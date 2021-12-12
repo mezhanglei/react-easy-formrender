@@ -37,7 +37,7 @@ export const classes = {
   footer: `${prefixCls}__footer`
 }
 
-export const FormItem = React.forwardRef((props: FormItemProps, ref) => {
+export const FormItem = React.forwardRef((props: FormItemProps, ref: any) => {
   const {
     className,
     label,

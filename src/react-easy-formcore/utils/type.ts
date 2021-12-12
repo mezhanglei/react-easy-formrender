@@ -62,7 +62,7 @@ export function isNodeList(data: any) {
 }
 
 // 判断值是否为空
-export function isEmpty(value: unknown) {
+export function isEmpty(value: any) {
     if (Array.isArray(value)
         || typeof value === 'string'
         || value instanceof String

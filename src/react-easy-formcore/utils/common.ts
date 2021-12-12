@@ -3,7 +3,7 @@ import { isEmpty } from "./type";
 /**
  * 顺序执行数组中的函数或promise，返回对应的结果数组
  */
- export const asyncSequentialExe = (queues: any[], forbidFn?: Function) => {
+ export const asyncSequentialExe = (queues?: any[], forbidFn?: Function) => {
 
     // 包装成Promise
     const promiseWrapper = (x: Promise<any> | ((...rest: any[]) => any)) => {
