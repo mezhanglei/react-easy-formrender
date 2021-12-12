@@ -4,8 +4,6 @@
 
 [![Version](https://img.shields.io/badge/version-0.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
-![图片名称](./logo.jpg)
-
 # 适用场景
 
 高自由度、轻量级动态表单解决方案，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成)

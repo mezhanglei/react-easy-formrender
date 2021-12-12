@@ -4,8 +4,6 @@ English | [中文说明](./README_CN.md)
 
 [![Version](https://img.shields.io/badge/version-0.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
-![图片名称](./logo.jpg)
-
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form solutions, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development)
