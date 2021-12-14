@@ -147,7 +147,7 @@ interface FormFieldProps extends FormItemProps {
     decorator?: 'Form.Item' | 'Form.List' // Form field component, when set to `Form.List` means array, you need to set `properties` to hold the array of controls, type is array type
     component: string // form component
     props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // The form component's own props property
-    hidden?: string | boolean // Show-hidden logic, supporting `boolean` types and string expressions (e.g. `{{path === value}}`, controlling whether the field is shown or hidden based on the result of the expression, $form is formvalues)
+    hidden?: string | boolean // Show-hidden logic, supporting `boolean` types and string expressions (`{{path === value}}`, controlling whether the field is shown or hidden based on the result of the expression, $form is formvalues)
     properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // Nested form controls Nested objects when they are objects, or arrays of controls when they are arrays
 }
 ```
