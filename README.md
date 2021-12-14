@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -54,7 +54,7 @@ class demo extends React.Component {
                         required: true,
                         rules: [{ required: true, message: 'name1空了' }],
                         initialValue: 1111,
-                        hidden: '{{name4 == true}}',
+                        hidden: '{{$form.name4 == true}}',
                         props: {}
                     },
                     name2: {
@@ -65,7 +65,7 @@ class demo extends React.Component {
                         properties: [{
                             component: 'select',
                             required: true,
-                            hidden: '{{name4 == true}}',
+                            hidden: '{{$form.name4 == true}}',
                             rules: [{ required: true, message: 'name2空了' }],
                             props: {
                                 style: { width: '100%' },
@@ -147,7 +147,7 @@ interface FormFieldProps extends FormItemProps {
     decorator?: 'Form.Item' | 'Form.List' // Form field component, when set to `Form.List` means array, you need to set `properties` to hold the array of controls, type is array type
     component: string // form component
     props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // The form component's own props property
-    hidden?: string | boolean // Show-hidden logic, supporting `boolean` types and string expressions (e.g. `{{path === value}}`, controlling whether the field is shown or hidden based on the result of the expression)
+    hidden?: string | boolean // Show-hidden logic, supporting `boolean` types and string expressions (e.g. `{{path === value}}`, controlling whether the field is shown or hidden based on the result of the expression, $form is formvalues)
     properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // Nested form controls Nested objects when they are objects, or arrays of controls when they are arrays
 }
 ```

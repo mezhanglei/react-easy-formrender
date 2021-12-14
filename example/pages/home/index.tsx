@@ -28,7 +28,7 @@ class demo extends React.Component {
                         required: true,
                         rules: [{ required: true, message: 'name1空了' }],
                         initialValue: 1111,
-                        hidden: '{{name4 == true}}',
+                        hidden: '{{$form?.name4 == true && $form?.name3?.first == 1}}',
                         props: {}
                     },
                     name2: {
@@ -39,7 +39,7 @@ class demo extends React.Component {
                         properties: [{
                             component: 'select',
                             required: true,
-                            hidden: '{{name4 == true}}',
+                            hidden: '{{$form?.name4 == true}}',
                             rules: [{ required: true, message: 'name2空了' }],
                             props: {
                                 style: { width: '100%' },
