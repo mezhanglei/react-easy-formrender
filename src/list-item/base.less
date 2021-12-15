@@ -1,5 +1,4 @@
-.rh-form-field,
-.rh-form-list {
+.custom-list-item {
   margin-bottom: 20px;
   display: flex;
   align-items: flex-start;
@@ -25,17 +24,10 @@
 
   &__container {
     position: relative;
-    flex: 1;
     margin-top: auto;
     margin-bottom: auto;
-  }
-
-  &__message {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    font-size: 12px;
-    color: red;
+    word-break: break-all;
+    word-wrap: break-word;
   }
 
   &__footer {
@@ -51,16 +43,8 @@
     display: inline-flex;
   }
 
-  &--error {
- 
-  }
-
   &--compact {
     margin-bottom: 0;
-  }
-
-  &--compact &__message {
-    display: none;
   }
 
   &--required &__header::before {

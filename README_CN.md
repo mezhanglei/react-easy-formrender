@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -61,7 +61,6 @@ class demo extends React.Component {
                         label: 'list',
                         required: true,
                         rules: [{ required: true, message: 'name2空了' }],
-                        decorator: 'Form.List',
                         properties: [{
                             component: 'select',
                             required: true,
@@ -144,11 +143,11 @@ interface SchemaData extends FormProps {
 表单域控件的属性，可以实现嵌套和数组管理，其中的`FormItemProps`来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
 ```javascript
 interface FormFieldProps extends FormItemProps {
-    decorator?: 'Form.Item' | 'Form.List' // 表单域组件，当设置为`Form.List`时表示数组，需要设置`properties`存放控件数组，类型为数组类型
     component: string // 表单控件代表的字符串
+    render?: any // 非表单控件，会覆盖表单控件(component等属性)
     props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // 表单控件自有的props属性
     hidden?: string | boolean // 显示隐藏的逻辑，支持`boolean`类型和字符串表达式(如`{{$form.字段路径 === 某个值}}`,根据表达式结果控制该字段显示或者隐藏, $form表示表单值的对象)
-    properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示控件数组
+    properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
 }
 ```
 

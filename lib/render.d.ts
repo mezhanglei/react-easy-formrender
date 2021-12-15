@@ -26,7 +26,9 @@ declare class RenderFrom extends React.Component<RenderFormProps, RenderFormStat
     }): void;
     isHidden(hidden?: string | boolean): any;
     generateChildren(children?: ChildrenComponent['props']['children']): JSX.Element | JSX.Element[] | undefined;
-    renderFormItem(params: {
+    renderFormItem(name: string, field: FormFieldProps): JSX.Element;
+    renderListItem(name: string, field: FormFieldProps): JSX.Element;
+    renderProperties(params: {
         name: string;
         field: FormFieldProps;
         path?: string;
@@ -35,8 +37,8 @@ declare class RenderFrom extends React.Component<RenderFormProps, RenderFormStat
         name: string;
         field: FormFieldProps;
         path?: string;
-    }): JSX.Element | undefined;
-    getFormList(properties: SchemaData['properties']): (JSX.Element | undefined)[];
+    }): false | JSX.Element | undefined;
+    getFormList(properties: SchemaData['properties']): (false | JSX.Element | undefined)[];
     render(): JSX.Element;
 }
 export default RenderFrom;

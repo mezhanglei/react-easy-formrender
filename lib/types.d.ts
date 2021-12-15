@@ -8,11 +8,11 @@ export interface ChildrenComponent {
     };
 }
 export interface FormFieldProps extends FormItemProps {
-    decorator?: 'Form.Item' | 'Form.List';
-    component: string;
-    props?: ChildrenComponent['props'];
+    component?: string;
+    render?: any;
     hidden?: string | boolean;
     path?: string;
+    props?: ChildrenComponent['props'];
     properties?: {
         [key: string]: FormFieldProps;
     } | FormFieldProps[];
