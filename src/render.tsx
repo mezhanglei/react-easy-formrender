@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form } from "./react-easy-formcore";
+import { Form } from "react-easy-formcore";
 import { ChildrenComponent, FormFieldProps, RenderFormProps, RenderFormState, SchemaData } from './types';
 import { defaultFields } from './register';
 import { isObjectEqual } from './utils/object';

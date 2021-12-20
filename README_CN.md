@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.0.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.0.5-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -165,3 +165,6 @@ interface ChildrenComponent {
     props: Props // children组件自有的props属性
 }
 ```
+
+### rules
+表单控件中的`rules`规则来自于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`rules`属性。

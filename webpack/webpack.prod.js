@@ -47,12 +47,14 @@ const webpackConfig = {
             {
                 test: /\.css$/,
                 use: [
-                    "css-loader"
+                    "style-loader",
+                    "css-loader",
                 ],
             },
             {
                 test: /\.less$/,
                 use: [
+                    "style-loader",
                     "css-loader",
                     "postcss-loader",
                     {

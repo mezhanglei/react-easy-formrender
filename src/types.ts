@@ -1,4 +1,4 @@
-import { FormItemProps, FormProps } from "./react-easy-formcore";
+import { FormItemProps, FormProps } from "react-easy-formcore";
 import { defaultFields } from './register';
 
 // 组件的children(不绑定表单字段)

@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.0.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.0.5-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -165,3 +165,6 @@ interface ChildrenComponent {
     props: Props // children props
 }
 ```
+
+### rules
+The `rules` rules in the form control are derived from the `rules` property in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)。

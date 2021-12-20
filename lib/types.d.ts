@@ -1,4 +1,4 @@
-import { FormItemProps, FormProps } from "./react-easy-formcore";
+import { FormItemProps, FormProps } from "react-easy-formcore";
 import { defaultFields } from './register';
 export interface ChildrenComponent {
     component: string;
