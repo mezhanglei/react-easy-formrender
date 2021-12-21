@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.0.5-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -12,6 +12,9 @@
 
 - [x] 表单中用的原子组件和表单库完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口props的ui库组件或自定义的其他组件
 - [x] `schema`包括三个部分，`Form`容器设置，字段对应的表单控件设置，以及控件自身的`props`设置，心智模型简单，很轻松定制属于自己的表单
+
+# Matters
+注意：在使用之前需要先引入css样式文件，例：`import 'react-easy-formrender/css/main.css'`;
 
 ## 安装
 
@@ -28,6 +31,7 @@ import React from 'react';
 import "./index.less";
 import RenderFrom, { FormStore } from '../../../src/index';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
+import 'react-easy-formrender/css/main.css';
 
 // registter components
 export const defaultWidgets: { [key: string]: any } = {

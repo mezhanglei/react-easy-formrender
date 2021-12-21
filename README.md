@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.0.5-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -12,6 +12,9 @@ High degree of freedom and Lightweight dynamic form solutions, high-end solution
 
 - [x] The atomic components used in the form are fully decoupled from the form library, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
 - [x] The `schema` consists of three parts, the `Form` container settings, the field corresponding to the form control settings, and the control's own `props` settings, the mental model is simple and it is easy to customize your own forms
+
+# Matters
+Note: you need to import the css style file before you can use it，example：`import 'react-easy-formrender/css/main.css'`;
 
 ## install
 
@@ -28,6 +31,7 @@ import React from 'react';
 import "./index.less";
 import RenderFrom, { FormStore } from '../../../src/index';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
+import 'react-easy-formrender/lib/css/main.css';
 
 // registter components
 export const defaultWidgets: { [key: string]: any } = {
