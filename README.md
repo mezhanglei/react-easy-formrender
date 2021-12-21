@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.1.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -14,7 +14,7 @@ High degree of freedom and Lightweight dynamic form solutions, high-end solution
 - [x] The `schema` consists of three parts, the `Form` container settings, the field corresponding to the form control settings, and the control's own `props` settings, the mental model is simple and it is easy to customize your own forms
 
 # Matters
-Note: you need to import the css style file before you can use it，example：`import 'react-easy-formrender/css/main.css'`;
+Note: you need to import the css style file before you can use it，example：`import 'react-easy-formrender/lib/css/main.css'`;
 
 ## install
 
@@ -148,7 +148,8 @@ Properties of form field controls, allowing nesting and array management, where 
 ```javascript
 interface FormFieldProps extends FormItemProps {
     component: string // form component
-    render: any // Non-form controls, which override form component (`component` and so on)
+    readOnly?: boolean // readOnly mode
+    render?: any // Non-form controls, which override form component in readOnly
     props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // The form component's own props property
     hidden?: string | boolean // Show-hidden logic, supporting `boolean` types and string expressions (`{{$form.path === value}}`, controlling whether the field is shown or hidden based on the result of the expression, $form is formvalues)
     properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // Nested form controls Nested objects when they are objects, or arrays of controls when they are arrays

@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.1.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -14,7 +14,7 @@
 - [x] `schema`包括三个部分，`Form`容器设置，字段对应的表单控件设置，以及控件自身的`props`设置，心智模型简单，很轻松定制属于自己的表单
 
 # Matters
-注意：在使用之前需要先引入css样式文件，例：`import 'react-easy-formrender/css/main.css'`;
+注意：在使用之前需要先引入css样式文件，例：`import 'react-easy-formrender/lib/css/main.css'`;
 
 ## 安装
 
@@ -31,7 +31,7 @@ import React from 'react';
 import "./index.less";
 import RenderFrom, { FormStore } from '../../../src/index';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
-import 'react-easy-formrender/css/main.css';
+import 'react-easy-formrender/lib/css/main.css';
 
 // registter components
 export const defaultWidgets: { [key: string]: any } = {
@@ -148,7 +148,8 @@ interface SchemaData extends FormProps {
 ```javascript
 interface FormFieldProps extends FormItemProps {
     component: string // 表单控件代表的字符串
-    render?: any // 非表单控件，会覆盖表单控件(component等属性)
+    readOnly?: boolean // 是否为只读模式
+    render?: any // 非表单控件, 在readOnly只读模式下才会覆盖表单控件
     props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // 表单控件自有的props属性
     hidden?: string | boolean // 显示隐藏的逻辑，支持`boolean`类型和字符串表达式(如`{{$form.字段路径 === 某个值}}`,根据表达式结果控制该字段显示或者隐藏, $form表示表单值的对象)
     properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合

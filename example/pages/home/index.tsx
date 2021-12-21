@@ -1,6 +1,6 @@
 import React from 'react';
 import "./index.less";
-import RenderFrom, { FormStore } from '../../../src/index';
+import RenderFrom, { FormStore } from '../../../lib/index';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
 // 原子组件

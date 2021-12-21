@@ -6,7 +6,7 @@ import { isObjectEqual } from './utils/object';
 import { deepGetKeys } from './utils/utils';
 import { AopFactory } from './utils/function-aop';
 import { isEmpty } from './utils/type';
-import 'react-easy-formcore/css/main.css';
+import 'react-easy-formcore/lib/css/main.css';
 
 class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
     aopFormOnChange: AopFactory;
