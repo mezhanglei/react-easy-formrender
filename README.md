@@ -6,7 +6,7 @@ English | [中文说明](./README_CN.md)
 
 # Introduction?
 
-High degree of freedom and Lightweight dynamic form solutions, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development)
+High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development)
 
 # features
 
