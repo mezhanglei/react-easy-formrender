@@ -11,7 +11,7 @@ High degree of freedom and Lightweight dynamic form solutions, high-end solution
 # features
 
 - [x] The atomic components used in the form are fully decoupled from the form library, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
-- [x] The `schema` consists of three parts, the `Form` container settings, the field corresponding to the form control settings, and the control's own `props` settings, the mental model is simple and it is easy to customize your own forms
+- [x] The `schema` consists of three parts, the `Form` container settings, the form field settings, and form components own `props` settings, the mental model is simple and it is easy to customize your own forms
 
 # Matters
 Note: you need to import the css style file before you can use it，example：`import 'react-easy-formrender/lib/css/main.css'`;

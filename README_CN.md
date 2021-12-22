@@ -11,7 +11,7 @@
 # features
 
 - [x] 表单中用的原子组件和表单库完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口props的ui库组件或自定义的其他组件
-- [x] `schema`包括三个部分，`Form`容器设置，字段对应的表单控件设置，以及控件自身的`props`设置，心智模型简单，很轻松定制属于自己的表单
+- [x] `schema`包括三个部分，`Form`容器属性设置，表单域的属性设置，以及表单域内的控件自身的`props`设置，心智模型简单，很轻松定制属于自己的表单。
 
 # Matters
 注意：在使用之前需要先引入css样式文件，例：`import 'react-easy-formrender/lib/css/main.css'`;
@@ -134,7 +134,7 @@ class demo extends React.Component {
 }
 ```
 
-### Form容器设置
+### Form容器属性设置
 - 基础属性：`FormProps`类型来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
 - `properties`: `{name: FormFieldProps, ...}` `name`为控件字段名，`FormFieldProps`为控件设置
 ```javascript
@@ -143,7 +143,7 @@ interface SchemaData extends FormProps {
 }
 ```
 
-### 表单域控件设置
+### 表单域属性设置
 表单域控件的属性，可以实现嵌套和数组管理，其中的`FormItemProps`来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
 ```javascript
 interface FormFieldProps extends FormItemProps {
@@ -156,7 +156,7 @@ interface FormFieldProps extends FormItemProps {
 }
 ```
 
-### 表单控件自身的`props`设置
+### 表单域内的控件自身的`props`设置
 
 ```javascript
 // 控件自有props设置
