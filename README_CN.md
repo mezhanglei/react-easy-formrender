@@ -10,8 +10,8 @@
 
 # features
 
-- [x] 表单中用的原子组件和表单库完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口props的ui库组件或自定义的其他组件
-- [x] `schema`包括三个部分，`Form`容器属性设置，表单域的属性设置，以及表单域内的控件自身的`props`设置，心智模型简单，很轻松定制属于自己的表单。
+- [x] 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
+- [x] `schema`包括三个部分：`Form`容器属性设置，表单域的属性设置，以及表单域内的控件自身的`props`设置，心智模型简单，很轻松定制属于自己的表单。
 
 # Matters
 注意：在使用之前需要先引入css样式文件，例：`import 'react-easy-formrender/lib/css/main.css'`;
