@@ -33,7 +33,7 @@ import RenderFrom, { FormStore } from '../../../src/index';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 import 'react-easy-formrender/lib/css/main.css';
 
-// registter components
+// register components
 export const defaultWidgets: { [key: string]: any } = {
     input: Input,
     select: Select,
