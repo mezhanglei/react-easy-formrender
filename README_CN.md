@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.1.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.1.4-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -12,6 +12,7 @@
 
 - [x] 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
 - [x] `schema`包括三个部分：`Form`容器属性设置，表单域的属性设置，以及表单域内的控件自身的`props`设置，心智模型简单，很轻松定制属于自己的表单。
+- [x] `schema`中关于表单域的属性字段已全面支持字符串表达式（除了`component`,`readOnly`,`props`,`properties`,`render`）
 
 # Matters
 注意：在使用之前需要先引入css样式文件，例：`import 'react-easy-formrender/lib/css/main.css'`;
@@ -144,15 +145,16 @@ interface SchemaData extends FormProps {
 ```
 
 ### 表单域属性设置
-表单域控件的属性，可以实现嵌套和数组管理，其中的`FormItemProps`来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
+1. 表单域的属性，可以实现嵌套和数组管理，其中的`FormItemProps`来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
+2. 表单域的属性全面支持字符串表达式（除了`component`,`readOnly`,`props`,`properties`,`render`），例如`hidden`字段显示隐藏的逻辑，`{{$form.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$form`表示表单值对象
 ```javascript
 interface FormFieldProps extends FormItemProps {
-    component: string // 表单控件代表的字符串
-    readOnly?: boolean // 是否为只读模式
-    render?: any // 非表单控件, 在readOnly只读模式下才会覆盖表单控件
-    props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // 表单控件自有的props属性
-    hidden?: string | boolean // 显示隐藏的逻辑，支持`boolean`类型和字符串表达式(如`{{$form.字段路径 === 某个值}}`,根据表达式结果控制该字段显示或者隐藏, $form表示表单值的对象)
-    properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
+    component: string // 表单控件代表的字符串，和properties属性不能同时存在，不支持字符串表达式
+    readOnly?: boolean | string // 是否为只读模式, 不支持字符串表达式
+    render?: any // 非表单控件, 在readOnly只读模式下才会覆盖表单控件，不支持字符串表达式
+    props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // 表单控件自有的props属性, 不支持字符串表达式
+    hidden?: string | boolean // 显示隐藏的逻辑，支持字符串表达式
+    properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合， 不支持字符串表达式
 }
 ```
 

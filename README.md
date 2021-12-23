@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.1.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.1.4-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -12,6 +12,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 - [x] The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
 - [x] The `schema` consists of three parts： the `Form` container settings, the form field settings, and form components own `props` settings, the mental model is simple and it is easy to customize your own forms
+- [x] The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`)
 
 # Matters
 Note: you need to import the css style file before you can use it，example：`import 'react-easy-formrender/lib/css/main.css'`;
@@ -144,15 +145,17 @@ interface SchemaData extends FormProps {
 ```
 
 ### Form field settings
-Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
+1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
+2. The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`), for example `hidden` fields show hidden logic, `{{$form.field path === a value}}` means that a field value of the form is equal to a value, where `$form` represents the form value object
+
 ```javascript
 interface FormFieldProps extends FormItemProps {
-    component: string // form component
-    readOnly?: boolean // readOnly mode
-    render?: any // Non-form controls, which override form component in readOnly
-    props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // The form component's own props property
-    hidden?: string | boolean // Show-hidden logic, supporting `boolean` types and string expressions (`{{$form.path === value}}`, controlling whether the field is shown or hidden based on the result of the expression, $form is formvalues)
-    properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // Nested form controls Nested objects when they are objects, or arrays of controls when they are arrays
+    component: string // form component，and properties properties cannot co-exist and string expressions are not supported
+    readOnly?: boolean // readOnly mode  ，string expressions are not supported
+    render?: any // Non-form controls, which override form component in readOnly，string expressions are not supported
+    props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // The form component's own props property，string expressions are not supported
+    hidden?: string | boolean // Show-hidden logic, supporting `boolean` types and support string expressions
+    properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // Nested form controls Nested objects when they are objects, or arrays of controls when they are arrays，string expressions are not supported
 }
 ```
 

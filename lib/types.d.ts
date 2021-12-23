@@ -8,21 +8,22 @@ export interface ChildrenComponent {
     };
 }
 export interface FormFieldProps extends FormItemProps {
-    component?: string;
-    readOnly?: boolean;
+    component: string;
+    readOnly?: boolean | string;
     render?: any;
+    props?: {
+        children?: JSX.Element | ChildrenComponent[];
+        [key: string]: any;
+    };
     hidden?: string | boolean;
-    path?: string;
-    props?: ChildrenComponent['props'];
     properties?: {
-        [key: string]: FormFieldProps;
+        [name: string]: FormFieldProps;
     } | FormFieldProps[];
 }
 export interface RenderFormState {
-    hiddenMap: {
-        [key: string]: boolean;
-    };
+    fieldPropsMap: Map<string, any>;
     prevSchema?: SchemaData;
+    schema?: SchemaData;
 }
 export interface SchemaData extends FormProps {
     properties: {

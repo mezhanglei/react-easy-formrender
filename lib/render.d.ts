@@ -16,22 +16,32 @@ declare class RenderFrom extends React.Component<RenderFormProps, RenderFormStat
     componentDidUpdate(prevProps: RenderFormProps, prevState: RenderFormState): void;
     static getDerivedStateFromProps(nextProps: RenderFormProps, prevState: RenderFormState): {
         prevSchema: SchemaData;
-        hiddenMap: {
-            [key: string]: boolean;
-        };
+        fieldPropsMap: Map<string, any>;
+        schema?: SchemaData | undefined;
     } | null;
     handleFieldProps(): void;
+    calcFieldProps(field?: object, path?: string): {
+        [k: string]: any;
+    } | undefined;
     onFormChange(params: {
         name: string;
         value: any;
     }): void;
     getValueByForm(target?: string | boolean): any;
     generateChildren(children?: ChildrenComponent['props']['children']): JSX.Element | JSX.Element[] | undefined;
-    renderFormItem(name: string, field: FormFieldProps): JSX.Element;
-    renderListItem(name: string, field: FormFieldProps): JSX.Element;
+    renderFormItem(params: {
+        name: string;
+        itemField: FormFieldProps;
+        path?: string;
+    }): JSX.Element;
+    renderListItem(params: {
+        name: string;
+        itemField: FormFieldProps;
+        path?: string;
+    }): JSX.Element;
     renderProperties(params: {
         name: string;
-        field: FormFieldProps;
+        propertiesField: FormFieldProps;
         path?: string;
     }): JSX.Element;
     generateTree(params: {
