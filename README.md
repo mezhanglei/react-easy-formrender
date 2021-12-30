@@ -154,7 +154,7 @@ const watch = {
 
 ### Form settings
 - base Attributes：The `FormProps` type is derived from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- `properties`: `{name: FormFieldProps, ...}` `name` is the field name of the control, `FormFieldProps` is the control setting
+- `properties`: `{name: FormFieldProps, ...}` `name` is the field name of the control, `FormFieldProps` is the form field setting
 ```javascript
 interface SchemaData extends FormProps {
     properties: { [key: string]: FormFieldProps }

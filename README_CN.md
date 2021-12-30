@@ -154,7 +154,7 @@ const watch = {
 
 ### Form容器属性设置
 - 基础属性：`FormProps`类型来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
-- `properties`: `{name: FormFieldProps, ...}` `name`为控件字段名，`FormFieldProps`为控件设置
+- `properties`: `{name: FormFieldProps, ...}` `name`为控件字段名，`FormFieldProps`为表单域属性设置
 ```javascript
 interface SchemaData extends FormProps {
     properties: { [key: string]: FormFieldProps }
