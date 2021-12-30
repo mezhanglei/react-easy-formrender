@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.1.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -13,9 +13,6 @@
 - [x] 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
 - [x] `schema`包括三个部分：`Form`容器属性设置，表单域的属性设置，以及表单域内的控件自身的`props`设置，心智模型简单，很轻松定制属于自己的表单。
 - [x] `schema`中关于表单域的属性字段已全面支持字符串表达式（除了`component`,`readOnly`,`props`,`properties`,`render`）
-
-# Matters
-注意：在使用之前需要先引入css样式文件，例：`import 'react-easy-formrender/lib/css/main.css'`;
 
 ## 安装
 
@@ -30,9 +27,8 @@ yarn add react-easy-formrender
 ```javascript
 import React from 'react';
 import "./index.less";
-import RenderFrom, { FormStore } from '../../../src/index';
+import RenderFrom, { FormStore } from 'react-easy-formrender';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
-import 'react-easy-formrender/lib/css/main.css';
 
 // register components
 export const defaultWidgets: { [key: string]: any } = {
@@ -132,6 +128,27 @@ class demo extends React.Component {
             </div>
         );
     }
+}
+```
+
+### 表单值的监听
+watch属性：可以监听任意字段的值的变化，例如：
+```javascript
+const watch = {
+  'name1': (newValue, oldValue) => {
+    // console.log(newValue, oldValue)
+  },
+  'name2.0': (newValue, oldValue) => {
+    // console.log(newValue, oldValue)
+  },
+  'name3': {
+      handler: (newValue, oldValue) => {
+        // console.log(newValue, oldValue)
+      }
+      immediate: true // 立即监听
+  }
+  ...
+  <RenderFrom watch={watch} />
 }
 ```
 

@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.1.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -13,9 +13,6 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - [x] The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
 - [x] The `schema` consists of three parts： the `Form` container settings, the form field settings, and form components own `props` settings, the mental model is simple and it is easy to customize your own forms
 - [x] The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`)
-
-# Matters
-Note: you need to import the css style file before you can use it，example：`import 'react-easy-formrender/lib/css/main.css'`;
 
 ## install
 
@@ -30,9 +27,8 @@ yarn add react-easy-formrender
 ```javascript
 import React from 'react';
 import "./index.less";
-import RenderFrom, { FormStore } from '../../../src/index';
+import RenderFrom, { FormStore } from 'react-easy-formrender';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
-import 'react-easy-formrender/lib/css/main.css';
 
 // register components
 export const defaultWidgets: { [key: string]: any } = {
@@ -132,6 +128,27 @@ class demo extends React.Component {
             </div>
         );
     }
+}
+```
+
+### Listening for form values
+watch attribute: can listen to changes in the value of any field, for example:
+```javascript
+const watch = {
+  'name1': (newValue, oldValue) => {
+    // console.log(newValue, oldValue)
+  },
+  'name2.0': (newValue, oldValue) => {
+    // console.log(newValue, oldValue)
+  },
+  'name3': {
+      handler: (newValue, oldValue) => {
+        // console.log(newValue, oldValue)
+      }
+      immediate: true // Immediately
+  }
+  ...
+  <RenderFrom watch={watch} />
 }
 ```
 

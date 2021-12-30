@@ -1,4 +1,4 @@
-// 判断两个对象(包括数组)是否相等
+// 判断两个值是否相等
 export function isObjectEqual(a: any, b: any) {
     if (!(typeof a == 'object' && typeof b === 'object')) {
         return a === b;
@@ -21,4 +21,4 @@ export function isObjectEqual(a: any, b: any) {
         }
     }
     return true;
-};
+}

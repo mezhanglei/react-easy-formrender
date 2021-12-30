@@ -6,10 +6,12 @@ import { isObjectEqual } from './utils/object';
 import { AopFactory } from './utils/function-aop';
 import { isEmpty, isObject } from './utils/type';
 import 'react-easy-formcore/lib/css/main.css';
+import { debounce } from './utils/common';
 
 class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
-    aopFormOnChange: AopFactory;
-    aopFormMount: AopFactory;
+    aopOnValuesChange: AopFactory;
+    aopOnMount: AopFactory;
+    aopOnVisible: AopFactory;
     constructor(props: RenderFormProps) {
         super(props);
         this.state = {
@@ -21,13 +23,16 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
         this.renderFormItem = this.renderFormItem.bind(this);
         this.renderListItem = this.renderListItem.bind(this);
         this.renderProperties = this.renderProperties.bind(this);
-        this.onFormChange = this.onFormChange.bind(this);
-        this.onFormMount = this.onFormMount.bind(this);
+        this.onValuesChange = debounce(this.onValuesChange.bind(this), 16.7);
+        this.onVisible = debounce(this.onVisible.bind(this), 16.7);
+        this.onMount = this.onMount.bind(this);
         this.handleFieldProps = this.handleFieldProps.bind(this);
-        this.getValueByForm = this.getValueByForm.bind(this);
-        this.calcFieldProps = this.calcFieldProps.bind(this);
-        this.aopFormOnChange = new AopFactory(this.onFormChange);
-        this.aopFormMount = new AopFactory(this.onFormMount);
+        this.calcExpression = this.calcExpression.bind(this);
+        this.showCalcFieldProps = this.showCalcFieldProps.bind(this);
+        this.handleWatch = this.handleWatch.bind(this);
+        this.aopOnValuesChange = new AopFactory(this.onValuesChange);
+        this.aopOnMount = new AopFactory(this.onMount);
+        this.aopOnVisible = new AopFactory(this.onVisible);
     }
 
     static defaultProps = {
@@ -36,8 +41,20 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
     }
 
     // 表单渲染完成
-    onFormMount() {
+    onMount() {
         this.handleFieldProps();
+    }
+
+    // 监听表单值变化的事件
+    onValuesChange() {
+        this.handleFieldProps();
+    }
+
+    // 监听表单域的显示或隐藏
+    onVisible(params: { name: string, hidden: boolean }) {
+        if (params?.hidden) {
+            this.handleWatch();
+        }
     }
 
     componentDidUpdate(prevProps: RenderFormProps, prevState: RenderFormState) {
@@ -58,7 +75,26 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
         return null;
     }
 
-    // 初始化所有的控件的属性
+    // 遍历监听指定对象
+    handleWatch() {
+        const { store, watch } = this.props;
+        Object.entries(watch || {})?.map(([key, watcher]) => {
+            // 函数形式
+            if (typeof watcher === 'function') {
+                store?.subscribeValue(key, watcher)
+                // 对象形式
+            } else if (typeof watcher === 'object') {
+                if (typeof watcher.handler === 'function') {
+                    store?.subscribeValue(key, watcher.handler);
+                }
+                if (watcher.immediate) {
+                    watcher.handler(store?.getFieldValue(key), store?.getLastValue(key));
+                }
+            }
+        });
+    }
+
+    // 遍历表单域的属性
     handleFieldProps() {
         const fieldPropsMap = new Map();
         // 遍历对象树中的叶子节点(控件的属性节点)
@@ -74,13 +110,13 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
                         if (childKey !== 'properties') {
                             const currentKey = `${key}.${childKey}`;
                             const path = parentPath ? `${parentPath}.${currentKey}` : currentKey;
-                            const result = this.getValueByForm(value);
+                            const result = this.calcExpression(value);
                             fieldPropsMap.set(path, result)
                         }
                     }
                 } else if (!isEmpty(target)) {
                     const path = parentPath ? `${parentPath}.${key}` : key;
-                    const result = this.getValueByForm(target);
+                    const result = this.calcExpression(target);
                     fieldPropsMap.set(path, result)
                 }
                 // 具有properties则深入遍历properties
@@ -95,8 +131,8 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
         this.setState({ fieldPropsMap: fieldPropsMap });
     }
 
-    // 字符串表达式后的值
-    calcFieldProps(field?: object, path?: string) {
+    // 展示计算完表达式之后的结果
+    showCalcFieldProps(field?: object, path?: string) {
         const { fieldPropsMap } = this.state;
         let newField;
         if (fieldPropsMap?.size && field) {
@@ -111,13 +147,8 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
         return newField;
     }
 
-    // onChange时触发的事件
-    onFormChange(params: { name: string, value: any }) {
-        this.handleFieldProps();
-    }
-
     // 值兼容字符串表达式
-    getValueByForm(target?: string | boolean) {
+    calcExpression(target?: string | boolean) {
         if (typeof target === 'string') {
             const reg = new RegExp('\{\{\s*.*?\s*\}\}', 'gi');
             const hiddenStr = target?.match(reg)?.[0];
@@ -158,7 +189,7 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
         const { children, ...componentProps } = props || {};
         const FormField = Fields?.['Form.Item'];
         const FormComponent = component && widgets?.[component];
-        const newField = this.calcFieldProps(fieldProps, path);
+        const newField = this.showCalcFieldProps(fieldProps, path);
         return (
             <FormField {...fieldProps} {...newField} key={name} name={name}>
                 <FormComponent {...componentProps}>{this.generateChildren(children)}</FormComponent>
@@ -172,7 +203,7 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
         const { Fields } = this.props;
         const FormField = Fields?.['List.Item'];
         const { render, ...fieldProps } = itemField;
-        const newField = this.calcFieldProps(itemField, path);
+        const newField = this.showCalcFieldProps(itemField, path);
 
         return (
             <FormField {...fieldProps} {...newField} key={name}>
@@ -192,7 +223,7 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
         } else {
             FormField = Fields['Form.Item']
         }
-        const newField = this.calcFieldProps(fieldProps, path);
+        const newField = this.showCalcFieldProps(fieldProps, path);
 
         return (
             <FormField {...fieldProps} {...newField} key={name} name={name}>
@@ -245,15 +276,17 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
     }
 
     render() {
-        const { schema, ...rest } = this.props;
+        const { schema, watch, ...rest } = this.props;
         const { properties, ...restForm } = schema || {};
-        const formChangeProps = rest?.onFormChange || restForm?.onFormChange;
-        const formMountProps = rest?.onMount || restForm?.onMount;
-        const formChange = this.aopFormOnChange.addAfter(formChangeProps);
-        const formOnMount = this.aopFormMount.addAfter(formMountProps);
+        const valuesChangeProps = rest?.onValuesChange || restForm?.onValuesChange;
+        const onMountProps = rest?.onMount || restForm?.onMount;
+        const onVisibleProps = rest?.onVisible || restForm?.onVisible;
+        const valuesChange = this.aopOnValuesChange.addAfter(valuesChangeProps);
+        const formOnMount = this.aopOnMount.addAfter(onMountProps);
+        const onVisible = this.aopOnVisible.addAfter(onVisibleProps);
 
         return (
-            <Form  {...restForm} {...rest} onFormChange={formChange} onMount={formOnMount}>
+            <Form  {...restForm} {...rest} onValuesChange={valuesChange} onMount={formOnMount} onVisible={onVisible}>
                 {this.getFormList(properties)}
             </Form>
         );
