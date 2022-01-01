@@ -131,8 +131,9 @@ class demo extends React.Component {
 }
 ```
 
-### 表单值的监听
-watch属性：可以监听任意字段的值的变化，例如：
+### 表单组件的props
+- 基础属性：来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
+- watch属性：可以监听任意字段的值的变化，例如：
 ```javascript
 const watch = {
   'name1': (newValue, oldValue) => {

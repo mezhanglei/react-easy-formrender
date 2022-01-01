@@ -131,8 +131,9 @@ class demo extends React.Component {
 }
 ```
 
-### Listening for form values
-watch attribute: can listen to changes in the value of any field, for example:
+### Form Component Props
+- base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+- `watch` attribute: can listen to changes in the value of any field, for example:
 ```javascript
 const watch = {
   'name1': (newValue, oldValue) => {
