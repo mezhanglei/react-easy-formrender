@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.2.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -135,6 +135,8 @@ class demo extends React.Component {
 - base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 - `watch` attribute: can listen to changes in the value of any field, for example:
 ```javascript
+
+// component props
 const watch = {
   'name1': (newValue, oldValue) => {
     // console.log(newValue, oldValue)
@@ -151,12 +153,10 @@ const watch = {
   ...
   <RenderFrom watch={watch} />
 }
-```
 
-### Form settings
-- base Attributes：The `FormProps` type is derived from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- `properties`: `{name: FormFieldProps, ...}` `name` is the field name of the control, `FormFieldProps` is the form field setting
-```javascript
+...
+
+// shema props
 interface SchemaData extends FormProps {
     properties: { [key: string]: FormFieldProps }
 }

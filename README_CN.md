@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.2.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -131,10 +131,12 @@ class demo extends React.Component {
 }
 ```
 
-### 表单组件的props
+### 表单容器的props
 - 基础属性：来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
 - watch属性：可以监听任意字段的值的变化，例如：
 ```javascript
+
+// 声明式传值
 const watch = {
   'name1': (newValue, oldValue) => {
     // console.log(newValue, oldValue)
@@ -151,12 +153,10 @@ const watch = {
   ...
   <RenderFrom watch={watch} />
 }
-```
 
-### Form容器属性设置
-- 基础属性：`FormProps`类型来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
-- `properties`: `{name: FormFieldProps, ...}` `name`为控件字段名，`FormFieldProps`为表单域属性设置
-```javascript
+....
+
+// schema方式传值
 interface SchemaData extends FormProps {
     properties: { [key: string]: FormFieldProps }
 }
