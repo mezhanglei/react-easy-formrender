@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.2.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -133,6 +133,12 @@ class demo extends React.Component {
 
 ### Form Component Props
 - base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+```javascript
+// shema props
+interface SchemaData extends FormProps {
+    properties: { [key: string]: FormFieldProps }
+}
+```
 - `watch` attribute: can listen to changes in the value of any field, for example:
 ```javascript
 
@@ -152,13 +158,6 @@ const watch = {
   }
   ...
   <RenderFrom watch={watch} />
-}
-
-...
-
-// shema props
-interface SchemaData extends FormProps {
-    properties: { [key: string]: FormFieldProps }
 }
 ```
 
