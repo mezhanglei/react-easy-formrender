@@ -39,6 +39,11 @@ export interface RenderFormProps extends FormProps {
             handler: WatchHandler;
         } | WatchHandler;
     };
+    customRender?: (properties: SchemaData['properties'], renderItem: (params: {
+        name: string;
+        field: FormFieldProps;
+        path?: string;
+    }) => any) => any;
     widgets: {
         [key: string]: any;
     };

@@ -52,7 +52,11 @@ declare class RenderFrom extends React.Component<RenderFormProps, RenderFormStat
         field: FormFieldProps;
         path?: string;
     }): false | JSX.Element | undefined;
-    getFormList(properties: SchemaData['properties']): (false | JSX.Element | undefined)[];
+    getFormList(properties: SchemaData['properties'], renderItem: (params: {
+        name: string;
+        field: FormFieldProps;
+        path?: string;
+    }) => any): any[];
     render(): JSX.Element;
 }
 export default RenderFrom;
