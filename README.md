@@ -11,7 +11,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # features
 
 - [x] The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
-- [x] The `schema` consists of three parts： the `Form` container settings, the form field settings, and form components own `props` settings, the mental model is simple and it is easy to customize your own forms
+- [x] The `schema` consists of three parts： (1)the `Form` container settings, (2)the form field settings, (3) form components own `props` settings, the mental model is simple and it is easy to customize your own forms
 - [x] The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`)
 
 ## install
@@ -163,7 +163,7 @@ const watch = {
 
 ### Form field settings
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
-2. The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`), for example `hidden` fields show hidden logic, `{{$form.field path === a value}}` means that a field value of the form is equal to a value, where `$form` represents the form value object
+2. The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`), for example `hidden` fields show hidden logic, `{{$form.xxx === xxx}}` means that a field value of the form is equal to a value, where `$form` represents the form value object
 
 ```javascript
 interface FormFieldProps extends FormItemProps {
