@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.2.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -133,6 +133,8 @@ class demo extends React.Component {
 
 ### 表单容器的props
 - 基础属性：来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
+
+- shema: 渲染表单的数据
 ```javascript
 interface SchemaData extends FormProps {
     properties: { [key: string]: FormFieldProps }
@@ -157,6 +159,27 @@ const watch = {
   }
   ...
   <RenderFrom watch={watch} />
+}
+```
+- widgets：注册表单所需要使用的组件
+```javascript
+import { Button, Checkbox, Input, Radio, Select } from 'antd';
+
+  ...
+
+// register components
+const defaultWidgets: { [key: string]: any } = {
+    input: Input,
+    select: Select,
+    radioGroup: Radio.Group,
+    radio: Radio,
+    option: Select.Option,
+    Checkbox: Checkbox
+};
+
+  ...
+  
+  <RenderFrom widgets={defaultWidgets} />
 }
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "react-easy-formrender",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "优秀的动态表单解决方案",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
@@ -95,7 +95,7 @@
     "classnames": "^2.2.6",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-easy-formcore": "^0.3.2",
+    "react-easy-formcore": "^0.3.4",
     "react-loadable": "^5.5.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2"

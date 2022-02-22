@@ -29,10 +29,16 @@ export interface SchemaData extends FormProps {
 }
 
 export type WatchHandler = (newValue: any, oldValue: string) => void
+
+// 带form容器的渲染组件props
 export interface RenderFormProps extends FormProps {
     schema: SchemaData
-    watch: { [key: string]: { immediate?: boolean, handler: WatchHandler } | WatchHandler }
-    customRender?: (properties: SchemaData['properties'], renderItem: (params: { name: string, field: FormFieldProps, path?: string }) => any) => any // 将生成表单列表的方法暴露出来
+    watch?: { [key: string]: { immediate?: boolean, handler: WatchHandler } | WatchHandler }
     widgets: { [key: string]: any }
     Fields: typeof defaultFields
+    // 自定义children，并注入渲染表单控件的方法
+    children?: (
+      properties: SchemaData['properties'],
+      renderItem: (params: { name: string, field: FormFieldProps, path?: string }) => any
+  ) => any
 };

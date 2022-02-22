@@ -13,6 +13,18 @@ export const defaultWidgets: { [key: string]: any } = {
     Checkbox: Checkbox
 };
 
+const watch = {
+    'name1': (newValue, oldValue) => {
+        console.log(newValue, oldValue)
+    },
+    'name2.0': (newValue, oldValue) => {
+        console.log(newValue, oldValue)
+    },
+    'name3': (newValue, oldValue) => {
+        console.log(newValue, oldValue)
+    }
+}
+
 class demo extends React.Component {
     store: FormStore<any>;
     constructor(props) {
@@ -95,7 +107,7 @@ class demo extends React.Component {
     render() {
         return (
             <div>
-                <RenderFrom widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
+                <RenderFrom watch={watch} widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
                 <div style={{ marginLeft: '140px' }}>
                     <Button onClick={this.onSubmit}>submit</Button>
                 </div>

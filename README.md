@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.2.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -133,16 +133,16 @@ class demo extends React.Component {
 
 ### Form Component Props
 - base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+- shema: form render data
 ```javascript
-// shema props
 interface SchemaData extends FormProps {
     properties: { [key: string]: FormFieldProps }
 }
 ```
-- `watch` attribute: can listen to changes in the value of any field, for example:
+- watch：can listen to changes in the value of any field, for example:
 ```javascript
 
-// component props
+// 声明式传值
 const watch = {
   'name1': (newValue, oldValue) => {
     // console.log(newValue, oldValue)
@@ -154,10 +154,31 @@ const watch = {
       handler: (newValue, oldValue) => {
         // console.log(newValue, oldValue)
       }
-      immediate: true // Immediately
+      immediate: true
   }
   ...
   <RenderFrom watch={watch} />
+}
+```
+- widgets：register components for form to use
+```javascript
+import { Button, Checkbox, Input, Radio, Select } from 'antd';
+
+  ...
+
+// register components
+const defaultWidgets: { [key: string]: any } = {
+    input: Input,
+    select: Select,
+    radioGroup: Radio.Group,
+    radio: Radio,
+    option: Select.Option,
+    Checkbox: Checkbox
+};
+
+  ...
+  
+  <RenderFrom widgets={defaultWidgets} />
 }
 ```
 

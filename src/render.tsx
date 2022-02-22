@@ -1,17 +1,15 @@
 import React from 'react';
-import { Form } from "react-easy-formcore";
 import { ChildrenComponent, FormFieldProps, RenderFormProps, RenderFormState, SchemaData } from './types';
 import { defaultFields } from './register';
 import { isObjectEqual } from './utils/object';
 import { AopFactory } from './utils/function-aop';
 import { isEmpty } from './utils/type';
-import 'react-easy-formcore/lib/css/main.css';
 import { debounce } from './utils/common';
+import { Form } from 'react-easy-formcore';
+import 'react-easy-formcore/lib/css/main.css';
 
-class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
+export default class RenderForm extends React.Component<RenderFormProps, RenderFormState> {
   aopOnValuesChange: AopFactory;
-  aopOnMount: AopFactory;
-  aopOnVisible: AopFactory;
   constructor(props: RenderFormProps) {
     super(props);
     this.state = {
@@ -24,15 +22,11 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
     this.renderListItem = this.renderListItem.bind(this);
     this.renderProperties = this.renderProperties.bind(this);
     this.onValuesChange = debounce(this.onValuesChange.bind(this), 16.7);
-    this.onVisible = debounce(this.onVisible.bind(this), 16.7);
-    this.onMount = this.onMount.bind(this);
     this.handleFieldProps = this.handleFieldProps.bind(this);
     this.calcExpression = this.calcExpression.bind(this);
     this.showCalcFieldProps = this.showCalcFieldProps.bind(this);
-    this.handleWatch = this.handleWatch.bind(this);
+    this.initWatch = this.initWatch.bind(this);
     this.aopOnValuesChange = new AopFactory(this.onValuesChange);
-    this.aopOnMount = new AopFactory(this.onMount);
-    this.aopOnVisible = new AopFactory(this.onVisible);
   }
 
   static defaultProps = {
@@ -41,20 +35,19 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
   }
 
   // 表单渲染完成
-  onMount() {
+  componentDidMount() {
     this.handleFieldProps();
+    this.initWatch();
   }
 
-  // 监听表单值变化的事件
+  componentWillUnmount() {
+    const { store } = this.props;
+    store?.removeListenStoreValue();
+  }
+
+  // 监听表单值变化的事件(防抖执行)
   onValuesChange() {
     this.handleFieldProps();
-  }
-
-  // 监听表单域的显示或隐藏
-  onVisible(params: { name: string, hidden: boolean }) {
-    if (params?.hidden) {
-      this.handleWatch();
-    }
   }
 
   componentDidUpdate(prevProps: RenderFormProps, prevState: RenderFormState) {
@@ -75,17 +68,17 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
     return null;
   }
 
-  // 遍历监听指定对象
-  handleWatch() {
+  // 初始化监听
+  initWatch() {
     const { store, watch } = this.props;
     Object.entries(watch || {})?.map(([key, watcher]) => {
       // 函数形式
       if (typeof watcher === 'function') {
-        store?.subscribeValue(key, watcher)
+        store?.listenStoreValue(key, watcher)
         // 对象形式
       } else if (typeof watcher === 'object') {
         if (typeof watcher.handler === 'function') {
-          store?.subscribeValue(key, watcher.handler);
+          store?.listenStoreValue(key, watcher.handler);
         }
         if (watcher.immediate) {
           watcher.handler(store?.getFieldValue(key), store?.getLastValue(key));
@@ -122,7 +115,7 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
         }
       }
     }
-    const properties = this.props.schema?.properties;
+    const properties = this.props?.schema?.properties;
     for (const key in properties) {
       const formField = properties[key];
       deepHandle(formField, key);
@@ -154,7 +147,6 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
       if (hiddenStr) {
         let target = hiddenStr?.replace(/\{\{|\}\}|\s*/g, '');
         target = target?.replace(/\$form/g, 'this.props.store && this.props.store.getFieldValue()');
-        target = target?.replace(/\$schema/g, 'this.props && this.props.schema');
         const actionStr = "return " + target;
         const action = new Function(actionStr);
         const value = action.apply(this);
@@ -218,9 +210,9 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
     const { properties, component, props, render, ...fieldProps } = propertiesField;
     let FormField;
     if (properties instanceof Array) {
-      FormField = Fields['Form.List']
+      FormField = Fields?.['Form.List']
     } else {
-      FormField = Fields['Form.Item']
+      FormField = Fields?.['Form.Item']
     }
     const newField = this.showCalcFieldProps(fieldProps, path);
 
@@ -275,26 +267,26 @@ class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
   }
 
   render() {
-    const { schema, watch, customRender, ...rest } = this.props;
-    const { properties, ...restForm } = schema || {};
-    const valuesChangeProps = rest?.onValuesChange || restForm?.onValuesChange;
-    const onMountProps = rest?.onMount || restForm?.onMount;
-    const onVisibleProps = rest?.onVisible || restForm?.onVisible;
-    const valuesChange = this.aopOnValuesChange.addAfter(valuesChangeProps);
-    const formOnMount = this.aopOnMount.addAfter(onMountProps);
-    const onVisible = this.aopOnVisible.addAfter(onVisibleProps);
+    const { schema, watch, onValuesChange, children, ...rest } = this.props;
+    const { properties, ...restSchema } = schema || {};
+    const valuesCallback = this.aopOnValuesChange.addAfter(onValuesChange);
+
+    const options = {
+      ...restSchema,
+      ...rest,
+      onValuesChange: valuesCallback
+    }
 
     return (
-      <Form  {...restForm} {...rest} onValuesChange={valuesChange} onMount={formOnMount} onVisible={onVisible}>
-        {
-          customRender ?
-            customRender(properties, this.generateTree)
-            :
-            this.getFormList(properties, this.generateTree)
-        }
+      <Form {...options}>
+          {
+            typeof children === 'function'
+              ?
+              children(properties, this.generateTree)
+              :
+              this.getFormList(properties, this.generateTree)
+          }
       </Form>
     );
   }
 }
-
-export default RenderFrom;

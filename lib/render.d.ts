@@ -2,10 +2,8 @@ import React from 'react';
 import { ChildrenComponent, FormFieldProps, RenderFormProps, RenderFormState, SchemaData } from './types';
 import { AopFactory } from './utils/function-aop';
 import 'react-easy-formcore/lib/css/main.css';
-declare class RenderFrom extends React.Component<RenderFormProps, RenderFormState> {
+export default class RenderForm extends React.Component<RenderFormProps, RenderFormState> {
     aopOnValuesChange: AopFactory;
-    aopOnMount: AopFactory;
-    aopOnVisible: AopFactory;
     constructor(props: RenderFormProps);
     static defaultProps: {
         widgets: {};
@@ -13,19 +11,16 @@ declare class RenderFrom extends React.Component<RenderFormProps, RenderFormStat
             [key: string]: any;
         };
     };
-    onMount(): void;
+    componentDidMount(): void;
+    componentWillUnmount(): void;
     onValuesChange(): void;
-    onVisible(params: {
-        name: string;
-        hidden: boolean;
-    }): void;
     componentDidUpdate(prevProps: RenderFormProps, prevState: RenderFormState): void;
     static getDerivedStateFromProps(nextProps: RenderFormProps, prevState: RenderFormState): {
         prevSchema: SchemaData;
         fieldPropsMap: Map<string, any>;
         schema?: SchemaData | undefined;
     } | null;
-    handleWatch(): void;
+    initWatch(): void;
     handleFieldProps(): void;
     showCalcFieldProps(field?: object, path?: string): {
         [k: string]: any;
@@ -59,4 +54,3 @@ declare class RenderFrom extends React.Component<RenderFormProps, RenderFormStat
     }) => any): any[];
     render(): JSX.Element;
 }
-export default RenderFrom;
