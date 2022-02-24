@@ -2,17 +2,25 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.2.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.4-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
-High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development)
+High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a 'Form' container component for rendering (2) The exported 'renderformchildren' component does not have a 'Form' container, but only provides the rendering of form fields. You can choose according to yourself
 
-# features
+# Default export component
 
-- [x] The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
-- [x] The `schema` consists of three parts： (1)the `Form` container settings, (2)the form field settings, (3) form components own `props` settings, the mental model is simple and it is easy to customize your own forms
-- [x] The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`)
+- The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
+- Render the form through the `schema` attribute, It includes three parts： (1)the `Form` container settings, (2)the form field settings, (3) form components own `props` settings, the mental model is simple and it is easy to customize your own forms
+- The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`)
+
+# RenderFormChildren component
+
+- Rendering a form field through the `properties` property has only two parts: (1) the property setting of the form field, (2) form components own `props` settings, the mental model is simple and it is easy to customize your own forms, Other properties are the same as the default component
+```javascript
+// properties
+SchemaData['properties']
+```
 
 ## install
 
@@ -27,7 +35,7 @@ yarn add react-easy-formrender
 ```javascript
 import React from 'react';
 import "./index.less";
-import RenderFrom, { FormStore } from 'react-easy-formrender';
+import RenderForm, { FormStore, Form, RenderFormChildren } from 'react-easy-formrender';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
 // register components
@@ -121,7 +129,10 @@ class demo extends React.Component {
     render() {
         return (
             <div>
-                <RenderFrom widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
+               {/* <Form store={this.store}>
+                    <RenderFormChildren watch={watch} widgets={defaultWidgets} properties={this.state.schema?.properties} />
+                   </Form> */}
+                <RenderForm widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
                 <div style={{ marginLeft: '140px' }}>
                     <Button onClick={this.onSubmit}>submit</Button>
                 </div>
@@ -157,7 +168,7 @@ const watch = {
       immediate: true
   }
   ...
-  <RenderFrom watch={watch} />
+  <RenderForm watch={watch} />
 }
 ```
 - widgets：register components for form to use
@@ -178,7 +189,7 @@ const defaultWidgets: { [key: string]: any } = {
 
   ...
   
-  <RenderFrom widgets={defaultWidgets} />
+  <RenderForm widgets={defaultWidgets} />
 }
 ```
 

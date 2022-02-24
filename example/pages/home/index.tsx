@@ -1,6 +1,6 @@
 import React from 'react';
 import "./index.less";
-import RenderFrom, { FormStore } from '../../../src/index';
+import RenderForm, { Form, FormStore, RenderFormChildren } from '../../../src/index';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
 // 原子组件
@@ -107,7 +107,10 @@ class demo extends React.Component {
     render() {
         return (
             <div>
-                <RenderFrom watch={watch} widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
+                {/* <Form store={this.store}>
+                    <RenderFormChildren watch={watch} widgets={defaultWidgets} properties={this.state.schema?.properties} />
+                </Form> */}
+                <RenderForm watch={watch} widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
                 <div style={{ marginLeft: '140px' }}>
                     <Button onClick={this.onSubmit}>submit</Button>
                 </div>

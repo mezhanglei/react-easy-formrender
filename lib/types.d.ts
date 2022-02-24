@@ -1,4 +1,4 @@
-import { FormItemProps, FormProps } from "react-easy-formcore";
+import { FormItemProps, FormOptions, FormProps } from "react-easy-formcore";
 import { defaultFields } from './register';
 export interface ChildrenComponent {
     component: string;
@@ -20,11 +20,6 @@ export interface FormFieldProps extends FormItemProps {
         [name: string]: FormFieldProps;
     } | FormFieldProps[];
 }
-export interface RenderFormState {
-    fieldPropsMap: Map<string, any>;
-    prevSchema?: SchemaData;
-    schema?: SchemaData;
-}
 export interface SchemaData extends FormProps {
     properties: {
         [key: string]: FormFieldProps;
@@ -42,7 +37,25 @@ export interface RenderFormProps extends FormProps {
     widgets: {
         [key: string]: any;
     };
-    Fields: typeof defaultFields;
+    Fields?: typeof defaultFields;
+    children?: (properties: SchemaData['properties'], renderItem: (params: {
+        name: string;
+        field: FormFieldProps;
+        path?: string;
+    }) => any) => any;
+}
+export interface RenderFormChildrenProps extends FormOptions {
+    properties: SchemaData['properties'];
+    watch?: {
+        [key: string]: {
+            immediate?: boolean;
+            handler: WatchHandler;
+        } | WatchHandler;
+    };
+    widgets: {
+        [key: string]: any;
+    };
+    Fields?: typeof defaultFields;
     children?: (properties: SchemaData['properties'], renderItem: (params: {
         name: string;
         field: FormFieldProps;

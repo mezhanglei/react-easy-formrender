@@ -2,17 +2,25 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.2.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.4-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
-高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成)
+高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成), 提供两种组件： (1)默认导出组件自带`Form`容器组件进行渲染.(2)导出`RenderFormChildren`组件不带`Form`容器, 只提供表单域的渲染。可以根据自己选择
 
-# features
+# 默认导出组件
 
-- [x] 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
-- [x] `schema`包括三个部分：(1)`Form`容器属性设置，(2)表单域的属性设置，(3)表单域内的控件自身的`props`设置.心智模型简单，很轻松定制属于自己的表单。
-- [x] `schema`中关于表单域的属性字段已全面支持字符串表达式（除了`component`,`readOnly`,`props`,`properties`,`render`）
+- 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
+- 通过`schema`属性渲染表单，包括三个部分：(1)`Form`容器属性设置，(2)表单域的属性设置，(3)表单域内的控件自身的`props`设置.心智模型简单，很轻松定制属于自己的表单。
+- `schema`中关于表单域的属性字段已全面支持字符串表达式（除了`component`,`readOnly`,`props`,`properties`,`render`）
+
+# RenderFormChildren组件
+
+- 通过`properties`属性渲染表单域，只有两个部分：(1)表单域的属性设置，(2)表单域内的控件自身的`props`设置.心智模型简单，很轻松定制属于自己的表单。其他属性和默认组件相同
+```javascript
+// properties 属性
+SchemaData['properties']
+```
 
 ## 安装
 
@@ -27,7 +35,7 @@ yarn add react-easy-formrender
 ```javascript
 import React from 'react';
 import "./index.less";
-import RenderFrom, { FormStore } from 'react-easy-formrender';
+import RenderForm, { FormStore, RenderFormChildren, Form } from 'react-easy-formrender';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
 // register components
@@ -121,7 +129,10 @@ class demo extends React.Component {
     render() {
         return (
             <div>
-                <RenderFrom widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
+               {/* <Form store={this.store}>
+                    <RenderFormChildren watch={watch} widgets={defaultWidgets} properties={this.state.schema?.properties} />
+                   </Form> */}
+                <RenderForm widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
                 <div style={{ marginLeft: '140px' }}>
                     <Button onClick={this.onSubmit}>submit</Button>
                 </div>
@@ -136,6 +147,7 @@ class demo extends React.Component {
 
 - shema: 渲染表单的数据
 ```javascript
+// shcema 属性
 interface SchemaData extends FormProps {
     properties: { [key: string]: FormFieldProps }
 }
@@ -158,7 +170,7 @@ const watch = {
       immediate: true // 立即监听
   }
   ...
-  <RenderFrom watch={watch} />
+  <RenderForm watch={watch} />
 }
 ```
 - widgets：注册表单所需要使用的组件
@@ -179,7 +191,7 @@ const defaultWidgets: { [key: string]: any } = {
 
   ...
   
-  <RenderFrom widgets={defaultWidgets} />
+  <RenderForm widgets={defaultWidgets} />
 }
 ```
 
