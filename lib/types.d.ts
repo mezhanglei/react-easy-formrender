@@ -46,6 +46,7 @@ export interface RenderFormProps extends FormProps {
 }
 export interface RenderFormChildrenProps extends FormOptions {
     properties: SchemaData['properties'];
+    initialValues?: Partial<unknown>;
     watch?: {
         [key: string]: {
             immediate?: boolean;
