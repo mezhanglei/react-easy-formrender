@@ -2,11 +2,11 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-0.2.6-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.7-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
-High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a 'Form' container component for rendering (2) The exported 'renderformchildren' component does not have a 'Form' container, but only provides the rendering of form fields. You can choose according to yourself
+High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a 'Form' container component for rendering, is Full form component (2) The exported `RenderFormChildren` component does not have a `Form` container, but only provides the rendering of form fields. need to be used with the `Form` container component to have full form functionality.
 
 # Default export component
 
@@ -16,11 +16,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 # RenderFormChildren component
 
-- Rendering a form field through the `properties` property has only two parts: (1) the property setting of the form field, (2) form components own `props` settings, the mental model is simple and it is easy to customize your own forms, Other properties are the same as the default component
-```javascript
-// properties
-SchemaData['properties']
-```
+- Rendering a form field through the `properties` property has only two parts: (1) the property setting of the form field, (2) form components own `props` settings.
 
 ## install
 
@@ -195,14 +191,14 @@ const defaultWidgets: { [key: string]: any } = {
 
 ### Form field settings
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
-2. The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`), for example `hidden` fields show hidden logic, `{{$form.xxx === xxx}}` means that a field value of the form is equal to a value, where `$form` represents the form value object
+2. The properties of the form field fully support string expressions (except `component`, `readOnly`, `props`, `properties`, `render`), for example `hidden: {{$form.xxx === xxx}}` means that a field value of the form is equal to a value, where `$form` represents the form value object
 
 ```javascript
 interface FormFieldProps extends FormItemProps {
     component: string // form component，and properties properties cannot co-exist and string expressions are not supported
     readOnly?: boolean // readOnly mode  ，string expressions are not supported
     render?: any // Non-form controls, which override form component in readOnly，string expressions are not supported
-    props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // The form component's own props property，string expressions are not supported
+    props?: { children?: JSX.Element | {component: string, props: FormFieldProps['props']}[], [key: string]: any } // The form component's own props property，string expressions are not supported
     hidden?: string | boolean // Show-hidden logic, supporting `boolean` types and support string expressions
     properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // Nested form controls Nested objects when they are objects, or arrays of controls when they are arrays，string expressions are not supported
 }
@@ -212,14 +208,12 @@ interface FormFieldProps extends FormItemProps {
 
 ```javascript
 // component props
-interface Props {
-    children?: JSX.Element | ChildrenComponent[],
+interface Props { 
+    children?: JSX.Element | {
+      component: string, // children component
+      props: Props // children props
+    }[],
     [key: string]: any
-}
-// component's children。The types are `JSX.Element | ChildrenComponent[]`, which also support nesting
-interface ChildrenComponent {
-    component: string, // children component
-    props: Props // children props
 }
 ```
 

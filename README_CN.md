@@ -2,11 +2,11 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-0.2.6-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-0.2.7-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
-高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成), 提供两种组件： (1)默认导出组件自带`Form`容器组件进行渲染.(2)导出`RenderFormChildren`组件不带`Form`容器, 只提供表单域的渲染。可以根据自己选择
+高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成), 提供两种组件： (1)默认导出组件自带`Form`容器组件进行渲染,可以实现完整的表单功能(2)导出`RenderFormChildren`组件不带`Form`容器, 只提供表单域的控件渲染, 需要配合`Form`容器组件使用才具有完整表单功能.
 
 # 默认导出组件
 
@@ -16,11 +16,7 @@
 
 # RenderFormChildren组件
 
-- 通过`properties`属性渲染表单域，只有两个部分：(1)表单域的属性设置，(2)表单域内的控件自身的`props`设置.心智模型简单，很轻松定制属于自己的表单。其他属性和默认组件相同
-```javascript
-// properties 属性
-SchemaData['properties']
-```
+- 通过`properties`属性渲染表单域，只有两个部分：(1)表单域的属性设置，(2)表单域内的控件自身的`props`设置.
 
 ## 安装
 
@@ -197,13 +193,13 @@ const defaultWidgets: { [key: string]: any } = {
 
 ### 表单域属性设置
 1. 表单域的属性，可以实现嵌套和数组管理，其中的`FormItemProps`来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
-2. 表单域的属性全面支持字符串表达式（除了`component`,`readOnly`,`props`,`properties`,`render`），例如`hidden`字段显示隐藏的逻辑，`{{$form.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$form`表示表单值对象
+2. 表单域的属性全面支持字符串表达式（除了`component`,`readOnly`,`props`,`properties`,`render`），例如`hidden:{{$form.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$form`表示表单值对象
 ```javascript
 interface FormFieldProps extends FormItemProps {
     component: string // 表单控件代表的字符串，和properties属性不能同时存在，不支持字符串表达式
     readOnly?: boolean | string // 是否为只读模式, 不支持字符串表达式
     render?: any // 非表单控件, 在readOnly只读模式下才会覆盖表单控件，不支持字符串表达式
-    props?: { children?: JSX.Element | ChildrenComponent[], [key: string]: any } // 表单控件自有的props属性, 不支持字符串表达式
+    props?: { children?: JSX.Element | {component: string, props: FormFieldProps['props']}[], [key: string]: any } // 表单控件自有的props属性, 不支持字符串表达式
     hidden?: string | boolean // 显示隐藏的逻辑，支持字符串表达式
     properties?: { [name: string]: FormFieldProps } | FormFieldProps[] // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合， 不支持字符串表达式
 }
@@ -212,15 +208,13 @@ interface FormFieldProps extends FormItemProps {
 ### 表单域内的控件自身的`props`设置
 
 ```javascript
-// 控件自有props设置
+// 控件自有props设置, children 支持嵌套描述组件
 interface Props { 
-    children?: JSX.Element | ChildrenComponent[],
+    children?: JSX.Element | {
+      component: string, // children组件代表的字符串
+      props: Props // children组件自有的props属性
+    }[],
     [key: string]: any
-}
-// 表单控件自己的`children`。类型有`JSX.Element | ChildrenComponent[]`,同样支持嵌套
-interface ChildrenComponent {
-    component: string, // children组件代表的字符串
-    props: Props // children组件自有的props属性
 }
 ```
 

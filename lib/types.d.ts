@@ -1,18 +1,14 @@
 import { FormItemProps, FormOptions, FormProps } from "react-easy-formcore";
 import { defaultFields } from './register';
-export interface ChildrenComponent {
-    component: string;
-    props: {
-        children?: JSX.Element | ChildrenComponent[];
-        [key: string]: any;
-    };
-}
 export interface FormFieldProps extends FormItemProps {
     component: string;
     readOnly?: boolean | string;
     render?: any;
     props?: {
-        children?: JSX.Element | ChildrenComponent[];
+        children?: JSX.Element | {
+            component: string;
+            props: FormFieldProps['props'];
+        }[];
         [key: string]: any;
     };
     hidden?: string | boolean;
