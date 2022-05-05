@@ -1,14 +1,16 @@
-import { FormItemProps, FormOptions, FormProps } from "react-easy-formcore";
+import { FormItemProps, FormProps } from "react-easy-formcore";
+import { FormRenderStore } from "./formrender-store";
 import { defaultFields } from './register';
 export interface FormFieldProps extends FormItemProps {
-    component: string;
-    readOnly?: boolean | string;
-    render?: any;
-    props?: {
-        children?: JSX.Element | {
-            component: string;
-            props: FormFieldProps['props'];
-        }[];
+    readOnly?: boolean;
+    readOnlyWidget?: string;
+    readOnlyRender?: any;
+    widget?: string;
+    widgetProps?: {
+        children?: JSX.Element | Array<{
+            widget: string;
+            widgetProps: FormFieldProps['widgetProps'];
+        }>;
         [key: string]: any;
     };
     hidden?: string | boolean;
@@ -16,14 +18,15 @@ export interface FormFieldProps extends FormItemProps {
         [name: string]: FormFieldProps;
     } | FormFieldProps[];
 }
-export interface SchemaData extends FormProps {
+export interface SchemaData extends FormProps<FormRenderStore> {
     properties: {
         [key: string]: FormFieldProps;
-    };
+    } | FormFieldProps[];
 }
 export declare type WatchHandler = (newValue: any, oldValue: string) => void;
-export interface RenderFormProps extends FormProps {
+export interface RenderFormProps extends FormProps<FormRenderStore> {
     schema: SchemaData;
+    onPropertiesChange?: (name: string, properties: SchemaData['properties']) => void;
     watch?: {
         [key: string]: {
             immediate?: boolean;
@@ -34,15 +37,11 @@ export interface RenderFormProps extends FormProps {
         [key: string]: any;
     };
     Fields?: typeof defaultFields;
-    children?: (properties: SchemaData['properties'], renderItem: (params: {
-        name: string;
-        field: FormFieldProps;
-        path?: string;
-    }) => any) => any;
 }
-export interface RenderFormChildrenProps extends FormOptions {
+export interface RenderFormChildrenProps {
+    propertiesName: string;
     properties: SchemaData['properties'];
-    initialValues?: Partial<unknown>;
+    onPropertiesChange?: (name: string, properties: SchemaData['properties']) => void;
     watch?: {
         [key: string]: {
             immediate?: boolean;
@@ -53,9 +52,5 @@ export interface RenderFormChildrenProps extends FormOptions {
         [key: string]: any;
     };
     Fields?: typeof defaultFields;
-    children?: (properties: SchemaData['properties'], renderItem: (params: {
-        name: string;
-        field: FormFieldProps;
-        path?: string;
-    }) => any) => any;
 }
+export declare type ValueOf<T> = T[keyof T];

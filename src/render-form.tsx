@@ -12,12 +12,16 @@ export default function RenderForm(props: RenderFormProps) {
     widgets,
     Fields,
     children,
-    ...rest
+    onPropertiesChange,
+    ...restProps
   } = props;
+
+  const { properties, ...schemaRest } = schema;
+  const rest = { ...schemaRest, ...restProps };
 
   return (
     <Form store={store} {...rest}>
-      <RenderFormChildren children={children} properties={schema?.properties} watch={watch} widgets={widgets} Fields={Fields} />
+      <RenderFormChildren propertiesName="default" onPropertiesChange={onPropertiesChange} properties={properties} watch={watch} widgets={widgets} Fields={Fields} />
     </Form>
-  )
+  );
 }
