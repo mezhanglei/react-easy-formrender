@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-1.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-1.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -35,131 +35,172 @@ yarn add react-easy-formrender
 
 ## 基本使用
 
+1. 首先注册基本组件(以antd@4.20.2组件库为例)
 ```javascript
+// register
+import RenderBaseForm, { RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
-import "./index.less";
-import RenderForm, { Form, FormRenderStore, RenderFormChildren }  from 'react-easy-formrender';
-import { Button, Checkbox, Input, Radio, Select } from 'antd';
+import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
+export * from 'react-easy-formrender';
+// 提供开发过程中的基础控件(控件需要满足具有value传参，onChange回调函数的props)
+export const AntdBaseWidgets = {
+  "Input": Input, // 输入控件
+  "Input.TextArea": Input.TextArea, // 输入文本域
+  "Input.Password": Input.Password, // 输入密码组件
+  "Input.Search": Input.Search, // 输入搜索组件
+  "InputNumber": InputNumber, // 数字输入控件
+  "Mentions": Mentions, // 携带@提示的输入控件
+  "Mentions.Option": Mentions.Option, // 提示控件的option
+  "Checkbox": Checkbox, // 多选组件
+  'Checkbox.Group': Checkbox.Group, // 多选列表组件
+  "Radio": Radio, // 单选组件
+  "Radio.Group": Radio.Group, // 单选列表组件
+  "Radio.Button": Radio.Button, // 单选按钮组件
+  "DatePicker": DatePicker, // 日期控件
+  "DatePicker.RangePicker": DatePicker.RangePicker, // 日期范围控件
+  "Rate": Rate, // 星星评分控件
+  "Select": Select, // 选择控件
+  "Select.Option": Select.Option, // 选择的选项
+  "Slider": Slider, // 滑动输入项
+  "Switch": Switch, // 切换组件
+  "TimePicker": TimePicker, // 时分秒控件
+  "TimePicker.RangePicker": TimePicker.RangePicker, // 时分秒范围控件
+}
 
-// register components
-export const defaultWidgets: { [key: string]: any } = {
-    input: Input,
-    select: Select,
-    radioGroup: Radio.Group,
-    radio: Radio,
-    option: Select.Option,
-    Checkbox: Checkbox
-};
+export default function FormRender(props: RenderFormProps) {
+  return (
+    <RenderBaseForm {...props} widgets={{ ...AntdBaseWidgets, ...props?.widgets }} />
+  );
+}
+```
+2. 引入第一步已经注册完的组件
+```javascript
+import { Button } from 'antd';
+import React, { useState } from 'react';
+import RenderForm, { useFormRenderStore } from './form-render';
+export default function Demo5(props) {
 
-class demo extends React.Component {
-    store: FormRenderStore<any>;
-    constructor(props) {
-      super(props);
-      this.store = new FormRenderStore();
-      this.state = {
-      schema: {
-        title: '1111',
-        className: 'form-wrapper',
+  const watch = {
+    'name2': (newValue, oldValue) => {
+      console.log(newValue, oldValue)
+    },
+    'name3[0]': (newValue, oldValue) => {
+      console.log(newValue, oldValue)
+    },
+    'name4': (newValue, oldValue) => {
+      console.log(newValue, oldValue)
+    }
+  }
+
+  const [schema, setSchema] = useState({
+    properties: {
+      name1: {
+        label: "只读展示",
+        widget: 'Input',
+        required: true,
+        readOnly: true,
+        readOnlyRender: "只读展示组件",
+        initialValue: 1111,
+        // col: { span: 6 },
+        hidden: '{{$form.name5 == true}}',
+        widgetProps: {}
+      },
+      name2: {
+        label: "输入框",
+        widget: 'Input',
+        required: true,
+        // col: { span: 6 },
+        rules: [{ required: true, message: 'name1空了' }],
+        initialValue: 1,
+        hidden: '{{$form.name5 == true}}',
+        widgetProps: {}
+      },
+      name3: {
+        label: "数组",
+        required: true,
+        // col: { span: 6 },
+        properties: [{
+          widget: 'Select',
+          required: true,
+          rules: [{ required: true, message: 'name3[0]空了' }],
+          initialValue: { label: '选项1', value: '1', key: '1' },
+          widgetProps: {
+            labelInValue: true,
+            style: { width: '100%' },
+            children: [
+              { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } },
+              { widget: 'Select.Option', widgetProps: { key: 2, value: '2', children: '选项2' } }
+            ]
+          }
+        }, {
+          widget: 'Select',
+          required: true,
+          rules: [{ required: true, message: 'name3[1]空了' }],
+          widgetProps: {
+            labelInValue: true,
+            style: { width: '100%' },
+            children: [
+              { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } },
+              { widget: 'Select.Option', widgetProps: { key: 2, value: '2', children: '选项2' } }
+            ]
+          }
+        }]
+      },
+      name4: {
+        label: '对象嵌套',
+        required: true,
+        // col: { span: 6 },
         properties: {
-          name1: {
-            label: "name1",
-            widget: 'input',
-            required: true,
-            readOnly: true,
-            readOnlyRender: 1111,
-            rules: [{ required: true, message: 'name1空了' }],
-            initialValue: 1111,
-            // labelAlign: 'vertical',
-            col: { span: 6 },
-            hidden: '{{$form.name4 == true}}',
-            widgetProps: {}
-          },
-          name2: {
-            label: "name2",
-            required: true,
-            rules: [{ required: true, message: 'name2空了' }],
-            col: { span: 6 },
-            properties: [{
-              widget: 'select',
-              required: true,
-              rules: [{ required: true, message: 'name2空了' }],
-              initialValue: { label: '选项1', value: '1', key: '1' },
-              widgetProps: {
-                labelInValue: true,
-                style: { width: '100%' },
-                children: [{ widget: 'option', widgetProps: { key: 1, value: '1', children: '选项1' } }, { widget: 'option', widgetProps: { key: 2, value: '2', children: '选项2' } }]
-              }
-            }, {
-              widget: 'select',
-              required: true,
-              rules: [{ required: true, message: 'name2空了' }],
-              widgetProps: {
-                labelInValue: true,
-                style: { width: '100%' },
-                children: [{ widget: 'option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
-              }
-            }]
-          },
-          name3: {
-            label: 'name3',
-            required: true,
-            col: { span: 6 },
-            properties: {
-              first: {
-                rules: [{ required: true, message: 'name3空了' }],
-                widget: 'select',
-                widgetProps: {
-                  style: { width: '100%' },
-                  children: [{ widget: 'option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
-                }
-              },
-              second: {
-                rules: [{ required: true, message: 'name3空了' }],
-                widget: 'select',
-                widgetProps: {
-                  style: { width: '100%' },
-                  children: [{ widget: 'option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
-                }
-              }
-            }
-          },
-          name4: {
-            label: 'name4',
-            widget: 'Checkbox',
-            required: true,
-            valueProp: 'checked',
-            col: { span: 6 },
-            initialValue: true,
-            rules: [{ required: true, message: 'name3空了' }],
+          first: {
+            rules: [{ required: true, message: 'name4空了' }],
+            widget: 'Select',
             widgetProps: {
               style: { width: '100%' },
-              children: '多选框'
+              children: [{ widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
+            }
+          },
+          second: {
+            rules: [{ required: true, message: 'name2空了' }],
+            widget: 'Select',
+            widgetProps: {
+              style: { width: '100%' },
+              children: [{ widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
             }
           }
         }
-      }
-    };
-  }
-
-    onSubmit = async (e) => {
-        e.preventDefault();
-        const { error, values } = await this.store.validate();
-        console.log(error, values);
-    };
-
-    render() {
-        return (
-            <div>
-               {/* <Form store={this.store}>
-                    <RenderFormChildren watch={watch} widgets={defaultWidgets} propertiesName="default" properties={this.state.schema?.properties} />
-                   </Form> */}
-                <RenderForm widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
-                <div style={{ marginLeft: '140px' }}>
-                    <Button onClick={this.onSubmit}>submit</Button>
-                </div>
-            </div>
-        );
+      },
+      name5: {
+        label: 'name4',
+        widget: 'Checkbox',
+        required: true,
+        valueProp: 'checked',
+        // col: { span: 6 },
+        initialValue: true,
+        rules: [{ required: true, message: 'name3空了' }],
+        widgetProps: {
+          style: { width: '100%' },
+          children: '多选框'
+        }
+      },
     }
+  })
+
+  const store = useFormRenderStore();
+
+  const onSubmit = async (e) => {
+    e?.preventDefault?.();
+    const result = await store.validate();
+    console.log(result, 'result');
+  };
+
+  return (
+    <div>
+      <RenderForm store={store} schema={schema} watch={watch} />
+      <div style={{ marginLeft: '120px' }}>
+        <Button onClick={onSubmit}>submit</Button>
+      </div>
+    </div>
+  );
 }
 ```
 

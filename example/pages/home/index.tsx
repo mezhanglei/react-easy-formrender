@@ -44,7 +44,6 @@ class demo extends React.Component {
             rules: [{ required: true, message: 'name1空了' }],
             initialValue: 1111,
             // labelAlign: 'vertical',
-            col: { span: 6 },
             hidden: '{{$form.name4 == true}}',
             widgetProps: {}
           },
@@ -52,7 +51,6 @@ class demo extends React.Component {
             label: "name2",
             required: true,
             rules: [{ required: true, message: 'name2空了' }],
-            col: { span: 6 },
             properties: [{
               widget: 'select',
               required: true,
@@ -77,7 +75,6 @@ class demo extends React.Component {
           name3: {
             label: 'name3',
             required: true,
-            col: { span: 6 },
             properties: {
               first: {
                 rules: [{ required: true, message: 'name3空了' }],
@@ -102,7 +99,6 @@ class demo extends React.Component {
             widget: 'Checkbox',
             required: true,
             valueProp: 'checked',
-            col: { span: 6 },
             initialValue: true,
             rules: [{ required: true, message: 'name3空了' }],
             widgetProps: {
