@@ -2,14 +2,15 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-1.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-1.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
-High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a 'Form' container component for rendering, is Full form component (2) The exported `RenderFormChildren` component does not have a `Form` container, but only provides the rendering of form fields. need to be used with the `Form` container component to have full form functionality.
+High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a `Form` container component for rendering, is Full form component (2) The exported `RenderFormChildren` component does not have a `Form` container, but only provides the rendering of form fields. need to be used with the `Form` container component to have full form functionality.
 
 # version log
-- v1.0.0:
+- v1.x:
+   - `onValuesChange` optimise
    - Change `component` and `props` to `widget` and `widgetProps` in schema
    - Change `render` in schema to `readOnlyWidget` and `readOnlyRender`
    - Version matches version 1.1.x of react-easy-formcore
@@ -17,13 +18,13 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # Default export component
 
 - The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
-- Render the form through the `schema` attribute, It includes three parts： (1)the `Form` container settings, (2)the form field settings, (3) form components own `widgetProps` settings, the mental model is simple and it is easy to customize your own forms
+- Render the form through the `schema` attribute, It includes three parts: 1. the props of the outermost form container.2.the FormFieldProps of the field corresponding to the control in the `properties` property. 3. the `widgetProps` in the FormFieldProps
 - String expressions are fully supported for simple types of property fields in `schema`
 
 # RenderFormChildren component
 
-- Rendering a form field through the `properties` property has only two parts: (1) the property setting of the form field, (2) form components own `widgetProps` settings.
-- More than one of these components may be used, and the `propertiesName` property tag must be set.Default name `default`
+- Rendering a form field through the `properties` property。
+- More than one of these components may be used, and the `childrenName` property tag must be set.Default name `default`
 
 ## install
 
@@ -170,7 +171,7 @@ export default function Demo5(props) {
         }
       },
       name5: {
-        label: 'name4',
+        label: 'name5',
         widget: 'Checkbox',
         required: true,
         valueProp: 'checked',
@@ -206,7 +207,7 @@ export default function Demo5(props) {
 
 ### Form Component Props
 - base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- shema: form render data
+- `shema`: form render data, There are three main parts: 1. the props of the outermost form container.2.the FormFieldProps of the field corresponding to the control in the `properties` property. 3. the `widgetProps` in the FormFieldProps
 ```javascript
 export interface SchemaData extends FormProps<FormRenderStore> {
   properties: { [key: string]: FormFieldProps } | FormFieldProps[]
@@ -254,25 +255,26 @@ const defaultWidgets: { [key: string]: any } = {
   <RenderForm widgets={defaultWidgets} />
 }
 ```
-- `onPropertiesChange`: `(propertiesName: string, newProperties: SchemaData['properties'])=>void` Callback function when `properties` of `schema` is changed
+- `onPropertiesChange`: `(childrenName: string, newProperties: SchemaData['properties'])=>void` Callback function when `properties` of `schema` is changed
 
-### Form field settings
+### FormFieldProps
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$form.xxx === xxx}}` means that a field value of the form is equal to a value, where `$form` represents the form value object
 
 ```javascript
 export interface FormFieldProps extends FormItemProps {
+  dependencies?: string[]; // The field item on which the current field depends will be injected into the current corresponding control as a dependvalues property of the dependent field
   readOnly?: boolean;
   readOnlyWidget?: string; // Only one of the components in read-only mode, need register in `widgets`,and readOnlyRender, can be active, with readOnlyRender having the highest priority.
   readOnlyRender?: any; // Only one of the components in read-only mode, and readOnlyWidget, can be active, with readOnlyRender having the highest priority.
   widget?: string; // The string represented by the form control, and the properties property cannot both exist
-  widgetProps?: { children?: JSX.Element | Array<{ widget: string, widgetProps: FormFieldProps['widgetProps'] }>, [key: string]: any }; // widget props
+  widgetProps?: { children?: any | Array<{ widget: string, widgetProps: FormFieldProps['widgetProps'] }>, [key: string]: any }; // widget props
   hidden?: string | boolean; // show or hidden
   properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // Nested form controls Nested objects when they are objects, or collections of arrays when they are array types
 }
 ```
 
-### widget's own props setting
+### widgetProps
 
 ```javascript
 interface widgetProps?: { 
@@ -286,13 +288,12 @@ The `rules` rules in the form control are derived from the `rules` property in [
 
 ### FormRenderStore Methods
   There are two parts: methods for rendering forms and methods for form controls
-1. Methods for rendering forms. (Example of the path rule: `a.b[0]`, representing the 0th item of the b array of properties under the a property)
- - updatePropertiesByPath: `(path: string, data?: Partial<FormFieldProps>, propertiesName = "default") => void` updates the `propertiesName` of the specified `propertiesName` according to the path path properties`;
- - setPropertiesByPath: `(path: string, data?: Partial<FormFieldProps>, propertiesName = "default") => void` Override the ` properties` of the specified `propertiesName` according to the path path. properties`. 2;
+1. Methods for rendering forms. (the path rule: `a.b[0]`, representing the 0th item of the b array of properties under the a property)
+ - `updatePropertiesByPath`: `(path: string, data?: Partial<FormFieldProps>, childrenName = "default") => void` Update the information corresponding to `path` in schema, the default `childrenName` of RenderFormChildren is `default`.
+ - `setPropertiesByPath`: `(path: string, data?: Partial<FormFieldProps>, childrenName = "default") => void` Override set the information corresponding to `path` in schema, the default `childrenName` of RenderFormChildren is `default`.
+ - `setProperties`: `(childrenName = "default", data?: Partial<FormFieldProps>) => void` set the `properties` of the specified `childrenName` RenderFormChildren;
 2. Methods for form controls
   Inherits the `FormStore Methods` properties and methods from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-
-Translated with www.DeepL.com/Translator (free version)
 
 ### Hooks
 

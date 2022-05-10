@@ -95,7 +95,7 @@ class demo extends React.Component {
             }
           },
           name4: {
-            label: 'name4',
+            label: 'name5',
             widget: 'Checkbox',
             required: true,
             valueProp: 'checked',
@@ -121,7 +121,7 @@ class demo extends React.Component {
     return (
       <div>
         {/* <Form store={this.store}>
-                    <RenderFormChildren watch={watch} widgets={defaultWidgets} propertiesName="default" properties={this.state.schema?.properties} />
+                    <RenderFormChildren watch={watch} widgets={defaultWidgets} childrenName="default" properties={this.state.schema?.properties} />
                 </Form> */}
         <RenderForm watch={watch} widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
         <div style={{ marginLeft: '140px' }}>
