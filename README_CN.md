@@ -208,7 +208,7 @@ export default function Demo5(props) {
 ### 表单容器的props
 - 基础属性：来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
 
-- `shema`: 渲染表单的数据, 主要分为三部分, 最外层表单容器的props, `properties`属性中字段对应控件的FormFieldProps以及FormFieldProps中的`widgetProps`
+- `schema`: 渲染表单的数据, 主要分为三部分, 最外层表单容器的props, `properties`属性中字段对应控件的FormFieldProps以及FormFieldProps中的`widgetProps`
 ```javascript
 // shcema 属性
 export interface SchemaData extends FormProps<FormRenderStore> {
@@ -236,27 +236,7 @@ const watch = {
   <RenderForm watch={watch} />
 }
 ```
-- `widgets`：注册表单所需要使用的组件
-```javascript
-import { Button, Checkbox, Input, Radio, Select } from 'antd';
-
-  ...
-
-// register components
-const defaultWidgets: { [key: string]: any } = {
-    input: Input,
-    select: Select,
-    radioGroup: Radio.Group,
-    radio: Radio,
-    option: Select.Option,
-    Checkbox: Checkbox
-};
-
-  ...
-  
-  <RenderForm widgets={defaultWidgets} />
-}
-```
+- `widgets`：注册表单所需要使用的组件.
 - `onPropertiesChange`: `(childrenName: string, newProperties: SchemaData['properties'])=>void` `schema`的`properties`更改时回调函数
 
 ### 表单域属性设置FormFieldProps

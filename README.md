@@ -207,7 +207,7 @@ export default function Demo5(props) {
 
 ### Form Component Props
 - base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- `shema`: form render data, There are three main parts: 1. the props of the outermost form container.2.the FormFieldProps of the field corresponding to the control in the `properties` property. 3. the `widgetProps` in the FormFieldProps
+- `schema`: form render data, There are three main parts: 1. the props of the outermost form container.2.the FormFieldProps of the field corresponding to the control in the `properties` property. 3. the `widgetProps` in the FormFieldProps
 ```javascript
 export interface SchemaData extends FormProps<FormRenderStore> {
   properties: { [key: string]: FormFieldProps } | FormFieldProps[]
@@ -234,27 +234,7 @@ const watch = {
   <RenderForm watch={watch} />
 }
 ```
-- `widgets`：register components for form to use
-```javascript
-import { Button, Checkbox, Input, Radio, Select } from 'antd';
-
-  ...
-
-// register components
-const defaultWidgets: { [key: string]: any } = {
-    input: Input,
-    select: Select,
-    radioGroup: Radio.Group,
-    radio: Radio,
-    option: Select.Option,
-    Checkbox: Checkbox
-};
-
-  ...
-  
-  <RenderForm widgets={defaultWidgets} />
-}
-```
+- `widgets`：register components for form to use.
 - `onPropertiesChange`: `(childrenName: string, newProperties: SchemaData['properties'])=>void` Callback function when `properties` of `schema` is changed
 
 ### FormFieldProps
