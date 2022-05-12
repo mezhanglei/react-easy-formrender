@@ -43,7 +43,7 @@ class demo extends React.Component {
             readOnlyRender: 1111,
             rules: [{ required: true, message: 'name1空了' }],
             initialValue: 1111,
-            // labelAlign: 'vertical',
+            // layout: 'vertical',
             hidden: '{{$form.name4 == true}}',
             widgetProps: {}
           },
@@ -95,7 +95,7 @@ class demo extends React.Component {
             }
           },
           name4: {
-            label: 'name5',
+            label: 'name4',
             widget: 'Checkbox',
             required: true,
             valueProp: 'checked',
@@ -121,7 +121,7 @@ class demo extends React.Component {
     return (
       <div>
         {/* <Form store={this.store}>
-                    <RenderFormChildren watch={watch} widgets={defaultWidgets} childrenName="default" properties={this.state.schema?.properties} />
+                    <RenderFormChildren watch={watch} widgets={defaultWidgets} propertiesName="default" properties={this.state.schema?.properties} />
                 </Form> */}
         <RenderForm watch={watch} widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
         <div style={{ marginLeft: '140px' }}>

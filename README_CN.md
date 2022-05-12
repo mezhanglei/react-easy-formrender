@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-1.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-1.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -10,6 +10,7 @@
 
 # version log
 - v1.x:
+   - 更改表单控件的方法
    - 优化`onValuesChange`使用
    - 更改schema中的`component`和`props`为`widget`和`widgetProps`
    - 更改schema中的`render`为`readOnlyWidget`和`readOnlyRender`
@@ -24,7 +25,7 @@
 # RenderFormChildren组件
 
 - 通过`properties`属性渲染表单域
-- 该组件可使用多个，且必须设置`childrenName`属性标记唯一性, 默认名为`default`
+- 该组件可使用多个，且必须设置`propertiesName`属性标记唯一性, 默认名为`default`
 
 ## 安装
 
@@ -210,7 +211,7 @@ export default function Demo5(props) {
 
 - `schema`: 渲染表单的数据, 主要分为三部分, 最外层表单容器的props, `properties`属性中字段对应控件的FormFieldProps以及FormFieldProps中的`widgetProps`
 ```javascript
-// shcema 属性
+// schema 属性
 export interface SchemaData extends FormProps<FormRenderStore> {
   properties: { [key: string]: FormFieldProps } | FormFieldProps[]
 }
@@ -237,7 +238,7 @@ const watch = {
 }
 ```
 - `widgets`：注册表单所需要使用的组件.
-- `onPropertiesChange`: `(childrenName: string, newProperties: SchemaData['properties'])=>void` `schema`的`properties`更改时回调函数
+- `onPropertiesChange`: `(propertiesName: string, newProperties: SchemaData['properties'])=>void` `schema`的`properties`更改时回调函数
 
 ### 表单域属性设置FormFieldProps
 1. 表单域的属性，可以实现嵌套和数组管理，其中的`FormItemProps`来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
@@ -270,9 +271,11 @@ interface widgetProps?: {
 ### FormRenderStore Methods
   包括两部分：渲染表单的方法以及表单控件的方法
 1. 渲染表单的方法。(其中path的规则：`a.b[0]`, 表示a属性下的b数组属性的第0项)
- - `updatePropertiesByPath`: `(path: string, data?: Partial<FormFieldProps>, childrenName = "default") => void` 更新schema中`path`对应的信息, 默认RenderFormChildren的`childrenName`为`default`;
- - `setPropertiesByPath`: `(path: string, data?: Partial<FormFieldProps>, childrenName = "default") => void` 设置schema中`path`对应的信息, 默认RenderFormChildren的`childrenName`为`default`;
- - `setProperties`: `(childrenName = "default", data?: Partial<FormFieldProps>) => void` 设置指定的`childrenName`组件的`properties`;
+ - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>, propertiesName = "default") => void` 更新schema中`path`对应的信息, 默认RenderFormChildren的`propertiesName`为`default`;
+ - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>, propertiesName = "default") => void` 设置schema中`path`对应的信息, 默认RenderFormChildren的`propertiesName`为`default`;
+ - `delItemByPath`: `(path: string, propertiesName = "default") => void` 删除schema中`path`对应的信息, 默认RenderFormChildren的`propertiesName`为`default`;
+ - `getItemByPath`: `(path: string, propertiesName = "default") => void` 获取schema中`path`对应的信息, 默认RenderFormChildren的`propertiesName`为`default`;
+ - `setProperties`: `(propertiesName = "default", data?: Partial<FormFieldProps>) => void` 设置指定的`propertiesName`组件的`properties`;
 2. 表单控件的方法
   继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`FormStore Methods`属性和方法
 

@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-1.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-1.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -10,6 +10,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 # version log
 - v1.x:
+   - FormRenderStore Methods changed
    - `onValuesChange` optimise
    - Change `component` and `props` to `widget` and `widgetProps` in schema
    - Change `render` in schema to `readOnlyWidget` and `readOnlyRender`
@@ -24,7 +25,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # RenderFormChildren component
 
 - Rendering a form field through the `properties` property。
-- More than one of these components may be used, and the `childrenName` property tag must be set.Default name `default`
+- More than one of these components may be used, and the `propertiesName` property tag must be set.Default name `default`
 
 ## install
 
@@ -235,7 +236,7 @@ const watch = {
 }
 ```
 - `widgets`：register components for form to use.
-- `onPropertiesChange`: `(childrenName: string, newProperties: SchemaData['properties'])=>void` Callback function when `properties` of `schema` is changed
+- `onPropertiesChange`: `(propertiesName: string, newProperties: SchemaData['properties'])=>void` Callback function when `properties` of `schema` is changed
 
 ### FormFieldProps
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
@@ -269,9 +270,11 @@ The `rules` rules in the form control are derived from the `rules` property in [
 ### FormRenderStore Methods
   There are two parts: methods for rendering forms and methods for form controls
 1. Methods for rendering forms. (the path rule: `a.b[0]`, representing the 0th item of the b array of properties under the a property)
- - `updatePropertiesByPath`: `(path: string, data?: Partial<FormFieldProps>, childrenName = "default") => void` Update the information corresponding to `path` in schema, the default `childrenName` of RenderFormChildren is `default`.
- - `setPropertiesByPath`: `(path: string, data?: Partial<FormFieldProps>, childrenName = "default") => void` Override set the information corresponding to `path` in schema, the default `childrenName` of RenderFormChildren is `default`.
- - `setProperties`: `(childrenName = "default", data?: Partial<FormFieldProps>) => void` set the `properties` of the specified `childrenName` RenderFormChildren;
+ - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>, propertiesName = "default") => void` Update the information corresponding to `path` in schema, the default `propertiesName` of RenderFormChildren is `default`.
+ - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>, propertiesName = "default") => void` Override set the information corresponding to `path` in schema, the default `propertiesName` of RenderFormChildren is `default`.
+ - `delItemByPath`: `(path: string, propertiesName = "default") => void` delete the information corresponding to `path` in schema, the default `propertiesName` of RenderFormChildren is `default`.
+ - `getItemByPath`: `(path: string, propertiesName = "default") => void` get the information corresponding to `path` in schema, the default `propertiesName` of RenderFormChildren is `default`.
+ - `setProperties`: `(propertiesName = "default", data?: Partial<FormFieldProps>) => void` set the `properties` of the specified `propertiesName` RenderFormChildren;
 2. Methods for form controls
   Inherits the `FormStore Methods` properties and methods from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
