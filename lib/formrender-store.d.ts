@@ -1,23 +1,31 @@
 import { FormStore } from "react-easy-formcore";
 import { FormFieldProps, SchemaData } from "./types";
-export declare type FormRenderListener = {
-    name: string;
-    onChange: (newValue?: any, oldValue?: any) => void;
-};
-export declare type PropertiesMap = {
-    [key: string]: SchemaData['properties'];
-};
+export declare type FormRenderListener = (newValue?: any, oldValue?: any) => void;
+export declare type Properties = SchemaData['properties'];
 export declare class FormRenderStore<T extends Object = any> extends FormStore {
-    private propertiesMap;
-    private lastPropertiesMap;
+    private properties;
+    private lastProperties;
     private propertiesListeners;
     constructor(values?: Partial<T>);
-    getProperties(propertiesName?: string): any;
-    setProperties(propertiesName: string, data: SchemaData['properties']): void;
-    updateItemByPath: (path: string, data?: Partial<FormFieldProps> | undefined, propertiesName?: string) => void;
-    setItemByPath: (path: string, data?: Partial<FormFieldProps> | undefined, propertiesName?: string) => void;
-    delItemByPath: (path: string, propertiesName?: string) => void;
-    getItemByPath: (path: string, propertiesName?: string) => any;
-    subscribeProperties(name: string, listener: FormRenderListener['onChange']): () => void;
+    getProperties(): FormFieldProps[] | {
+        [key: string]: FormFieldProps;
+    } | undefined;
+    setProperties(data?: SchemaData['properties']): void;
+    updateItemByPath: (path: string, data?: Partial<FormFieldProps> | undefined) => void;
+    setItemByPath: (path: string, data?: Partial<FormFieldProps> | undefined) => void;
+    addItemByIndex: (data: {
+        name: string;
+        field: FormFieldProps;
+    }, index?: number | undefined, parentPath?: string | undefined) => void;
+    delItemByPath: (path: string) => void;
+    getItemByPath: (path: string) => any;
+    swapItemByPath: (from: {
+        parentPath?: string;
+        index: number;
+    }, to: {
+        parentPath?: string;
+        index: number;
+    }) => void;
+    subscribeProperties(listener: FormRenderListener): () => void;
     private notifyProperties;
 }

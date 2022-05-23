@@ -50,11 +50,10 @@ class demo extends React.Component {
           name2: {
             label: "name2",
             required: true,
-            rules: [{ required: true, message: 'name2空了' }],
             properties: [{
               widget: 'select',
               required: true,
-              rules: [{ required: true, message: 'name2空了' }],
+              rules: [{ required: true, message: 'name2[0]空了' }],
               initialValue: { label: '选项1', value: '1', key: '1' },
               widgetProps: {
                 labelInValue: true,
@@ -64,7 +63,7 @@ class demo extends React.Component {
             }, {
               widget: 'select',
               required: true,
-              rules: [{ required: true, message: 'name2空了' }],
+              rules: [{ required: true, message: 'name2[1]空了' }],
               widgetProps: {
                 labelInValue: true,
                 style: { width: '100%' },
@@ -77,7 +76,7 @@ class demo extends React.Component {
             required: true,
             properties: {
               first: {
-                rules: [{ required: true, message: 'name3空了' }],
+                rules: [{ required: true, message: 'name3.first空了' }],
                 widget: 'select',
                 widgetProps: {
                   style: { width: '100%' },
@@ -85,7 +84,7 @@ class demo extends React.Component {
                 }
               },
               second: {
-                rules: [{ required: true, message: 'name3空了' }],
+                rules: [{ required: true, message: 'name3.second空了' }],
                 widget: 'select',
                 widgetProps: {
                   style: { width: '100%' },
@@ -100,7 +99,7 @@ class demo extends React.Component {
             required: true,
             valueProp: 'checked',
             initialValue: true,
-            rules: [{ required: true, message: 'name3空了' }],
+            rules: [{ required: true, message: 'name5空了' }],
             widgetProps: {
               style: { width: '100%' },
               children: '多选框'
@@ -121,7 +120,7 @@ class demo extends React.Component {
     return (
       <div>
         {/* <Form store={this.store}>
-                    <RenderFormChildren watch={watch} widgets={defaultWidgets} propertiesName="default" properties={this.state.schema?.properties} />
+                    <RenderFormChildren watch={watch} widgets={defaultWidgets} properties={this.state.schema?.properties} />
                 </Form> */}
         <RenderForm watch={watch} widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
         <div style={{ marginLeft: '140px' }}>

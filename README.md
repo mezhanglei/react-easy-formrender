@@ -2,13 +2,16 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-1.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-2.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a `Form` container component for rendering, is Full form component (2) The exported `RenderFormChildren` component does not have a `Form` container, but only provides the rendering of form fields. need to be used with the `Form` container component to have full form functionality.
 
 # version log
+- v2.x:
+  - Changing the api of the `RenderFormChildren` component
+  - Change the Methods of `FormRenderStore`.
 - v1.x:
    - FormRenderStore Methods changed
    - `onValuesChange` optimise
@@ -25,7 +28,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # RenderFormChildren component
 
 - Rendering a form field through the `properties` property。
-- More than one of these components may be used, and the `propertiesName` property tag must be set.Default name `default`
+- only one of the components can be used.
 
 ## install
 
@@ -112,7 +115,7 @@ export default function Demo5(props) {
         widget: 'Input',
         required: true,
         // col: { span: 6 },
-        rules: [{ required: true, message: 'name1空了' }],
+        rules: [{ required: true, message: 'name2空了' }],
         initialValue: 1,
         hidden: '{{$form.name5 == true}}',
         widgetProps: {}
@@ -178,7 +181,7 @@ export default function Demo5(props) {
         valueProp: 'checked',
         // col: { span: 6 },
         initialValue: true,
-        rules: [{ required: true, message: 'name3空了' }],
+        rules: [{ required: true, message: 'name5空了' }],
         widgetProps: {
           style: { width: '100%' },
           children: '多选框'
@@ -236,7 +239,7 @@ const watch = {
 }
 ```
 - `widgets`：register components for form to use.
-- `onPropertiesChange`: `(propertiesName: string, newProperties: SchemaData['properties'])=>void` Callback function when `properties` of `schema` is changed
+- `onPropertiesChange`: `(properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;` Callback function when `properties` of `schema` is changed
 
 ### FormFieldProps
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
@@ -270,11 +273,13 @@ The `rules` rules in the form control are derived from the `rules` property in [
 ### FormRenderStore Methods
   There are two parts: methods for rendering forms and methods for form controls
 1. Methods for rendering forms. (the path rule: `a.b[0]`, representing the 0th item of the b array of properties under the a property)
- - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>, propertiesName = "default") => void` Update the information corresponding to `path` in schema, the default `propertiesName` of RenderFormChildren is `default`.
- - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>, propertiesName = "default") => void` Override set the information corresponding to `path` in schema, the default `propertiesName` of RenderFormChildren is `default`.
- - `delItemByPath`: `(path: string, propertiesName = "default") => void` delete the information corresponding to `path` in schema, the default `propertiesName` of RenderFormChildren is `default`.
- - `getItemByPath`: `(path: string, propertiesName = "default") => void` get the information corresponding to `path` in schema, the default `propertiesName` of RenderFormChildren is `default`.
- - `setProperties`: `(propertiesName = "default", data?: Partial<FormFieldProps>) => void` set the `properties` of the specified `propertiesName` RenderFormChildren;
+ - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Update the information corresponding to `path` in schema.
+ - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Override set the information corresponding to `path` in schema.
+ - `delItemByPath`: `(path: string) => void` delete the information corresponding to `path` in schema.
+ - `addItemByIndex`: `(data: { name: string, field: FormFieldProps }, index?: number, parentPath?: string) => void` Add option based on `index` and `parentPath`.
+ - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in schema.
+ - `swapItemByPath`: `(from: { parentPath?: string, index: number }, to: { parentPath?: string, index: number })` move option in the tree from one position to another
+ - `setProperties`: `(data?: Partial<FormFieldProps>) => void` set the `properties`.
 2. Methods for form controls
   Inherits the `FormStore Methods` properties and methods from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
