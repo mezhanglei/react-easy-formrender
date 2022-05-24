@@ -24,7 +24,7 @@ export declare class FormRenderStore<T extends Object = any> extends FormStore {
         index: number;
     }, to: {
         parentPath?: string;
-        index: number;
+        index?: number;
     }) => void;
     subscribeProperties(listener: FormRenderListener): () => void;
     private notifyProperties;

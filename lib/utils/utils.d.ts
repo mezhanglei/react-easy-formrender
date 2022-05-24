@@ -28,7 +28,7 @@ export declare const swapSameLevel: (properties: SchemaData['properties'], from:
     index: number;
 }, to: {
     parentPath?: string;
-    index: number;
+    index?: number;
 }) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
@@ -37,7 +37,7 @@ export declare const swapDiffLevel: (properties: SchemaData['properties'], from:
     index: number;
 }, to: {
     parentPath?: string;
-    index: number;
+    index?: number;
 }) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
