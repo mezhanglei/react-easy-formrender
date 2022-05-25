@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-2.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-2.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -22,7 +22,7 @@
 # 默认导出组件
 
 - 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
-- 通过`schema`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. `properties`属性中字段对应控件的FormFieldProps. 3. FormFieldProps中的`widgetProps`
+- 通过`schema`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`widgetProps`用来描述`widgets`组件
 - `schema`中关于表单域的简单类型的属性字段已全面支持字符串表达式
 
 # RenderFormChildren组件
@@ -210,9 +210,8 @@ export default function Demo5(props) {
 ```
 
 ### 表单容器的props
-- 基础属性：来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
-
-- `schema`: 渲染表单的数据, 主要分为三部分, 最外层表单容器的props, `properties`属性中字段对应控件的FormFieldProps以及FormFieldProps中的`widgetProps`
+- 基础属性：继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
+- `schema`: 渲染表单的DSL形式的json数据
 ```javascript
 // schema 属性
 export interface SchemaData extends FormProps<FormRenderStore> {
@@ -221,7 +220,6 @@ export interface SchemaData extends FormProps<FormRenderStore> {
 ```
 - `watch`属性：可以监听任意字段的值的变化，例如：
 ```javascript
-
 // 声明式传值
 const watch = {
   'name1': (newValue, oldValue) => {
@@ -241,11 +239,13 @@ const watch = {
 }
 ```
 - `widgets`：注册表单所需要使用的组件.
+- `customRender`：提供自定义渲染表单的函数.
 - `onPropertiesChange`: `(properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;` `schema`的`properties`更改时回调函数
 
-### 表单域属性设置FormFieldProps
-1. 表单域的属性，可以实现嵌套和数组管理，其中的`FormItemProps`来自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
+### 表单域属性(FormFieldProps)
+1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
 2. 表单域的简单类型属性全面支持字符串表达式，例如`hidden:{{$form.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$form`表示表单值对象
+完整属性类型如下：
 ```javascript
 export interface FormFieldProps extends FormItemProps {
   dependencies?: string[]; // 当前字段依赖的字段项，会将依赖更新的字段作为dependvalues属性注入到当前对应的控件中
@@ -259,7 +259,7 @@ export interface FormFieldProps extends FormItemProps {
 }
 ```
 
-### 控件自身的属性`widgetProps`设置
+### 描述`widgets`组件(`widgetProps`)
 
 ```javascript
 interface widgetProps?: { 
@@ -279,7 +279,7 @@ interface widgetProps?: {
  - `delItemByPath`: `(path: string) => void` 删除schema中`path`对应的信息
  - `addItemByIndex`: `(data: { name: string, field: FormFieldProps }, index?: number, parentPath?: string) => void` 根据序号和父节点路径添加选项
  - `getItemByPath`: `(path: string) => void` 获取schema中`path`对应的信息
- - `swapItemByPath`: `(from: { parentPath?: string, index: number }, to: { parentPath?: string, index: number })` 把树中的选项从一个位置调换到另外一个位置
+ - `swapItemByPath`: `(from: { parentPath?: string, index: number }, to: { parentPath?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` 设置`properties`;
 2. 表单控件的方法
   继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`FormStore Methods`属性和方法

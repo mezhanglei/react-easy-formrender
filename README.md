@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-2.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-2.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -22,7 +22,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # Default export component
 
 - The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
-- Render the form through the `schema` attribute, It includes three parts: 1. the props of the outermost form container.2.the FormFieldProps of the field corresponding to the control in the `properties` property. 3. the `widgetProps` in the FormFieldProps
+- Render the form through the `schema` attribute, It includes three parts: 1. the props of the outermost form container.2.the `FormFieldProps` corresponding to the fields are used to describe the properties of the form field. 3. `widgetProps` in FormFieldProps is used to describe the `widgets` component
 - String expressions are fully supported for simple types of property fields in `schema`
 
 # RenderFormChildren component
@@ -211,7 +211,7 @@ export default function Demo5(props) {
 
 ### Form Component Props
 - base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- `schema`: form render data, There are three main parts: 1. the props of the outermost form container.2.the FormFieldProps of the field corresponding to the control in the `properties` property. 3. the `widgetProps` in the FormFieldProps
+- `schema`: Rendering json data in the form of a DSL for a form.
 ```javascript
 export interface SchemaData extends FormProps<FormRenderStore> {
   properties: { [key: string]: FormFieldProps } | FormFieldProps[]
@@ -239,12 +239,13 @@ const watch = {
 }
 ```
 - `widgets`：register components for form to use.
+- `customRender`: function that provides custom rendering of forms.
 - `onPropertiesChange`: `(properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;` Callback function when `properties` of `schema` is changed
 
 ### FormFieldProps
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$form.xxx === xxx}}` means that a field value of the form is equal to a value, where `$form` represents the form value object
-
+The full props are as follows：
 ```javascript
 export interface FormFieldProps extends FormItemProps {
   dependencies?: string[]; // The field item on which the current field depends will be injected into the current corresponding control as a dependvalues property of the dependent field
@@ -278,7 +279,7 @@ The `rules` rules in the form control are derived from the `rules` property in [
  - `delItemByPath`: `(path: string) => void` delete the information corresponding to `path` in schema.
  - `addItemByIndex`: `(data: { name: string, field: FormFieldProps }, index?: number, parentPath?: string) => void` Add option based on `index` and `parentPath`.
  - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in schema.
- - `swapItemByPath`: `(from: { parentPath?: string, index: number }, to: { parentPath?: string, index: number })` move option in the tree from one position to another
+ - `swapItemByPath`: `(from: { parentPath?: string, index: number }, to: { parentPath?: string, index?: number })` move option in the tree from one position to another
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` set the `properties`.
 2. Methods for form controls
   Inherits the `FormStore Methods` properties and methods from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
