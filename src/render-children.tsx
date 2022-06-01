@@ -11,8 +11,8 @@ import 'react-easy-formcore/lib/css/main.css';
 // 不带Form容器的组件
 export default function RenderFormChildren(props: RenderFormChildrenProps) {
 
-  const store = useContext<FormRenderStore | undefined>(FormStoreContext)
-  const options = useContext(FormOptionsContext)
+  const store = useContext<FormRenderStore | undefined>(FormStoreContext);
+  const options = useContext(FormOptionsContext);
 
   const [fieldPropsMap, setFieldPropsMap] = useState<Map<string, ValueOf<FormFieldProps>>>(new Map());
   const [dependValuesMap, setDependValuesMap] = useState<Map<string, any>>(new Map());
@@ -151,6 +151,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
         let target = hiddenStr?.replace(/\{\{|\}\}|\s*/g, '');
         target = target?.replace(/\$form/g, 'store && store.getFieldValue()');
         const actionStr = "return " + target;
+        // 函数最后一个参数为函数体，前面均为传入的变量名
         const action = new Function('store', actionStr);
         const value = action(store);
         return value;
