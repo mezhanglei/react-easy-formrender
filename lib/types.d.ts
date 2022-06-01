@@ -2,7 +2,6 @@ import { FormItemProps, FormProps } from "react-easy-formcore";
 import { FormRenderStore } from "./formrender-store";
 import { defaultFields } from './default-field';
 export interface FormFieldProps extends FormItemProps {
-    dependencies?: string[];
     readOnly?: boolean;
     readOnlyWidget?: string;
     readOnlyRender?: any;

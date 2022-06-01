@@ -15,7 +15,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   const options = useContext(FormOptionsContext);
 
   const [fieldPropsMap, setFieldPropsMap] = useState<Map<string, ValueOf<FormFieldProps>>>(new Map());
-  const [dependValuesMap, setDependValuesMap] = useState<Map<string, any>>(new Map());
   const [properties, setProperties] = useState<SchemaData['properties']>({});
   const isMountRef = useRef<boolean>(true);
 
@@ -91,7 +90,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   // 递归遍历表单域的属性
   const handleFieldProps = () => {
     const fieldPropsMap = new Map();
-    const dependValuesMap = new Map();
     // 遍历处理对象树中的非properties字段
     const deepHandle = (formField: FormFieldProps, parent: string) => {
       for (const key in formField) {
@@ -100,10 +98,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
           const path = parent ? `${parent}.${key}` : key;
           const result = calcExpression(value);
           fieldPropsMap.set(path, result);
-          if (key === 'dependencies') {
-            const dependValues = getDependencies(result);
-            dependValuesMap.set(parent, dependValues);
-          }
         } else {
           if (value instanceof Array) {
             for (let i = 0; i < value?.length; i++) {
@@ -127,7 +121,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       deepHandle(formField, key);
     }
     setFieldPropsMap(fieldPropsMap);
-    setDependValuesMap(dependValuesMap);
   }
 
   // 展示计算完表达式之后的结果
@@ -187,18 +180,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     }
   }
 
-  // 获取依赖的值
-  const getDependencies = (dependencies: string[]) => {
-    const values = dependencies?.length ? {} : undefined;
-    for (let i = 0; i < dependencies?.length; i++) {
-      const pathStr = dependencies[i];
-      if (values && pathStr) {
-        values[pathStr] = store?.getFieldValue(pathStr);
-      }
-    }
-    return values;
-  }
-
   // 获取field的类型
   const getFieldType = (readOnly?: boolean, properties?: SchemaData['properties']) => {
     if (readOnly) {
@@ -221,13 +202,14 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     const fieldType = getFieldType(readOnly, properties);
     const FormField = FieldsRegister[fieldType];
     const FormItemChild = widget && widgets?.[widget];
-    const { children, ...restWidgetProps } = widgetProps || {};
-    const fieldChildProps = { ...params, ...restWidgetProps };
-    // 依赖的值
-    const dependvalues = dependValuesMap.get(currentPath);
     // 是否隐藏
     const hiddenResult = fieldPropsMap.get(`${currentPath}.hidden`);
     if (hiddenResult || !FormField || !newField) return;
+
+    // 传给widget的props
+    const { children, ...restWidgetProps } = widgetProps || {};
+    const formvalues = store?.getFieldValue();
+    const fieldChildProps = { ...params, ...restWidgetProps, formvalues, store };
 
     // 只读组件
     if (readOnly === true) {
@@ -238,7 +220,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
         <FormField key={name} {...(fieldType === 'Form.Item' ? restField : listItemProps)}>
           {
             readOnlyRender ??
-            (ListItemChild !== undefined && <ListItemChild {...fieldChildProps} dependvalues={dependvalues} store={store} />)
+            (ListItemChild !== undefined && <ListItemChild {...fieldChildProps} />)
           }
         </FormField>
       );
@@ -255,7 +237,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     } else {
       return (
         <FormField key={name} {...restField} name={name} onValuesChange={valuesCallback}>
-          {FormItemChild ? <FormItemChild {...fieldChildProps} dependvalues={dependvalues} store={store}>{generateChildren(children)}</FormItemChild> : null}
+          {FormItemChild ? <FormItemChild {...fieldChildProps}>{generateChildren(children)}</FormItemChild> : null}
         </FormField>
       )
     }

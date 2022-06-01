@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-2.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-2.0.4-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -10,6 +10,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 # version log
 - v2.x:
+  - Remove the `dependencies` property and replace it with `formvalues` that are automatically injected into the widget component.
   - Changing the api of the `RenderFormChildren` component
   - Change the Methods of `FormRenderStore`.
 - v1.x:
@@ -248,7 +249,6 @@ const watch = {
 The full props are as follows：
 ```javascript
 export interface FormFieldProps extends FormItemProps {
-  dependencies?: string[]; // The field item on which the current field depends will be injected into the current corresponding control as a dependvalues property of the dependent field
   readOnly?: boolean;
   readOnlyWidget?: string; // Only one of the components in read-only mode, need register in `widgets`,and readOnlyRender, can be active, with readOnlyRender having the highest priority.
   readOnlyRender?: any; // Only one of the components in read-only mode, and readOnlyWidget, can be active, with readOnlyRender having the highest priority.

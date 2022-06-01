@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-2.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-2.0.4-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -10,6 +10,7 @@
 
 # version log
 - v2.x:
+  - 移除 `dependencies` 属性，改为给widget组件自动注入表单值`formvalues`.
   - 更改`RenderFormChildren`组件的api
   - 更改`FormRenderStore`的Methods
 - v1.x:
@@ -248,7 +249,6 @@ const watch = {
 完整属性类型如下：
 ```javascript
 export interface FormFieldProps extends FormItemProps {
-  dependencies?: string[]; // 当前字段依赖的字段项，会将依赖更新的字段作为dependvalues属性注入到当前对应的控件中
   readOnly?: boolean; // 只读模式
   readOnlyWidget?: string; // 只读模式下的组件，和readOnlyRender只能生效一个，readOnlyRender优先级最高
   readOnlyRender?: any; // 只读模式下的组件，和readOnlyWidget只能生效一个，readOnlyRender优先级最高
