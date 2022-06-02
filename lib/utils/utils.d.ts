@@ -1,13 +1,13 @@
 import { FormFieldProps, SchemaData } from "../types";
-export declare const pathToArray: (pathStr?: string | undefined) => string[];
-export declare const updateItemByPath: (properties: SchemaData['properties'], pathStr: string, data?: Partial<FormFieldProps> | undefined) => FormFieldProps[] | {
+export declare const pathToArray: (pathStr?: string) => string[];
+export declare const updateItemByPath: (properties: SchemaData['properties'], pathStr: string, data?: Partial<FormFieldProps>) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 };
-export declare const setItemByPath: (properties: SchemaData['properties'], pathStr: string, data?: Partial<FormFieldProps> | undefined) => FormFieldProps[] | {
+export declare const setItemByPath: (properties: SchemaData['properties'], pathStr: string, data?: Partial<FormFieldProps>) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 };
-export declare const getItemByPath: (properties: SchemaData['properties'], pathStr?: string | undefined) => any;
-export declare const getKeyValueByIndex: (properties: SchemaData['properties'], index: number, parentPath?: string | undefined) => {
+export declare const getItemByPath: (properties: SchemaData['properties'], pathStr?: string) => any;
+export declare const getKeyValueByIndex: (properties: SchemaData['properties'], index: number, parentPath?: string) => {
     name: string;
     field: any;
 };
@@ -20,7 +20,7 @@ export declare const objToArr: (properties: SchemaData['properties']) => DataLis
 export declare const addItemByIndex: (properties: SchemaData['properties'], data: {
     name: string;
     field: FormFieldProps;
-}, index?: number | undefined, parentPath?: string | undefined) => FormFieldProps[] | {
+}, index?: number, parentPath?: string) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
 export declare const swapSameLevel: (properties: SchemaData['properties'], from: {

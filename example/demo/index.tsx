@@ -1,6 +1,6 @@
 import React from 'react';
 import "./index.less";
-import RenderForm, { Form, FormRenderStore, RenderFormChildren } from '../../../src/index';
+import RenderForm, { Form, FormRenderStore, RenderFormChildren } from '../../src/index';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
 // 原子组件
