@@ -5,7 +5,6 @@ import { AopFactory } from './utils/function-aop';
 import { FormOptionsContext, FormStoreContext, isListItem } from 'react-easy-formcore';
 import { FormRenderStore } from './formrender-store';
 import { isObjectEqual } from './utils/object';
-import { isEmpty } from './utils/type';
 import 'react-easy-formcore/lib/css/main.css';
 
 // 不带Form容器的组件
@@ -227,7 +226,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     }
 
     // 容器组件
-    if (typeof properties === 'object' && !isEmpty(properties)) {
+    if (typeof properties === 'object') {
       return (
         <FormField key={name} {...restField} name={name} onValuesChange={valuesCallback}>
           {renderChildrenList(properties, generateChild, { name, path: currentPath, field: newField }, index)}
