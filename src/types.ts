@@ -23,10 +23,12 @@ export type WatchHandler = (newValue: any, oldValue: string) => void
 export interface BaseRenderProps {
   onPropertiesChange?: (properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;
   watch?: { [key: string]: { immediate?: boolean, handler: WatchHandler } | WatchHandler };
-  widgets: { [key: string]: any };
+  widgets?: any;
   Fields?: typeof defaultFields;
+  // 自定义渲染列表
+  customList?: getChildrenList;
   // 自定义渲染子元素
-  customRender?: getChildrenList;
+  customChild?: any;
 }
 
 // 带form容器的渲染组件props
@@ -41,8 +43,8 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
 
 export type ValueOf<T> = T[keyof T];
 
-// 返回列表
-export type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: { name: string, field: FormFieldProps, path?: string }, index?: number) => any;
-
 // 生成子元素
-export type generateChildFunc = (params: { name: string, field: FormFieldProps, path?: string }, index?: number) => JSX.Element | undefined
+export type ChildParams = { name: string, field: FormFieldProps, path?: string, index?: number };
+// 返回列表
+export type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: ChildParams) => any;
+export type generateChildFunc = (params: ChildParams) => JSX.Element | undefined

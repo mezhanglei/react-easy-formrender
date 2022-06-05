@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-2.0.6-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-2.0.7-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -240,7 +240,8 @@ const watch = {
 }
 ```
 - `widgets`：注册表单所需要使用的组件.
-- `customRender`：提供自定义渲染表单的函数.
+- `customList`：提供自定义渲染列表.
+- `customChild`：提供自定义渲染表单项.
 - `onPropertiesChange`: `(properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;` `schema`的`properties`更改时回调函数
 
 ### 表单域属性(FormFieldProps)

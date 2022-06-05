@@ -32,11 +32,10 @@ export interface BaseRenderProps {
             handler: WatchHandler;
         } | WatchHandler;
     };
-    widgets: {
-        [key: string]: any;
-    };
+    widgets?: any;
     Fields?: typeof defaultFields;
-    customRender?: getChildrenList;
+    customList?: getChildrenList;
+    customChild?: any;
 }
 export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderProps {
     schema: SchemaData;
@@ -45,13 +44,11 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
     properties: SchemaData['properties'];
 }
 export declare type ValueOf<T> = T[keyof T];
-export declare type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: {
+export declare type ChildParams = {
     name: string;
     field: FormFieldProps;
     path?: string;
-}, index?: number) => any;
-export declare type generateChildFunc = (params: {
-    name: string;
-    field: FormFieldProps;
-    path?: string;
-}, index?: number) => JSX.Element | undefined;
+    index?: number;
+};
+export declare type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: ChildParams) => any;
+export declare type generateChildFunc = (params: ChildParams) => JSX.Element | undefined;

@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-2.0.6-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-2.0.7-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -240,7 +240,8 @@ const watch = {
 }
 ```
 - `widgets`：register components for form to use.
-- `customRender`: function that provides custom rendering of forms.
+- `customList`: function that provides custom rendering List.
+- `customChild`: function that provides custom render Field's children.
 - `onPropertiesChange`: `(properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;` Callback function when `properties` of `schema` is changed
 
 ### FormFieldProps

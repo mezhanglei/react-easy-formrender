@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FormFieldProps, generateChildFunc, getChildrenList, RenderFormChildrenProps, SchemaData, ValueOf } from './types';
+import { ChildParams, FormFieldProps, generateChildFunc, getChildrenList, RenderFormChildrenProps, SchemaData, ValueOf } from './types';
 import { defaultFields } from './default-field';
-import { AopFactory } from './utils/function-aop';
 import { FormOptionsContext, FormStoreContext, isListItem } from 'react-easy-formcore';
 import { FormRenderStore } from './formrender-store';
 import { isObjectEqual } from './utils/object';
@@ -22,7 +21,8 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     widgets,
     watch,
     onPropertiesChange,
-    customRender
+    customList,
+    customChild
   } = props;
 
   const FieldsRegister = { ...defaultFields, ...Fields };
@@ -31,9 +31,10 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     onValuesChange
   } = options;
 
-  const aopOnValuesChange = new AopFactory(() => {
+  const valuesCallback = (params: { path?: string, value: any }) => {
+    onValuesChange && onValuesChange(params)
     handleFieldProps();
-  });
+  }
 
   // 订阅更新properties的函数,j将传值更新到state里面
   useEffect(() => {
@@ -190,20 +191,31 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     return 'Form.Item';
   }
 
+  // 自定义表单控件
+  const renderFieldChild = (child: any, props: ChildParams) => {
+    const Wrapper = customChild;
+    return (
+      Wrapper ?
+        <Wrapper data-type="fragment" {...props}>
+          {child}
+        </Wrapper>
+        : child
+    );
+  }
+
   // 生成表单控件
-  const generateChild: generateChildFunc = (params, index) => {
-    const { name, field, path } = params || {};
+  const generateChild: generateChildFunc = (params) => {
+    const { name, field, path, index } = params || {};
     const currentPath = getCurrentPath(name, path);
     const newField = showCalcFieldProps(field, currentPath);
     const { readOnly, readOnlyWidget, readOnlyRender, hidden, widgetProps, widget, properties, ...restField } = newField;
 
-    const valuesCallback = aopOnValuesChange.addAfter(onValuesChange);
     const fieldType = getFieldType(readOnly, properties);
     const FormField = FieldsRegister[fieldType];
     const FormItemChild = widget && widgets?.[widget];
     // 是否隐藏
     const hiddenResult = fieldPropsMap.get(`${currentPath}.hidden`);
-    if (hiddenResult || !FormField || !newField) return;
+    if (hiddenResult === true || !FormField || !newField) return;
 
     // 传给widget的props
     const { children, ...restWidgetProps } = widgetProps || {};
@@ -215,51 +227,43 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       const ListItemChild = readOnlyWidget && widgets?.[readOnlyWidget]
       // 当fieldType === 'Form.Item'的传参
       const { rules, initialValue, ...listItemProps } = restField;
+      const child = readOnlyRender ?? (ListItemChild !== undefined && <ListItemChild {...fieldChildProps} />);
       return (
         <FormField key={name} {...(fieldType === 'Form.Item' ? restField : listItemProps)}>
-          {
-            readOnlyRender ??
-            (ListItemChild !== undefined && <ListItemChild {...fieldChildProps} />)
-          }
+          {renderFieldChild(child, { name, field: newField, path, index })}
         </FormField>
       );
     }
 
-    // 容器组件
+    // 列表组件
     if (typeof properties === 'object') {
       return (
         <FormField key={name} {...restField} name={name} onValuesChange={valuesCallback}>
-          {renderChildrenList(properties, generateChild, { name, path: currentPath, field: newField }, index)}
+          {renderChildrenList(properties, generateChild, { name, path: currentPath, field: newField, index })}
         </FormField>
       )
       // widget组件
     } else {
+      const child = FormItemChild ? <FormItemChild {...fieldChildProps}>{generateChildren(children)}</FormItemChild> : null;
       return (
         <FormField key={name} {...restField} name={name} onValuesChange={valuesCallback}>
-          {FormItemChild ? <FormItemChild {...fieldChildProps}>{generateChildren(children)}</FormItemChild> : null}
+          {renderFieldChild(child, { name, field: newField, path, index })}
         </FormField>
       )
     }
   };
 
   // 根据properties渲染子列表
-  const renderChildrenList: getChildrenList = (properties, generate, parent, itemIndex) => {
-    if (customRender) {
-      return customRender(properties, generate, parent, itemIndex);
+  const renderChildrenList: getChildrenList = (properties, generate, parent) => {
+    if (customList) {
+      return customList(properties, generate, parent);
     }
     const { path } = parent || {};
     return (
-      properties instanceof Array ?
-        properties?.map((formField, index) => {
-          return generate({ name: `[${index}]`, field: formField, path }, index);
-        })
-        :
-        Object.entries(properties || {})?.map(
-          ([name, formField], index) => {
-            return generate({ name: name, field: formField, path }, index);
-          }
-        )
-    )
+      Object.entries(properties || {})?.map(([name, formField], index) => {
+        return generate({ name: name, field: formField, path, index });
+      })
+    );
   }
 
   return renderChildrenList(properties, generateChild);
