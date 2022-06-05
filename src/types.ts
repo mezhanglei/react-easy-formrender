@@ -26,7 +26,7 @@ export interface BaseRenderProps {
   widgets?: any;
   Fields?: typeof defaultFields;
   // 自定义渲染列表
-  customList?: getChildrenList;
+  customList?: any;
   // 自定义渲染子元素
   customChild?: any;
 }
@@ -46,5 +46,5 @@ export type ValueOf<T> = T[keyof T];
 // 生成子元素
 export interface GenerateParams { name: string, field: FormFieldProps, path?: string, index?: number };
 // 返回列表
-export type getChildrenList = (properties: SchemaData['properties'], childs: any, parent?: GenerateParams) => any;
+export type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: GenerateParams) => any;
 export type generateChildFunc = (params: GenerateParams) => JSX.Element | undefined

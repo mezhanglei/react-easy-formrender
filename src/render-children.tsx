@@ -264,7 +264,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     });
 
     if (customList) {
-      return customList(properties, childs, parent);
+      return customList({ children: childs, parent: parent, properties: properties });
     }
     return childs;
   }

@@ -34,7 +34,7 @@ export interface BaseRenderProps {
     };
     widgets?: any;
     Fields?: typeof defaultFields;
-    customList?: getChildrenList;
+    customList?: any;
     customChild?: any;
 }
 export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderProps {
@@ -50,5 +50,5 @@ export interface GenerateParams {
     path?: string;
     index?: number;
 }
-export declare type getChildrenList = (properties: SchemaData['properties'], childs: any, parent?: GenerateParams) => any;
+export declare type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: GenerateParams) => any;
 export declare type generateChildFunc = (params: GenerateParams) => JSX.Element | undefined;
