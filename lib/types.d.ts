@@ -44,11 +44,11 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
     properties: SchemaData['properties'];
 }
 export declare type ValueOf<T> = T[keyof T];
-export declare type ChildParams = {
+export interface GenerateParams {
     name: string;
     field: FormFieldProps;
     path?: string;
     index?: number;
-};
-export declare type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: ChildParams) => any;
-export declare type generateChildFunc = (params: ChildParams) => JSX.Element | undefined;
+}
+export declare type getChildrenList = (properties: SchemaData['properties'], childs: any, parent?: GenerateParams) => any;
+export declare type generateChildFunc = (params: GenerateParams) => JSX.Element | undefined;
