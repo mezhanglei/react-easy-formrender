@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { FormItemProps, FormProps } from "react-easy-formcore";
 import { FormRenderStore } from "./formrender-store";
 import { defaultFields } from './default-field';

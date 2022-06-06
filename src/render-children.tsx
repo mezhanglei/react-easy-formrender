@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FormFieldProps, generateChildFunc, getChildrenList, RenderFormChildrenProps, SchemaData } from './types';
 import { defaultFields } from './default-field';
-import { FormOptionsContext, FormStoreContext, getColProps, isListItem } from 'react-easy-formcore';
+import { FormOptionsContext, FormStoreContext, getColProps, getCurrentPath } from 'react-easy-formcore';
 import { FormRenderStore } from './formrender-store';
-import { isObjectEqual } from './utils/object';
+import { isEqual } from './utils/object';
 import 'react-easy-formcore/lib/css/main.css';
 
 // 不带Form容器的组件
@@ -42,7 +42,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     // 订阅目标控件
     const uninstall = store.subscribeProperties((newValue, oldValue) => {
       setProperties(newValue);
-      if (!isMountRef.current && !isObjectEqual(newValue, oldValue)) {
+      if (!isMountRef.current && !isEqual(newValue, oldValue)) {
         onPropertiesChange && onPropertiesChange(newValue, oldValue)
       }
     })
@@ -57,7 +57,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       store.setProperties(props?.properties)
       isMountRef.current = false;
     }
-  }, [JSON.stringify(props?.properties)]);
+  }, [props?.properties]);
 
   // 变化时更新
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     return () => {
       store?.unsubscribeFormGlobal();
     }
-  }, [JSON.stringify(properties)]);
+  }, [properties]);
 
   // 初始化监听
   const initWatch = () => {
@@ -170,16 +170,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     }
   }
 
-  // 拼接当前项的path
-  const getCurrentPath = (name: string, parent?: string) => {
-    if (name === undefined) return name;
-    if (isListItem(name)) {
-      return parent ? `${parent}${name}` : name;
-    } else {
-      return parent ? `${parent}.${name}` : name;
-    }
-  }
-
   // 获取field的类型
   const getFieldType = (readOnly?: boolean, properties?: SchemaData['properties']) => {
     if (readOnly) {
@@ -246,14 +236,15 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     const childs = Object.entries(properties || {})?.map(([name, formField], index) => {
       const currentPath = getCurrentPath(name, path);
       const newField = showCalcFieldProps(formField, currentPath);
-      const { hidden, layout, col } = newField;
       const Wrapper = customChild;
       const childProps = { name: name, field: newField, path, index };
-      const colProps = getColProps({ layout: layout, col: col });
-      if (hidden === true) {
+      if (newField?.hidden === true) {
         return;
       }
       if (Wrapper) {
+        const { col, ...restField } = newField;
+        const childProps = { name: name, field: restField, path, index };
+        const colProps = getColProps({ layout: restField?.layout, col: col });
         return (
           <Wrapper data-type="fragment" key={name} {...colProps} {...childProps}>
             {generate(childProps)}

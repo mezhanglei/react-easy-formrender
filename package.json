@@ -85,11 +85,12 @@
   "dependencies": {
     "antd": "^4.20.2",
     "classnames": "^2.2.6",
+    "copy-anything": "^3.0.2",
     "history": "^5.0.0",
-    "klona": "^2.0.5",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-easy-formcore": "^1.2.8",
+    "react-easy-formcore": "^1.2.9",
+    "react-fast-compare": "^3.2.0",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^5.2.0"
   },
