@@ -1,10 +1,15 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FormFieldProps, generateChildFunc, getChildrenList, RenderFormChildrenProps, SchemaData } from './types';
-import { defaultFields } from './default-field';
+import { FormFieldProps, generateChildFunc, getChildrenList, RenderFormChildrenProps, SchemaData, SlotParams, WidgetParams } from './types';
+import { defaultFields, defaultSlotWidgets } from './components';
 import { FormOptionsContext, FormStoreContext, getColProps, getCurrentPath } from 'react-easy-formcore';
 import { FormRenderStore } from './formrender-store';
 import { isEqual } from './utils/object';
 import 'react-easy-formcore/lib/css/main.css';
+
+// 是否为class组件
+export const isElementClass = (target: any) => {
+  return target.prototype instanceof React.Component;
+}
 
 // 不带Form容器的组件
 export default function RenderFormChildren(props: RenderFormChildrenProps) {
@@ -19,6 +24,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   const {
     Fields,
     widgets,
+    slotWidgets,
     watch,
     onPropertiesChange,
     customList,
@@ -26,6 +32,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   } = props;
 
   const FieldsRegister = { ...defaultFields, ...Fields };
+  const slotWidgetsRegister = { ...defaultSlotWidgets, ...slotWidgets };
 
   const {
     onValuesChange
@@ -94,24 +101,12 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     const deepHandle = (formField: FormFieldProps, parent: string) => {
       for (const key in formField) {
         const value = formField[key];
+        const path = parent ? `${parent}.${key}` : key;
         if (key !== 'properties') {
-          const path = parent ? `${parent}.${key}` : key;
           const result = calcExpression(value);
           fieldPropsMap[path] = result;
         } else {
-          if (value instanceof Array) {
-            for (let i = 0; i < value?.length; i++) {
-              const formField = value[i];
-              const path = `${parent}.${i}`;
-              deepHandle(formField, path);
-            }
-          } else {
-            for (const key in value) {
-              const formField = value[key];
-              const path = `${parent}.${key}`;
-              deepHandle(formField, path);
-            }
-          }
+          deepHandle(value, path);
         }
       }
     };
@@ -157,16 +152,23 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   // 生成组件的children
-  const generateChildren = (children?: JSX.Element | { widget: string, widgetProps: FormFieldProps['widgetProps'] }[]) => {
-    if (children instanceof Array) {
-      return children?.map(({ widget, widgetProps }) => {
+  const generateChildren = (child?: Array<WidgetParams> | WidgetParams | any) => {
+    if (child instanceof Array) {
+      return child?.map(({ widget, widgetProps }) => {
         const Child = widgets?.[widget];
         if (Child) {
           return <Child {...widgetProps} children={generateChildren(widgetProps?.children)} />;
         }
       });
     } else {
-      return children;
+      const renderParams = child as WidgetParams;
+      const Child = widgets?.[renderParams?.widget];
+      const ChildProps = renderParams?.widgetProps;
+      if (Child) {
+        return <Child {...ChildProps} children={generateChildren(ChildProps?.children)} />
+      } else {
+        return child
+      }
     }
   }
 
@@ -181,15 +183,71 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     return 'Form.Item';
   }
 
+  // 生成slot组件实例
+  const generateSlot = (child: Array<SlotParams> | SlotParams | any): any => {
+    if (child instanceof Array) {
+      return child?.map((item) => {
+        return generateSlot(item);
+      });
+    } else {
+      const Child = slotWidgetsRegister[child?.type];
+      const ChildProps = child?.props;
+      // 如果是组件实例则实例化
+      if (Child) {
+        const slotHidden = typeof child?.hidden === 'function' ? child?.hidden() : child?.hidden;
+        if (slotHidden === true) {
+          return;
+        }
+        return <Child {...ChildProps} children={generateSlot(ChildProps?.children)} />
+        // 如果是组件声明则进行实例化
+      } else if (typeof child?.render === 'function') {
+        const Slot = child;
+        return <Slot />;
+      } else {
+        return child;
+      }
+    }
+  }
+
+  // // 内置按钮
+  // const getDefaultSlot = (child: any, params: GenerateParams) => {
+  //   const { type, props: slotProps } = child || {};
+  //   if (type) {
+  //     const { path, field } = params;
+  //     const btnClick = () => {
+  //       // 只有数组列表才可以设置增加按钮
+  //       if (type === 'add' && field?.properties instanceof Array) {
+  //         const len = field?.properties?.length || 0;
+  //         const newField = { widget: field?.properties?.[len - 1]?.widget };
+  //         const newIndex = len;
+  //         if (newField) {
+  //           store?.addItemByIndex({ name: `${newIndex}`, field: newField }, newIndex, path)
+  //         }
+  //         // 删除按钮
+  //       } else if (type === 'delete') {
+  //         path && store?.setFieldValue(path, undefined, true);
+  //         path && store?.delItemByPath(path);
+  //       }
+  //     }
+  //     const slotHidden = typeof child?.hidden === 'function' ? child?.hidden(params) : child?.hidden;
+  //     if (slotHidden === true) {
+  //       return;
+  //     }
+  //     const Slot = defaultSlotWidgets[type];
+  //     return <Slot onClick={btnClick} children={type === 'add' && '新增一条'} {...slotProps} />
+  //   }
+  // }
+
   // 生成表单控件
-  const generateChild: generateChildFunc = (params) => {
+  const generateChild: generateChildFunc = (params, parent) => {
     const { name, field, path, index } = params || {};
-    const currentPath = getCurrentPath(name, path);
-    const { readOnly, readOnlyWidget, readOnlyRender, hidden, widgetProps, widget, properties, ...restField } = field;
+    const { readOnly, readOnlyWidget, readOnlyRender, hidden, widgetProps, widget, properties, footer, suffix, ...restField } = field;
 
     const fieldType = getFieldType(readOnly, properties);
     const FormField = FieldsRegister[fieldType];
     const FormItemChild = widget && widgets?.[widget];
+    const slotFooter = generateSlot(footer);
+    const slotSuffix = generateSlot(suffix);
     // 是否隐藏
     if (!FormField || !field) return;
 
@@ -206,7 +264,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       const fieldProps = fieldType === 'Form.Item' ? restField : listItemProps;
       const child = readOnlyRender ?? (ListItemChild !== undefined && <ListItemChild {...fieldChildProps} />);
       return (
-        <FormField key={name} {...fieldProps}>
+        <FormField key={name} {...fieldProps} footer={slotFooter} suffix={slotSuffix}>
           {child}
         </FormField>
       );
@@ -215,15 +273,15 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     // 列表组件
     if (typeof properties === 'object') {
       return (
-        <FormField key={name} {...restField} name={name} onValuesChange={valuesCallback}>
-          {renderChildrenList(properties, generateChild, { name, path: currentPath, field: field, index })}
+        <FormField key={name} {...restField} name={name} onValuesChange={valuesCallback} footer={slotFooter} suffix={slotSuffix}>
+          {renderChildrenList(properties, generateChild, { name, path: path, field: field, index })}
         </FormField>
       )
       // widget组件
     } else {
       const child = FormItemChild ? <FormItemChild {...fieldChildProps}>{generateChildren(children)}</FormItemChild> : null;
       return (
-        <FormField key={name} {...restField} name={name} onValuesChange={valuesCallback}>
+        <FormField key={name} {...restField} name={name} onValuesChange={valuesCallback} footer={slotFooter} suffix={slotSuffix}>
           {child}
         </FormField>
       )
@@ -234,28 +292,29 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   const renderChildrenList: getChildrenList = (properties, generate, parent) => {
     const { path } = parent || {};
     const childs = Object.entries(properties || {})?.map(([name, formField], index) => {
+      name = properties instanceof Array ? `[${name}]` : name;
       const currentPath = getCurrentPath(name, path);
       const newField = showCalcFieldProps(formField, currentPath);
-      const Wrapper = customChild;
-      const childProps = { name: name, field: newField, path, index };
+      const Wrapper = customChild as any;
+      const childProps = { name: name, field: newField, path: currentPath, index };
       if (newField?.hidden === true) {
         return;
       }
       if (Wrapper) {
         const { col, ...restField } = newField;
-        const childProps = { name: name, field: restField, path, index };
+        const childProps = { name: name, field: restField, path: currentPath, index };
         const colProps = getColProps({ layout: restField?.layout, col: col });
         return (
           <Wrapper data-type="fragment" key={name} {...colProps} {...childProps}>
-            {generate(childProps)}
+            {generate(childProps, properties)}
           </Wrapper>
         );
       }
-      return generate(childProps);
+      return generate(childProps, properties);
     });
-
-    if (customList) {
-      return customList({ children: childs, parent: parent, properties: properties });
+    const RenderList = customList as any;
+    if (RenderList) {
+      return <RenderList children={childs} parent={parent} properties={properties} />
     }
     return childs;
   }

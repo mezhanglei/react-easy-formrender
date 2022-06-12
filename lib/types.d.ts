@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import { FormItemProps, FormProps } from "react-easy-formcore";
 import { FormRenderStore } from "./formrender-store";
-import { defaultFields } from './default-field';
+import { defaultFields } from './components';
 export interface FormFieldProps extends FormItemProps {
     readOnly?: boolean;
     readOnlyWidget?: string;
@@ -34,9 +34,10 @@ export interface BaseRenderProps {
         } | WatchHandler;
     };
     widgets?: any;
+    slotWidgets?: any;
     Fields?: typeof defaultFields;
-    customList?: any;
-    customChild?: any;
+    customList?: React.ComponentType<CustomListProps>;
+    customChild?: React.ComponentType<GenerateParams>;
 }
 export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderProps {
     schema: SchemaData;
@@ -45,6 +46,20 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
     properties: SchemaData['properties'];
 }
 export declare type ValueOf<T> = T[keyof T];
+export interface SlotParams {
+    type: string;
+    props?: any;
+    hidden?: boolean;
+}
+export interface WidgetParams {
+    widget: string;
+    widgetProps: FormFieldProps['widgetProps'];
+}
+export interface CustomListProps {
+    children: any;
+    properties: SchemaData['properties'];
+    parent?: GenerateParams;
+}
 export interface GenerateParams {
     name: string;
     field: FormFieldProps;
@@ -52,4 +67,4 @@ export interface GenerateParams {
     index?: number;
 }
 export declare type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: GenerateParams) => any;
-export declare type generateChildFunc = (params: GenerateParams) => JSX.Element | undefined;
+export declare type generateChildFunc = (params: GenerateParams, properties?: SchemaData['properties']) => JSX.Element | undefined;
