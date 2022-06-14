@@ -2,13 +2,17 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-2.0.11-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-3.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a `Form` container component for rendering, is Full form component (2) The exported `RenderFormChildren` component does not have a `Form` container, but only provides the rendering of form fields. need to be used with the `Form` container component to have full form functionality.
 
 # version log
+- v3.x:
+  - String expression for form values changed from `$form` to `$formvalues`.
+  - Added `$store` to string expression to represent an instance of `FormRenderStore`, which can retrieve the form's associated methods and data.
+  - If you need to introduce a built-in component (the add/drop button for a list), you need to `import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
   - Remove the `dependencies` property and replace it with `formvalues` that are automatically injected into the widget component.
   - Changing the api of the `RenderFormChildren` component
@@ -108,7 +112,7 @@ export default function Demo5(props) {
         readOnlyRender: "只读展示组件",
         initialValue: 1111,
         // col: { span: 6 },
-        hidden: '{{$form.name5 == true}}',
+        hidden: '{{$formvalues.name5 == true}}',
         widgetProps: {}
       },
       name2: {
@@ -118,7 +122,7 @@ export default function Demo5(props) {
         // col: { span: 6 },
         rules: [{ required: true, message: 'name2空了' }],
         initialValue: 1,
-        hidden: '{{$form.name5 == true}}',
+        hidden: '{{$formvalues.name5 == true}}',
         widgetProps: {}
       },
       name3: {
@@ -246,7 +250,7 @@ const watch = {
 
 ### FormFieldProps
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
-2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$form.xxx === xxx}}` means that a field value of the form is equal to a value, where `$form` represents the form value object
+2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$formvalues.xxx === xxx}}` means that a field value of the form is equal to a value, where `$formvalues` represents the form value object
 The full props are as follows：
 ```javascript
 export interface FormFieldProps extends FormItemProps {

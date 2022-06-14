@@ -2,13 +2,17 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-2.0.11-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-3.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成), 提供两种组件： (1)默认导出组件自带`Form`容器组件进行渲染,可以实现完整的表单功能(2)导出`RenderFormChildren`组件不带`Form`容器, 只提供表单域的控件渲染, 需要配合`Form`容器组件使用才具有完整表单功能.
 
 # version log
+- v3.x:
+  - 字符串表达式中表示表单值的字符由`$form`改为`$formvalues`.
+  - 字符串表达式中增加`$store`表示`FormRenderStore`的实例，可以获取表单的相关方法和数据.
+  - 如果需要引入内置组件(列表的增删按钮), 则需要`import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
   - 移除 `dependencies` 属性，改为给widget组件自动注入表单值`formvalues`.
   - 更改`RenderFormChildren`组件的api
@@ -108,7 +112,7 @@ export default function Demo5(props) {
         readOnlyRender: "只读展示组件",
         initialValue: 1111,
         // col: { span: 6 },
-        hidden: '{{$form.name5 == true}}',
+        hidden: '{{$formvalues.name5 == true}}',
         widgetProps: {}
       },
       name2: {
@@ -118,7 +122,7 @@ export default function Demo5(props) {
         // col: { span: 6 },
         rules: [{ required: true, message: 'name2空了' }],
         initialValue: 1,
-        hidden: '{{$form.name5 == true}}',
+        hidden: '{{$formvalues.name5 == true}}',
         widgetProps: {}
       },
       name3: {
@@ -246,7 +250,7 @@ const watch = {
 
 ### 表单域属性(FormFieldProps)
 1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
-2. 表单域的简单类型属性全面支持字符串表达式，例如`hidden:{{$form.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$form`表示表单值对象
+2. 表单域的简单类型属性全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象
 完整属性类型如下：
 ```javascript
 export interface FormFieldProps extends FormItemProps {

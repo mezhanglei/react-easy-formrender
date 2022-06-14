@@ -50,6 +50,7 @@ export interface SlotParams {
     type: string;
     props?: any;
     hidden?: boolean;
+    addItem?: FormFieldProps;
 }
 export interface WidgetParams {
     widget: string;

@@ -1,6 +1,7 @@
 import React from 'react';
 import "./index.less";
 import RenderForm, { Form, FormRenderStore, RenderFormChildren } from '../../src/index';
+// import '../../lib/css/main.css';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
 // 原子组件
@@ -44,17 +45,32 @@ class demo extends React.Component {
             rules: [{ required: true, message: 'name1空了' }],
             initialValue: 1111,
             // layout: 'vertical',
-            hidden: '{{$form.name4 == true}}',
+            hidden: '{{$formvalues.name4 == true}}',
             widgetProps: {}
           },
           name2: {
             label: "name2",
             required: true,
+            footer: {
+              type: 'add', addItem: {
+                widget: 'select',
+                required: true,
+                suffix: { type: 'delete' },
+                rules: [{ required: true, message: 'name2存在空' }],
+                initialValue: { label: '选项1', value: '1', key: '1' },
+                widgetProps: {
+                  labelInValue: true,
+                  style: { width: '100%' },
+                  children: [{ widget: 'option', widgetProps: { key: 1, value: '1', children: '选项1' } }, { widget: 'option', widgetProps: { key: 2, value: '2', children: '选项2' } }]
+                }
+              }
+            },
             properties: [{
               widget: 'select',
               required: true,
               rules: [{ required: true, message: 'name2[0]空了' }],
               initialValue: { label: '选项1', value: '1', key: '1' },
+              suffix: { type: 'delete' },
               widgetProps: {
                 labelInValue: true,
                 style: { width: '100%' },
@@ -63,6 +79,7 @@ class demo extends React.Component {
             }, {
               widget: 'select',
               required: true,
+              suffix: { type: 'delete' },
               rules: [{ required: true, message: 'name2[1]空了' }],
               widgetProps: {
                 labelInValue: true,
