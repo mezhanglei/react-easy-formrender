@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3450641 */
-  src: url('iconfont.woff2?t=1654440052421') format('woff2'),
-       url('iconfont.woff?t=1654440052421') format('woff'),
-       url('iconfont.ttf?t=1654440052421') format('truetype');
+  src: url('iconfont.woff2?t=1656940583890') format('woff2'),
+       url('iconfont.woff?t=1656940583890') format('woff'),
+       url('iconfont.ttf?t=1656940583890') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-biaodankongjianshanchu:before {
+  content: "\e8c1";
 }
 
 .icon-fuzhi:before {

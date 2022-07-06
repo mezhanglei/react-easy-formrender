@@ -56,7 +56,7 @@ class demo extends React.Component {
                 widget: 'select',
                 required: true,
                 suffix: { type: 'delete' },
-                rules: [{ required: true, message: 'name2存在空' }],
+                rules: [{ required: true, message: '空' }],
                 initialValue: { label: '选项1', value: '1', key: '1' },
                 widgetProps: {
                   labelInValue: true,
@@ -116,7 +116,7 @@ class demo extends React.Component {
             required: true,
             valueProp: 'checked',
             initialValue: true,
-            rules: [{ required: true, message: 'name5空了' }],
+            rules: [{ required: true, message: 'name4空了' }],
             widgetProps: {
               style: { width: '100%' },
               children: '多选框'

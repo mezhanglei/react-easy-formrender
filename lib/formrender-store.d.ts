@@ -1,5 +1,6 @@
 import { FormStore } from "react-easy-formcore";
 import { FormFieldProps, SchemaData } from "./types";
+import { AddItem } from "./utils/utils";
 export declare type FormRenderListener = (newValue?: any, oldValue?: any) => void;
 export declare type Properties = SchemaData['properties'];
 export declare class FormRenderStore<T extends Object = any> extends FormStore {
@@ -13,10 +14,7 @@ export declare class FormRenderStore<T extends Object = any> extends FormStore {
     setProperties(data?: SchemaData['properties']): void;
     updateItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
     setItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
-    addItemByIndex: (data: {
-        name: string;
-        field: FormFieldProps;
-    }, index?: number, parentPath?: string) => void;
+    addItemByIndex: (data: AddItem | AddItem[], index?: number, parentPath?: string) => void;
     delItemByPath: (path: string) => void;
     getItemByPath: (path: string) => any;
     swapItemByPath: (from: {

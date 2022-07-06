@@ -2,14 +2,18 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-3.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-3.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成), 提供两种组件： (1)默认导出组件自带`Form`容器组件进行渲染,可以实现完整的表单功能(2)导出`RenderFormChildren`组件不带`Form`容器, 只提供表单域的控件渲染, 需要配合`Form`容器组件使用才具有完整表单功能.
 
 # version log
-- v3.x:
+- v3.1.x:
+  - 调整表单域的`layout`属性，增加`inline`, `labelWidth`属性
+  - 调整默认导出组件的`onPropertiesChange`改为`onSchemaChange`
+  - 调整`customChild`改为`customInner`
+- v3.0.x:
   - 字符串表达式中表示表单值的字符由`$form`改为`$formvalues`.
   - 字符串表达式中增加`$store`表示`FormRenderStore`的实例，可以获取表单的相关方法和数据.
   - 如果需要引入内置组件(列表的增删按钮), 则需要`import 'react-easy-formrender/lib/css/main.css'`.
@@ -28,11 +32,12 @@
 
 - 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
 - 通过`schema`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`widgetProps`用来描述`widgets`组件
-- `schema`中关于表单域的简单类型的属性字段已全面支持字符串表达式
+- `schema`中关于表单域属性字段已全面支持字符串表达式
 
 # RenderFormChildren组件
 
 - 通过`properties`属性渲染表单域
+- `onPropertiesChange`: `(newValue: SchemaData['properties'], oldValue?: SchemaData['properties']) => void;` `properties`更改时回调函数
 - 该组件只能使用一个
 
 ## 安装
@@ -245,12 +250,12 @@ const watch = {
 ```
 - `widgets`：注册表单所需要使用的组件.
 - `customList`：提供自定义渲染列表.
-- `customChild`：提供自定义渲染表单项.
-- `onPropertiesChange`: `(properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;` `schema`的`properties`更改时回调函数
+- `customInner`：提供自定义渲染表单项.
+- `onSchemaChange`: `(newValue: SchemaData) => void;` `schema`更改时回调函数
 
 ### 表单域属性(FormFieldProps)
 1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
-2. 表单域的简单类型属性全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象
+2. 表单域的全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象
 完整属性类型如下：
 ```javascript
 export interface FormFieldProps extends FormItemProps {

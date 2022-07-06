@@ -2,14 +2,18 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-3.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-3.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a `Form` container component for rendering, is Full form component (2) The exported `RenderFormChildren` component does not have a `Form` container, but only provides the rendering of form fields. need to be used with the `Form` container component to have full form functionality.
 
 # version log
-- v3.x:
+- v3.1.x:
+  - Adjusted the `layout` property of the form field to add `inline`, `labelWidth` properties
+  - Changed `onPropertiesChange` to `onSchemaChange` for the default export component
+  - Changed `customChild` to `customInner`
+- v3.0.x:
   - String expression for form values changed from `$form` to `$formvalues`.
   - Added `$store` to string expression to represent an instance of `FormRenderStore`, which can retrieve the form's associated methods and data.
   - If you need to introduce a built-in component (the add/drop button for a list), you need to `import 'react-easy-formrender/lib/css/main.css'`.
@@ -33,6 +37,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # RenderFormChildren component
 
 - Rendering a form field through the `properties` property。
+- `onPropertiesChange`: `(newValue: SchemaData['properties'], oldValue?: SchemaData['properties']) => void;` Callback function when `properties` is changed
 - only one of the components can be used.
 
 ## install
@@ -245,8 +250,8 @@ const watch = {
 ```
 - `widgets`：register components for form to use.
 - `customList`: function that provides custom rendering List.
-- `customChild`: function that provides custom render Field's children.
-- `onPropertiesChange`: `(properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;` Callback function when `properties` of `schema` is changed
+- `customInner`: function that provides custom render Field's children.
+- `onSchemaChange`: `(newValue: SchemaData) => void;` Callback function when `schema` is changed
 
 ### FormFieldProps
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).

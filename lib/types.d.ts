@@ -20,13 +20,12 @@ export interface FormFieldProps extends FormItemProps {
     } | FormFieldProps[];
 }
 export interface SchemaData extends FormProps<FormRenderStore> {
-    properties: {
+    properties?: {
         [key: string]: FormFieldProps;
     } | FormFieldProps[];
 }
 export declare type WatchHandler = (newValue: any, oldValue: string) => void;
 export interface BaseRenderProps {
-    onPropertiesChange?: (properties: SchemaData['properties'], oldProperties?: SchemaData['properties']) => void;
     watch?: {
         [key: string]: {
             immediate?: boolean;
@@ -36,13 +35,19 @@ export interface BaseRenderProps {
     widgets?: any;
     slotWidgets?: any;
     Fields?: typeof defaultFields;
-    customList?: React.ComponentType<CustomListProps>;
-    customChild?: React.ComponentType<GenerateParams>;
+    customList?: React.ComponentType<CustomListProps & {
+        children: any;
+    }>;
+    customInner?: React.ComponentType<GenerateParams & {
+        children: any;
+    }>;
 }
 export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderProps {
+    onSchemaChange?: (newValue: SchemaData) => void;
     schema: SchemaData;
 }
 export interface RenderFormChildrenProps extends BaseRenderProps {
+    onPropertiesChange?: (newValue: SchemaData['properties'], oldValue?: SchemaData['properties']) => void;
     properties: SchemaData['properties'];
 }
 export declare type ValueOf<T> = T[keyof T];
@@ -57,7 +62,6 @@ export interface WidgetParams {
     widgetProps: FormFieldProps['widgetProps'];
 }
 export interface CustomListProps {
-    children: any;
     properties: SchemaData['properties'];
     parent?: GenerateParams;
 }
@@ -65,7 +69,6 @@ export interface GenerateParams {
     name: string;
     field: FormFieldProps;
     path?: string;
-    index?: number;
 }
 export declare type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: GenerateParams) => any;
 export declare type generateChildFunc = (params: GenerateParams, properties?: SchemaData['properties']) => JSX.Element | undefined;
