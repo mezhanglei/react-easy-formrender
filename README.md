@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-3.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-3.1.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
