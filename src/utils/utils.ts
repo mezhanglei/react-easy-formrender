@@ -29,7 +29,13 @@ export const updateItemByPath = (properties: SchemaData['properties'], pathStr: 
       }
     } else {
       const lastData = temp[end];
-      temp[end] = { ...lastData, ...data };
+      const { name, ...rest } = data;
+      if (name) {
+        delete temp[end];
+        temp[name] = { ...lastData, ...rest };
+      } else {
+        temp[end] = { ...lastData, ...data };
+      }
     }
   }
   return properties;
