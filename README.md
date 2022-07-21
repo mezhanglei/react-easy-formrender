@@ -184,6 +184,21 @@ export default function Demo5(props) {
           }
         }
       },
+      col: {
+        label: 'format object',
+        widget: 'Select',
+        initialValue: { span: 12 },
+        valueSetter: "{{(value)=> (value && value['span'])}}",
+        valueGetter: "{{(value) => ({span: value})}}",
+        widgetProps: {
+          style: { width: '100%' },
+          children: [
+            { widget: 'Select.Option', widgetProps: { key: 1, value: 12, children: '一行一列' } },
+            { widget: 'Select.Option', widgetProps: { key: 2, value: 6, children: '一行二列' } },
+            { widget: 'Select.Option', widgetProps: { key: 3, value: 4, children: '一行三列' } }
+          ]
+        }
+      },
       name5: {
         label: 'name5',
         widget: 'Checkbox',
@@ -286,6 +301,7 @@ The `rules` rules in the form control are derived from the `rules` property in [
 1. Methods for rendering forms. (the path rule: `a.b[0]`, representing the 0th item of the b array of properties under the a property)
  - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Update the information corresponding to `path` in schema.
  - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Override set the information corresponding to `path` in schema.
+ - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the path.
  - `delItemByPath`: `(path: string) => void` delete the information corresponding to `path` in schema.
  - `addItemByIndex`: `(data: { name: string, field: FormFieldProps }, index?: number, parentPath?: string) => void` Add option based on `index` and `parentPath`.
  - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in schema.

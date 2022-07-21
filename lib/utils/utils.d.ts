@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { FormFieldProps, SchemaData } from "../types";
 export declare const pathToArray: (pathStr?: string) => string[];
 export declare const updateItemByPath: (properties: SchemaData['properties'], pathStr: string, data?: Partial<FormFieldProps>) => FormFieldProps[] | {
@@ -11,12 +12,109 @@ export declare const getKeyValueByIndex: (properties: SchemaData['properties'], 
     name: string;
     field: any;
 };
-interface DataListType extends FormFieldProps {
-    propertiesType?: 'object' | 'array';
-    properties?: DataListType[];
-}
-export declare const treeItemToListItem: (name: string, field: FormFieldProps) => DataListType;
-export declare const treeToArr: (properties: SchemaData['properties']) => DataListType[];
+export declare const treeItemToListItem: (name: string, field: FormFieldProps) => {
+    readOnly?: boolean | undefined;
+    readOnlyWidget?: string | undefined;
+    readOnlyRender?: any;
+    hidden?: string | boolean | undefined;
+    widget?: string | undefined;
+    widgetProps?: {
+        [key: string]: any;
+        children?: any;
+    } | undefined;
+    properties?: {
+        [name: string]: FormFieldProps;
+    } | FormFieldProps[] | undefined;
+    label?: string | undefined;
+    name: string;
+    suffix?: any;
+    footer?: any;
+    valueProp?: string | ((type: any) => string) | undefined;
+    valueGetter?: ((...args: any[]) => any) | undefined;
+    valueSetter?: ((value: any) => any) | undefined;
+    rules?: import("react-easy-formcore").FormRule[] | undefined;
+    path?: string | undefined;
+    index?: number | undefined;
+    initialValue?: any;
+    className?: string | undefined;
+    children?: import("react").ReactNode;
+    style?: import("react").CSSProperties | undefined;
+    errorClassName?: string | undefined;
+    customInner?: any;
+    col?: import("react-easy-formcore").FromColProps | undefined;
+    colon?: boolean | undefined;
+    layout?: string | undefined;
+    labelWidth?: number | undefined;
+    labelAlign?: import("csstype").Property.TextAlign | undefined;
+    inline?: boolean | undefined;
+    labelStyle?: import("react").CSSProperties | undefined;
+    compact?: boolean | undefined;
+    required?: boolean | undefined;
+    gutter?: number | undefined;
+    onFieldsChange?: ((obj: {
+        path: string;
+        name?: string | undefined;
+        value: any;
+    }) => void) | undefined;
+    onValuesChange?: ((obj: {
+        path?: string | undefined;
+        name?: string | undefined;
+        value: any;
+    }) => void) | undefined;
+};
+export declare const toList: (properties: SchemaData['properties']) => {
+    readOnly?: boolean | undefined;
+    readOnlyWidget?: string | undefined;
+    readOnlyRender?: any;
+    hidden?: string | boolean | undefined;
+    widget?: string | undefined;
+    widgetProps?: {
+        [key: string]: any;
+        children?: any;
+    } | undefined;
+    properties?: {
+        [name: string]: FormFieldProps;
+    } | FormFieldProps[] | undefined;
+    label?: string | undefined;
+    name: string;
+    suffix?: any;
+    footer?: any;
+    valueProp?: string | ((type: any) => string) | undefined;
+    valueGetter?: ((...args: any[]) => any) | undefined;
+    valueSetter?: ((value: any) => any) | undefined;
+    rules?: import("react-easy-formcore").FormRule[] | undefined;
+    path?: string | undefined;
+    index?: number | undefined;
+    initialValue?: any;
+    className?: string | undefined;
+    children?: import("react").ReactNode;
+    style?: import("react").CSSProperties | undefined;
+    errorClassName?: string | undefined;
+    customInner?: any;
+    col?: import("react-easy-formcore").FromColProps | undefined;
+    colon?: boolean | undefined;
+    layout?: string | undefined;
+    labelWidth?: number | undefined;
+    labelAlign?: import("csstype").Property.TextAlign | undefined;
+    inline?: boolean | undefined;
+    labelStyle?: import("react").CSSProperties | undefined;
+    compact?: boolean | undefined;
+    required?: boolean | undefined;
+    gutter?: number | undefined;
+    onFieldsChange?: ((obj: {
+        path: string;
+        name?: string | undefined;
+        value: any;
+    }) => void) | undefined;
+    onValuesChange?: ((obj: {
+        path?: string | undefined;
+        name?: string | undefined;
+        value: any;
+    }) => void) | undefined;
+}[];
+export declare const updateName: (properties: SchemaData['properties'], pathStr: string, newName?: string) => FormFieldProps[] | {
+    [key: string]: FormFieldProps;
+} | undefined;
 export interface AddItem {
     name: string;
     field: FormFieldProps;
@@ -42,4 +140,4 @@ export declare const swapDiffLevel: (properties: SchemaData['properties'], from:
 }) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
-export {};
+export declare const getInitialValues: (properties: SchemaData['properties']) => {};

@@ -14,6 +14,7 @@ export declare class FormRenderStore<T extends Object = any> extends FormStore {
     setProperties(data?: SchemaData['properties']): void;
     updateItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
     setItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
+    updateNameByPath: (path: string, newName?: string) => void;
     addItemByIndex: (data: AddItem | AddItem[], index?: number, parentPath?: string) => void;
     delItemByPath: (path: string) => void;
     getItemByPath: (path: string) => any;

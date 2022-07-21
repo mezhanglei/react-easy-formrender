@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-3.1.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-3.1.5-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -184,6 +184,21 @@ export default function Demo5(props) {
           }
         }
       },
+      col: {
+        label: 'format object',
+        widget: 'Select',
+        initialValue: { span: 12 },
+        valueSetter: "{{(value)=> (value && value['span'])}}",
+        valueGetter: "{{(value) => ({span: value})}}",
+        widgetProps: {
+          style: { width: '100%' },
+          children: [
+            { widget: 'Select.Option', widgetProps: { key: 1, value: 12, children: '一行一列' } },
+            { widget: 'Select.Option', widgetProps: { key: 2, value: 6, children: '一行二列' } },
+            { widget: 'Select.Option', widgetProps: { key: 3, value: 4, children: '一行三列' } }
+          ]
+        }
+      },
       name5: {
         label: 'name5',
         widget: 'Checkbox',
@@ -286,6 +301,7 @@ interface widgetProps?: {
 1. 渲染表单的方法。(其中path的规则：`a.b[0]`, 表示a属性下的b数组属性的第0项)
  - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 更新schema中`path`对应的信息
  - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 设置schema中`path`对应的信息
+ - `updateNameByPath`: `(path: string, newName?: string) => void` 更新指定路径的name键
  - `delItemByPath`: `(path: string) => void` 删除schema中`path`对应的信息
  - `addItemByIndex`: `(data: { name: string, field: FormFieldProps }, index?: number, parentPath?: string) => void` 根据序号和父节点路径添加选项
  - `getItemByPath`: `(path: string) => void` 获取schema中`path`对应的信息
