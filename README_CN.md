@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-3.1.5-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-3.1.6-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -38,7 +38,7 @@
 
 - 通过`properties`属性渲染表单域
 - `onPropertiesChange`: `(newValue: SchemaData['properties'], oldValue?: SchemaData['properties']) => void;` `properties`更改时回调函数
-- 该组件只能使用一个
+- 该组件在`Form`组件内只能使用一个。
 
 ## 安装
 
@@ -53,7 +53,7 @@ yarn add react-easy-formrender
 1. 首先注册基本组件(以antd@4.20.2组件库为例)
 ```javascript
 // register
-import RenderBaseForm, { RenderFormProps } from 'react-easy-formrender';
+import RenderBaseForm, {RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
 export * from 'react-easy-formrender';
@@ -80,6 +80,13 @@ export const AntdBaseWidgets = {
   "Switch": Switch, // 切换组件
   "TimePicker": TimePicker, // 时分秒控件
   "TimePicker.RangePicker": TimePicker.RangePicker, // 时分秒范围控件
+}
+
+// 重新包装子元素渲染组件
+export function RenderFormChildren(props: RenderFormChildrenProps) {
+  return (
+    <RenderFormChilds {...props} widgets={{ ...AntdBaseWidgets, ...props?.widgets }} />
+  );
 }
 
 export default function FormRender(props: RenderFormProps) {
@@ -284,7 +291,7 @@ export interface FormFieldProps extends FormItemProps {
 }
 ```
 
-### 描述`widgets`组件(`widgetProps`)
+### `widgets`组件的props(`widgetProps`)
 
 ```javascript
 interface widgetProps?: { 

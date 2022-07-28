@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-3.1.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-3.1.6-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -38,7 +38,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 - Rendering a form field through the `properties` property。
 - `onPropertiesChange`: `(newValue: SchemaData['properties'], oldValue?: SchemaData['properties']) => void;` Callback function when `properties` is changed
-- only one of the components can be used.
+- the only one component can be used.
 
 ## install
 
@@ -82,6 +82,12 @@ export const AntdBaseWidgets = {
   "TimePicker.RangePicker": TimePicker.RangePicker
 }
 
+export function RenderFormChildren(props: RenderFormChildrenProps) {
+  return (
+    <RenderFormChilds {...props} widgets={{ ...AntdBaseWidgets, ...props?.widgets }} />
+  );
+}
+
 export default function FormRender(props: RenderFormProps) {
   return (
     <RenderBaseForm {...props} widgets={{ ...AntdBaseWidgets, ...props?.widgets }} />
@@ -92,7 +98,7 @@ export default function FormRender(props: RenderFormProps) {
 ```javascript
 import { Button } from 'antd';
 import React, { useState } from 'react';
-import RenderForm, { useFormRenderStore } from './form-render';
+import RenderForm, {Form, RenderFormChildren, useFormRenderStore } from './form-render';
 export default function Demo5(props) {
 
   const watch = {
