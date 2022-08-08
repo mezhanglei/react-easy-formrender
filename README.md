@@ -2,13 +2,18 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-3.1.7-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-4.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a `Form` container component for rendering, is Full form component (2) The exported `RenderFormChildren` component does not have a `Form` container, but only provides the rendering of form fields. need to be used with the `Form` container component to have full form functionality.
 
 # version log
+- v4.x:
+  - Major update to deprecate fixed container properties `col` and `customInner` and add custom containers `inside` and `outside`;
+  - `widgets` change to `controls`, `widget` and `widgetProps` change to `type` and `props`;
+  - `readOnlyWidget` change to `readOnlyItem`;
+  - add `components` to register other;
 - v3.1.x:
   - Adjusted the `layout` property of the form field to add `inline`, `labelWidth` properties
   - Changed `onPropertiesChange` to `onSchemaChange` for the default export component
@@ -31,7 +36,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # Default export component
 
 - The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
-- Render the form through the `schema` attribute, It includes three parts: 1. the props of the outermost form container.2.the `FormFieldProps` corresponding to the fields are used to describe the properties of the form field. 3. `widgetProps` in FormFieldProps is used to describe the `widgets` component
+- Render the form through the `schema` attribute, It includes three parts: 1. the props of the outermost form container.2.the `FormFieldProps` corresponding to the fields are used to describe the properties of the form field. 3. `props` in FormFieldProps is used to describe the `controls` component
 - String expressions are fully supported for simple types of property fields in `schema`
 
 # RenderFormChildren component
@@ -58,7 +63,7 @@ import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
 export * from 'react-easy-formrender';
 
-export const AntdBaseWidgets = {
+export const AntdBaseControls = {
   "Input": Input,
   "Input.TextArea": Input.TextArea,
   "Input.Password": Input.Password,
@@ -84,13 +89,13 @@ export const AntdBaseWidgets = {
 
 export function RenderFormChildren(props: RenderFormChildrenProps) {
   return (
-    <RenderFormChilds {...props} widgets={{ ...AntdBaseWidgets, ...props?.widgets }} />
+    <RenderFormChilds {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
   );
 }
 
 export default function FormRender(props: RenderFormProps) {
   return (
-    <RenderBaseForm {...props} widgets={{ ...AntdBaseWidgets, ...props?.widgets }} />
+    <RenderBaseForm {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
   );
 }
 ```
@@ -114,106 +119,109 @@ export default function Demo5(props) {
   }
 
   const [schema, setSchema] = useState({
+    // inside: {
+    //   type: 'row'
+    // },
     properties: {
       name1: {
         label: "只读展示",
-        widget: 'Input',
+        type: 'Input',
         required: true,
         readOnly: true,
         readOnlyRender: "只读展示组件",
         initialValue: 1111,
-        // col: { span: 6 },
-        hidden: '{{$formvalues.name5 == true}}',
-        widgetProps: {}
+        // outside: { type: 'col', props: { span: 6 } },
+        hidden: '{{$formvalues.name6 == true}}',
+        props: {}
       },
       name2: {
         label: "输入框",
-        widget: 'Input',
+        type: 'Input',
         required: true,
-        // col: { span: 6 },
+        // outside: { type: 'col', props: { span: 6 } },
         rules: [{ required: true, message: 'name2空了' }],
         initialValue: 1,
-        hidden: '{{$formvalues.name5 == true}}',
-        widgetProps: {}
+        hidden: '{{$formvalues.name6 == true}}',
+        props: {}
       },
       name3: {
         label: "数组",
         required: true,
-        // col: { span: 6 },
+        // outside: { type: 'col', props: { span: 6 } },
         properties: [{
-          widget: 'Select',
+          type: 'Select',
           required: true,
           rules: [{ required: true, message: 'name3[0]空了' }],
           initialValue: { label: '选项1', value: '1', key: '1' },
-          widgetProps: {
+          props: {
             labelInValue: true,
             style: { width: '100%' },
             children: [
-              { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } },
-              { widget: 'Select.Option', widgetProps: { key: 2, value: '2', children: '选项2' } }
+              { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
+              { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
             ]
           }
         }, {
-          widget: 'Select',
+          type: 'Select',
           required: true,
           rules: [{ required: true, message: 'name3[1]空了' }],
-          widgetProps: {
+          props: {
             labelInValue: true,
             style: { width: '100%' },
             children: [
-              { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } },
-              { widget: 'Select.Option', widgetProps: { key: 2, value: '2', children: '选项2' } }
+              { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
+              { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
             ]
           }
         }]
       },
       name4: {
-        label: '对象嵌套',
+        label: 'name4',
         required: true,
-        // col: { span: 6 },
+        // outside: { type: 'col', props: { span: 6 } },
         properties: {
           first: {
             rules: [{ required: true, message: 'name4空了' }],
-            widget: 'Select',
-            widgetProps: {
+            type: 'Select',
+            props: {
               style: { width: '100%' },
-              children: [{ widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
+              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
             }
           },
           second: {
             rules: [{ required: true, message: 'name2空了' }],
-            widget: 'Select',
-            widgetProps: {
+            type: 'Select',
+            props: {
               style: { width: '100%' },
-              children: [{ widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
+              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
             }
           }
         }
       },
-      col: {
-        label: 'format object',
-        widget: 'Select',
+      name5: {
+        label: 'name5',
+        type: 'Select',
         initialValue: { span: 12 },
         valueSetter: "{{(value)=> (value && value['span'])}}",
         valueGetter: "{{(value) => ({span: value})}}",
-        widgetProps: {
+        props: {
           style: { width: '100%' },
           children: [
-            { widget: 'Select.Option', widgetProps: { key: 1, value: 12, children: '一行一列' } },
-            { widget: 'Select.Option', widgetProps: { key: 2, value: 6, children: '一行二列' } },
-            { widget: 'Select.Option', widgetProps: { key: 3, value: 4, children: '一行三列' } }
+            { type: 'Select.Option', props: { key: 1, value: 12, children: '一行一列' } },
+            { type: 'Select.Option', props: { key: 2, value: 6, children: '一行二列' } },
+            { type: 'Select.Option', props: { key: 3, value: 4, children: '一行三列' } }
           ]
         }
       },
-      name5: {
-        label: 'name5',
-        widget: 'Checkbox',
+      name6: {
+        label: 'name6',
+        type: 'Checkbox',
         required: true,
         valueProp: 'checked',
-        // col: { span: 6 },
+        // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
         rules: [{ required: true, message: 'name5空了' }],
-        widgetProps: {
+        props: {
           style: { width: '100%' },
           children: '多选框'
         }
@@ -269,9 +277,11 @@ const watch = {
   <RenderForm watch={watch} />
 }
 ```
-- `widgets`：register components for form to use.
-- `customList`: function that provides custom rendering List.
-- `customInner`: function that provides custom render Field's children.
+- `controls`：register form field's control to use.
+- `components`：register other component for form to use.
+- `renderList`: function that provides custom rendering List.
+- `renderItem`: function that provides custom render Field's children.
+- `inside`: the container of form.
 - `onSchemaChange`: `(newValue: SchemaData) => void;` Callback function when `schema` is changed
 
 ### FormFieldProps
@@ -279,23 +289,33 @@ const watch = {
 2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$formvalues.xxx === xxx}}` means that a field value of the form is equal to a value, where `$formvalues` represents the form value object
 The full props are as follows：
 ```javascript
-export interface FormFieldProps extends FormItemProps {
-  readOnly?: boolean;
-  readOnlyWidget?: string; // Only one of the components in read-only mode, need register in `widgets`,and readOnlyRender, can be active, with readOnlyRender having the highest priority.
+export interface BaseFieldProps extends SchemaComponent {
+  category?: string; // Is the current node a container
+  inside?: SchemaComponent; // Containers wrapped by inner children elements
+  outside?: SchemaComponent; // The container in which the element is wrapped
+  readOnly?: boolean; // is readonly?
+  readOnlyItem?: string; // // Only one of the components in read-only mode, need register in `controls`,and readOnlyRender, can be active, with readOnlyRender having the highest priority.
   readOnlyRender?: any; // Only one of the components in read-only mode, and readOnlyWidget, can be active, with readOnlyRender having the highest priority.
-  widget?: string; // The string represented by the form control, and the properties property cannot both exist
-  widgetProps?: { children?: any | Array<{ widget: string, widgetProps: FormFieldProps['widgetProps'] }>, [key: string]: any }; // widget props
-  hidden?: string | boolean; // show or hidden
-  properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // Nested form controls Nested objects when they are objects, or collections of arrays when they are array types
+  typeRender?: any; // form field's control render
+}
+
+export interface FormFieldProps extends FormItemProps, BaseFieldProps {
+  valueGetter?: string | ((...args: any[]) => any); // 拦截输出项
+  valueSetter?: string | ((value: any) => any); // 拦截输入项
+  properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
 }
 ```
 
-### widgetProps
-
+### Description of the components used in the form
+  The container components, form controls and buttons used in the form are uniformly described in the same structure.
 ```javascript
-interface widgetProps?: { 
-  children?: JSX.Element |
-  Array<{ widget: string, widgetProps: FormFieldProps['widgetProps'] }>, [key: string]: any };
+interface SchemaComponent {
+  type?: string;
+  props?: {
+    [key: string]: any;
+    children?: any | Array<SchemaComponent>
+  };
+  hidden?: string | boolean;
 }
 ```
 

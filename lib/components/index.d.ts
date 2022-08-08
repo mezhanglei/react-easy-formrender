@@ -1,10 +1,7 @@
 /// <reference types="react" />
-export declare const defaultFields: {
-    'Form.Item': import("react").ForwardRefExoticComponent<import("react-easy-formcore").FormItemProps & import("react").RefAttributes<unknown>>;
-    'Form.List': import("react").ForwardRefExoticComponent<import("react-easy-formcore").FormListProps & import("react").RefAttributes<unknown>>;
-    'List.Item': import("react").ForwardRefExoticComponent<import("react-easy-formcore").ListItemProps & import("react").RefAttributes<unknown>>;
-};
-export declare const defaultSlotWidgets: {
-    add: import("react").ForwardRefExoticComponent<import("./add-btn").ButtonProps & import("react").RefAttributes<any>>;
-    delete: import("react").FC<import("./delete-btn").DeleteBtnProps>;
+export declare const defaultComponents: {
+    row: import("react").ForwardRefExoticComponent<import("./grid").GridRowProps & import("react").RefAttributes<unknown>>;
+    col: import("react").ForwardRefExoticComponent<import("./grid").GridColProps & import("react").RefAttributes<unknown>>;
+    add: import("react").FC<import("./btn").AddBtnProps>;
+    delete: import("react").FC<import("./btn").DeleteBtnProps>;
 };

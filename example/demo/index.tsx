@@ -1,11 +1,11 @@
 import React from 'react';
 import "./index.less";
-import RenderForm, { Form, FormRenderStore, RenderFormChildren } from '../../lib/index';
+import RenderForm, { Form, FormRenderStore, RenderFormChildren } from '../../src/index';
 // import '../../lib/css/main.css';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
 // 原子组件
-export const defaultWidgets: { [key: string]: any } = {
+export const defaultControls: { [key: string]: any } = {
   "Input": Input,
   "Radio.Group": Radio.Group,
   "Radio": Radio,
@@ -38,60 +38,63 @@ class demo extends React.Component {
         properties: {
           name1: {
             label: "name1",
-            widget: 'Input',
+            type: 'Input',
             required: true,
             readOnly: true,
             readOnlyRender: 1111,
             rules: [{ required: true, message: 'name1空了' }],
             initialValue: 1111,
             // layout: 'vertical',
-            hidden: '{{$formvalues.name4 == true}}',
-            widgetProps: {}
+            hidden: '{{$formvalues.name5 == true}}',
+            props: {}
           },
           name2: {
             label: "name2",
             required: true,
             footer: {
-              type: 'add', addItem: {
-                widget: 'Select',
-                required: true,
-                suffix: { type: 'delete' },
-                rules: [{ required: true, message: '空' }],
-                initialValue: { label: '选项1', value: '1', key: '1' },
-                widgetProps: {
-                  labelInValue: true,
-                  style: { width: '100%' },
-                  children: [
-                    { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } },
-                    { widget: 'Select.Option', widgetProps: { key: 2, value: '2', children: '选项2' } }
-                  ]
+              type: 'add',
+              props: {
+                item: {
+                  type: 'Select',
+                  required: true,
+                  suffix: { type: 'delete' },
+                  rules: [{ required: true, message: '空' }],
+                  initialValue: { label: '选项1', value: '1', key: '1' },
+                  props: {
+                    labelInValue: true,
+                    style: { width: '100%' },
+                    children: [
+                      { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
+                      { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
+                    ]
+                  }
                 }
               }
             },
             properties: [{
-              widget: 'Select',
+              type: 'Select',
               required: true,
               rules: [{ required: true, message: 'name2[0]空了' }],
               initialValue: { label: '选项1', value: '1', key: '1' },
               suffix: { type: 'delete' },
-              widgetProps: {
+              props: {
                 labelInValue: true,
                 style: { width: '100%' },
                 children: [
-                  { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } },
-                  { widget: 'Select.Option', widgetProps: { key: 2, value: '2', children: '选项2' } }
+                  { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
+                  { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
                 ]
               }
             }, {
-              widget: 'Select',
+              type: 'Select',
               required: true,
               suffix: { type: 'delete' },
               rules: [{ required: true, message: 'name2[1]空了' }],
-              widgetProps: {
+              props: {
                 labelInValue: true,
                 style: { width: '100%' },
                 children: [
-                  { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }
+                  { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }
                 ]
               }
             }]
@@ -102,45 +105,45 @@ class demo extends React.Component {
             properties: {
               first: {
                 rules: [{ required: true, message: 'name3.first空了' }],
-                widget: 'Select',
-                widgetProps: {
+                type: 'Select',
+                props: {
                   style: { width: '100%' },
-                  children: [{ widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
+                  children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
                 }
               },
               second: {
                 rules: [{ required: true, message: 'name3.second空了' }],
-                widget: 'Select',
-                widgetProps: {
+                type: 'Select',
+                props: {
                   style: { width: '100%' },
-                  children: [{ widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
+                  children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
                 }
               }
             }
           },
-          col: {
-            label: 'format object',
-            widget: 'Select',
+          name4: {
+            label: 'name4',
+            type: 'Select',
             initialValue: { span: 12 },
             valueSetter: "{{(value)=> (value && value['span'])}}",
             valueGetter: "{{(value) => ({span: value})}}",
-            widgetProps: {
+            props: {
               style: { width: '100%' },
               children: [
-                { widget: 'Select.Option', widgetProps: { key: 1, value: 12, children: '一行一列' } },
-                { widget: 'Select.Option', widgetProps: { key: 2, value: 6, children: '一行二列' } },
-                { widget: 'Select.Option', widgetProps: { key: 3, value: 4, children: '一行三列' } }
+                { type: 'Select.Option', props: { key: 1, value: 12, children: '一行一列' } },
+                { type: 'Select.Option', props: { key: 2, value: 6, children: '一行二列' } },
+                { type: 'Select.Option', props: { key: 3, value: 4, children: '一行三列' } }
               ]
             }
           },
-          name4: {
-            label: 'name4',
-            widget: 'Checkbox',
+          name5: {
+            label: 'name5',
+            type: 'Checkbox',
             required: true,
             valueProp: 'checked',
             initialValue: true,
             rules: [{ required: true, message: 'name4空了' }],
-            widgetProps: {
+            props: {
               style: { width: '100%' },
               children: '多选框'
             }
@@ -160,9 +163,9 @@ class demo extends React.Component {
     return (
       <div>
         {/* <Form store={this.store}>
-                    <RenderFormChildren watch={watch} widgets={defaultWidgets} properties={this.state.schema?.properties} />
+                    <RenderFormChildren watch={watch} controls={defaultControls} properties={this.state.schema?.properties} />
                 </Form> */}
-        <RenderForm watch={watch} widgets={defaultWidgets} store={this.store} schema={this.state.schema} />
+        <RenderForm watch={watch} controls={defaultControls} store={this.store} schema={this.state.schema} />
         <div style={{ marginLeft: '140px' }}>
           <Button onClick={this.onSubmit}>submit</Button>
         </div>

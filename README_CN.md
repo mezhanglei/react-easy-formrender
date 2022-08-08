@@ -2,13 +2,18 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-3.1.7-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-4.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成), 提供两种组件： (1)默认导出组件自带`Form`容器组件进行渲染,可以实现完整的表单功能(2)导出`RenderFormChildren`组件不带`Form`容器, 只提供表单域的控件渲染, 需要配合`Form`容器组件使用才具有完整表单功能.
 
 # version log
+- v4.x:
+  - 大版本更新，废除固定容器属性`col`和`customInner`，增加自定义容器`inside`和`outside`;
+  - `widgets` 改为 `controls`, `widget`和`widgetProps`改为`type`和`props`;
+  - `readOnlyWidget` 改为 `readOnlyItem`;
+  - 增加非表单控件的注册: `components`;
 - v3.1.x:
   - 调整表单域的`layout`属性，增加`inline`, `labelWidth`属性
   - 调整默认导出组件的`onPropertiesChange`改为`onSchemaChange`
@@ -31,7 +36,7 @@
 # 默认导出组件
 
 - 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
-- 通过`schema`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`widgetProps`用来描述`widgets`组件
+- 通过`schema`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`props`用来描述`controls`组件
 - `schema`中关于表单域属性字段已全面支持字符串表达式
 
 # RenderFormChildren组件
@@ -58,7 +63,7 @@ import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
 export * from 'react-easy-formrender';
 // 提供开发过程中的基础控件(控件需要满足具有value传参，onChange回调函数的props)
-export const AntdBaseWidgets = {
+export const AntdBaseControls = {
   "Input": Input, // 输入控件
   "Input.TextArea": Input.TextArea, // 输入文本域
   "Input.Password": Input.Password, // 输入密码组件
@@ -85,13 +90,13 @@ export const AntdBaseWidgets = {
 // 重新包装子元素渲染组件
 export function RenderFormChildren(props: RenderFormChildrenProps) {
   return (
-    <RenderFormChilds {...props} widgets={{ ...AntdBaseWidgets, ...props?.widgets }} />
+    <RenderFormChilds {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
   );
 }
 
 export default function FormRender(props: RenderFormProps) {
   return (
-    <RenderBaseForm {...props} widgets={{ ...AntdBaseWidgets, ...props?.widgets }} />
+    <RenderBaseForm {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
   );
 }
 ```
@@ -118,52 +123,52 @@ export default function Demo5(props) {
     properties: {
       name1: {
         label: "只读展示",
-        widget: 'Input',
+        type: 'Input',
         required: true,
         readOnly: true,
         readOnlyRender: "只读展示组件",
         initialValue: 1111,
         // col: { span: 6 },
-        hidden: '{{$formvalues.name5 == true}}',
-        widgetProps: {}
+        hidden: '{{$formvalues.name6 == true}}',
+        props: {}
       },
       name2: {
         label: "输入框",
-        widget: 'Input',
+        type: 'Input',
         required: true,
         // col: { span: 6 },
         rules: [{ required: true, message: 'name2空了' }],
         initialValue: 1,
-        hidden: '{{$formvalues.name5 == true}}',
-        widgetProps: {}
+        hidden: '{{$formvalues.name6 == true}}',
+        props: {}
       },
       name3: {
-        label: "数组",
+        label: "数组name3",
         required: true,
         // col: { span: 6 },
         properties: [{
-          widget: 'Select',
+          type: 'Select',
           required: true,
           rules: [{ required: true, message: 'name3[0]空了' }],
           initialValue: { label: '选项1', value: '1', key: '1' },
-          widgetProps: {
+          props: {
             labelInValue: true,
             style: { width: '100%' },
             children: [
-              { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } },
-              { widget: 'Select.Option', widgetProps: { key: 2, value: '2', children: '选项2' } }
+              { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
+              { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
             ]
           }
         }, {
-          widget: 'Select',
+          type: 'Select',
           required: true,
           rules: [{ required: true, message: 'name3[1]空了' }],
-          widgetProps: {
+          props: {
             labelInValue: true,
             style: { width: '100%' },
             children: [
-              { widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } },
-              { widget: 'Select.Option', widgetProps: { key: 2, value: '2', children: '选项2' } }
+              { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
+              { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
             ]
           }
         }]
@@ -175,46 +180,46 @@ export default function Demo5(props) {
         properties: {
           first: {
             rules: [{ required: true, message: 'name4空了' }],
-            widget: 'Select',
-            widgetProps: {
+            type: 'Select',
+            props: {
               style: { width: '100%' },
-              children: [{ widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
+              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
             }
           },
           second: {
             rules: [{ required: true, message: 'name2空了' }],
-            widget: 'Select',
-            widgetProps: {
+            type: 'Select',
+            props: {
               style: { width: '100%' },
-              children: [{ widget: 'Select.Option', widgetProps: { key: 1, value: '1', children: '选项1' } }]
+              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
             }
           }
         }
       },
-      col: {
-        label: 'format object',
-        widget: 'Select',
+      name5: {
+        label: 'name5',
+        type: 'Select',
         initialValue: { span: 12 },
         valueSetter: "{{(value)=> (value && value['span'])}}",
         valueGetter: "{{(value) => ({span: value})}}",
-        widgetProps: {
+        props: {
           style: { width: '100%' },
           children: [
-            { widget: 'Select.Option', widgetProps: { key: 1, value: 12, children: '一行一列' } },
-            { widget: 'Select.Option', widgetProps: { key: 2, value: 6, children: '一行二列' } },
-            { widget: 'Select.Option', widgetProps: { key: 3, value: 4, children: '一行三列' } }
+            { type: 'Select.Option', props: { key: 1, value: 12, children: '一行一列' } },
+            { type: 'Select.Option', props: { key: 2, value: 6, children: '一行二列' } },
+            { type: 'Select.Option', props: { key: 3, value: 4, children: '一行三列' } }
           ]
         }
       },
-      name5: {
-        label: 'name5',
-        widget: 'Checkbox',
+      name6: {
+        label: 'name6',
+        type: 'Checkbox',
         required: true,
         valueProp: 'checked',
         // col: { span: 6 },
         initialValue: true,
         rules: [{ required: true, message: 'name5空了' }],
-        widgetProps: {
+        props: {
           style: { width: '100%' },
           children: '多选框'
         }
@@ -270,9 +275,11 @@ const watch = {
   <RenderForm watch={watch} />
 }
 ```
-- `widgets`：注册表单所需要使用的组件.
-- `customList`：提供自定义渲染列表.
-- `customInner`：提供自定义渲染表单项.
+- `controls`：注册表单控件.
+- `components`：注册表单中控件以外的其他组件(容器组件，按钮等);
+- `renderList`：提供自定义渲染列表.
+- `renderItem`：提供自定义渲染表单项.
+- `inside` 表单项的容器.
 - `onSchemaChange`: `(newValue: SchemaData) => void;` `schema`更改时回调函数
 
 ### 表单域属性(FormFieldProps)
@@ -280,23 +287,34 @@ const watch = {
 2. 表单域的全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象
 完整属性类型如下：
 ```javascript
-export interface FormFieldProps extends FormItemProps {
+export interface BaseFieldProps extends SchemaComponent {
+  category?: string; // 当前节点是否为容器
+  inside?: SchemaComponent; // 内层子元素包裹的容器
+  outside?: SchemaComponent; // 元素外层包裹的容器
   readOnly?: boolean; // 只读模式
-  readOnlyWidget?: string; // 只读模式下的组件，和readOnlyRender只能生效一个，readOnlyRender优先级最高
-  readOnlyRender?: any; // 只读模式下的组件，和readOnlyWidget只能生效一个，readOnlyRender优先级最高
-  widget?: string; // 表单控件代表的字符串，和properties属性不能同时存在
-  widgetProps?: { children?: any | Array<{ widget: string, widgetProps: FormFieldProps['widgetProps'] }>, [key: string]: any }; // 表单控件自有的props属性
-  hidden?: string | boolean; // 显示隐藏的逻辑，支持字符串表达式
+  readOnlyItem?: string; // 只读模式下的组件，和readOnlyRender只能生效一个，readOnlyRender优先级最高
+  readOnlyRender?: any; // 只读模式下的组件，和readOnlyItem只能生效一个，readOnlyRender优先级最高
+  typeRender?: any; // 表单控件自定义渲染
+}
+
+export interface FormFieldProps extends FormItemProps, BaseFieldProps {
+  valueGetter?: string | ((...args: any[]) => any); // 拦截输出项
+  valueSetter?: string | ((value: any) => any); // 拦截输入项
   properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
 }
 ```
 
-### `widgets`组件的props(`widgetProps`)
-
+### 表单中的使用的组件描述
+  表单中使用的容器组件、表单控件、按钮，统一用同样的结构描述。
 ```javascript
-interface widgetProps?: { 
-  children?: JSX.Element |
-  Array<{ widget: string, widgetProps: FormFieldProps['widgetProps'] }>, [key: string]: any }; // 表单控件自有的props属性
+// 组件描述基本属性
+export interface SchemaComponent {
+  type?: string;
+  props?: {
+    [key: string]: any;
+    children?: any | Array<SchemaComponent>
+  };
+  hidden?: string | boolean;
 }
 ```
 

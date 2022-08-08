@@ -1,41 +1,43 @@
 /// <reference types="react" />
 import { FormItemProps, FormProps } from "react-easy-formcore";
+import { defaultFields } from "./fields";
 import { FormRenderStore } from "./formrender-store";
-import { defaultFields } from './components';
 declare type Overwrite<T, U> = Omit<T, keyof U> & U;
 interface Extension {
     valueGetter?: string | ((...args: any[]) => any);
     valueSetter?: string | ((value: any) => any);
 }
-export interface WidgetProps {
-    children?: any | Array<{
-        widget: string;
-        widgetProps: WidgetProps;
-    }>;
-    [key: string]: any;
-}
-export interface BaseFieldProps {
-    readOnly?: boolean;
-    readOnlyWidget?: string;
-    readOnlyRender?: any;
+export interface SchemaComponent {
+    type?: string;
+    props?: {
+        [key: string]: any;
+        children?: any | Array<SchemaComponent>;
+    };
     hidden?: string | boolean;
-    widget?: string;
-    widgetProps?: WidgetProps;
+}
+export interface BaseFieldProps extends SchemaComponent {
+    category?: string;
+    inside?: SchemaComponent;
+    outside?: SchemaComponent;
+    readOnly?: boolean;
+    readOnlyItem?: string;
+    readOnlyRender?: any;
+    typeRender?: any;
 }
 export interface FormFieldProps extends Overwrite<FormItemProps, Extension>, BaseFieldProps {
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[];
 }
-export interface SchemaData extends FormProps<FormRenderStore> {
-    properties?: {
-        [key: string]: FormFieldProps;
-    } | FormFieldProps[];
-}
 export interface OverwriteFormFieldProps extends FormItemProps, BaseFieldProps {
     properties?: {
         [name: string]: OverwriteFormFieldProps;
     } | OverwriteFormFieldProps[];
+}
+export interface SchemaData extends FormProps<FormRenderStore> {
+    properties?: {
+        [key: string]: FormFieldProps;
+    } | FormFieldProps[];
 }
 export declare type WatchHandler = (newValue: any, oldValue: any) => void;
 export interface BaseRenderProps {
@@ -45,13 +47,14 @@ export interface BaseRenderProps {
             handler: WatchHandler;
         } | WatchHandler;
     };
-    widgets?: any;
-    slotWidgets?: any;
+    controls?: any;
+    components?: any;
+    inside?: SchemaComponent;
     Fields?: typeof defaultFields;
-    customList?: React.ComponentType<CustomListProps & {
+    renderList?: React.ComponentType<GeneratePrams & {
         children: any;
     }>;
-    customInner?: React.ComponentType<GenerateParams & {
+    renderItem?: React.ComponentType<GeneratePrams & {
         children: any;
     }>;
 }
@@ -61,28 +64,17 @@ export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderP
 }
 export interface RenderFormChildrenProps extends BaseRenderProps {
     onPropertiesChange?: (newValue: SchemaData['properties'], oldValue?: SchemaData['properties']) => void;
-    properties: SchemaData['properties'];
+    properties?: SchemaData['properties'];
 }
 export declare type ValueOf<T> = T[keyof T];
-export interface SlotParams {
-    type: string;
-    props?: any;
-    hidden?: boolean;
-    addItem?: FormFieldProps;
-}
-export interface WidgetParams {
-    widget: string;
-    widgetProps: WidgetProps;
-}
-export interface CustomListProps {
-    properties: SchemaData['properties'];
-    parent?: GenerateParams;
-}
-export interface GenerateParams {
-    name: string;
+export interface FormItemInfo {
+    name?: string;
     field: OverwriteFormFieldProps;
     path?: string;
 }
-export declare type getChildrenList = (properties: SchemaData['properties'], generate: generateChildFunc, parent?: GenerateParams) => any;
-export declare type generateChildFunc = (params: GenerateParams, properties?: SchemaData['properties']) => JSX.Element | undefined;
+export interface GeneratePrams extends FormItemInfo {
+    store?: FormRenderStore;
+}
+export declare type getChildrenList = (generate: generateChildFunc, parent?: FormItemInfo) => any;
+export declare type generateChildFunc = (params: FormItemInfo) => JSX.Element | undefined;
 export {};

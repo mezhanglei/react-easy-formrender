@@ -16,21 +16,19 @@ export declare const treeItemToListItem: (name: string, field: FormFieldProps) =
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[] | undefined;
-    className?: string | undefined;
     children?: import("react").ReactNode;
-    col?: import("react-easy-formcore").FromColProps | undefined;
-    footer?: any;
     label?: string | undefined;
-    style?: import("react").CSSProperties | undefined;
-    path?: string | undefined;
     name: string;
     suffix?: any;
+    footer?: any;
     valueProp?: string | ((type: any) => string) | undefined;
     rules?: import("react-easy-formcore").FormRule[] | undefined;
+    path?: string | undefined;
     index?: number | undefined;
     initialValue?: any;
+    className?: string | undefined;
+    style?: import("react").CSSProperties | undefined;
     errorClassName?: string | undefined;
-    customInner?: any;
     colon?: boolean | undefined;
     layout?: string | undefined;
     labelWidth?: number | undefined;
@@ -52,32 +50,37 @@ export declare const treeItemToListItem: (name: string, field: FormFieldProps) =
     }) => void) | undefined;
     valueGetter?: string | ((...args: any[]) => any) | undefined;
     valueSetter?: string | ((value: any) => any) | undefined;
+    category?: string | undefined;
+    inside?: import("../types").SchemaComponent | undefined;
+    outside?: import("../types").SchemaComponent | undefined;
     readOnly?: boolean | undefined;
-    readOnlyWidget?: string | undefined;
+    readOnlyItem?: string | undefined;
     readOnlyRender?: any;
+    typeRender?: any;
+    type?: string | undefined;
+    props?: {
+        [key: string]: any;
+        children?: any;
+    } | undefined;
     hidden?: string | boolean | undefined;
-    widget?: string | undefined;
-    widgetProps?: import("../types").WidgetProps | undefined;
 };
 export declare const toList: (properties: SchemaData['properties']) => {
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[] | undefined;
-    className?: string | undefined;
     children?: import("react").ReactNode;
-    col?: import("react-easy-formcore").FromColProps | undefined;
-    footer?: any;
     label?: string | undefined;
-    style?: import("react").CSSProperties | undefined;
-    path?: string | undefined;
     name: string;
     suffix?: any;
+    footer?: any;
     valueProp?: string | ((type: any) => string) | undefined;
     rules?: import("react-easy-formcore").FormRule[] | undefined;
+    path?: string | undefined;
     index?: number | undefined;
     initialValue?: any;
+    className?: string | undefined;
+    style?: import("react").CSSProperties | undefined;
     errorClassName?: string | undefined;
-    customInner?: any;
     colon?: boolean | undefined;
     layout?: string | undefined;
     labelWidth?: number | undefined;
@@ -99,12 +102,19 @@ export declare const toList: (properties: SchemaData['properties']) => {
     }) => void) | undefined;
     valueGetter?: string | ((...args: any[]) => any) | undefined;
     valueSetter?: string | ((value: any) => any) | undefined;
+    category?: string | undefined;
+    inside?: import("../types").SchemaComponent | undefined;
+    outside?: import("../types").SchemaComponent | undefined;
     readOnly?: boolean | undefined;
-    readOnlyWidget?: string | undefined;
+    readOnlyItem?: string | undefined;
     readOnlyRender?: any;
+    typeRender?: any;
+    type?: string | undefined;
+    props?: {
+        [key: string]: any;
+        children?: any;
+    } | undefined;
     hidden?: string | boolean | undefined;
-    widget?: string | undefined;
-    widgetProps?: import("../types").WidgetProps | undefined;
 }[];
 export declare const updateName: (properties: SchemaData['properties'], pathStr: string, newName?: string) => FormFieldProps[] | {
     [key: string]: FormFieldProps;

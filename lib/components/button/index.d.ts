@@ -1,5 +1,5 @@
 import React from 'react';
-import "./add-btn.less";
+import "./index.less";
 export declare type BUTTON_TYPE = "primary" | "default" | "dashed" | "ghost";
 export declare type HTML_TYPE = "button" | "submit" | "reset";
 export declare type SHAPE_TYPE = "circle";
