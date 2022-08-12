@@ -291,7 +291,7 @@ const watch = {
 完整属性类型如下：
 ```javascript
 export interface BaseFieldProps extends SchemaComponent {
-  category?: string; // 当前节点类型，为container时表示容器节点,不影响表单值。
+  category?: string; // 当前节点类型，为container时表示容器节点,不作为表单值的组成。
   inside?: SchemaComponent; // 内层子元素包裹的容器
   outside?: SchemaComponent; // 元素外层包裹的容器
   readOnly?: boolean; // 只读模式

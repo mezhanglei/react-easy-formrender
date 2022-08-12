@@ -290,7 +290,7 @@ const watch = {
 The full props are as follows：
 ```javascript
 export interface BaseFieldProps extends SchemaComponent {
-  category?: string; // The current node type, container when it is container, does not affect the form value.
+  category?: string; // The current node type, container when it is container, is not used as a component of the form value.
   inside?: SchemaComponent; // Containers wrapped by inner children elements
   outside?: SchemaComponent; // The container in which the element is wrapped
   readOnly?: boolean; // is readonly?
