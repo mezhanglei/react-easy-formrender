@@ -181,7 +181,7 @@ export default function Demo5(props) {
         // outside: { type: 'col', props: { span: 6 } },
         properties: {
           first: {
-            rules: [{ required: true, message: 'name4空了' }],
+            rules: [{ required: true, message: 'first空了' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
@@ -189,7 +189,7 @@ export default function Demo5(props) {
             }
           },
           second: {
-            rules: [{ required: true, message: 'name2空了' }],
+            rules: [{ required: true, message: 'second空了' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
@@ -220,7 +220,7 @@ export default function Demo5(props) {
         valueProp: 'checked',
         // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
-        rules: [{ required: true, message: 'name5空了' }],
+        rules: [{ required: true, message: 'name6空了' }],
         props: {
           style: { width: '100%' },
           children: '多选框'
@@ -280,8 +280,8 @@ const watch = {
 - `controls`：register form field's control to use.
 - `components`：register other component for form to use.
 - `renderList`: function that provides custom rendering List.
-- `renderItem`: function that provides custom render Field's children.
-- `inside`: the container of form.
+- `renderItem`: function that provides custom render field item.
+- `inside`: the container of form children.
 - `onSchemaChange`: `(newValue: SchemaData) => void;` Callback function when `schema` is changed
 
 ### FormFieldProps
@@ -290,7 +290,7 @@ const watch = {
 The full props are as follows：
 ```javascript
 export interface BaseFieldProps extends SchemaComponent {
-  category?: string; // Is the current node a container
+  category?: string; // The current node type, container when it is container, does not affect the form value.
   inside?: SchemaComponent; // Containers wrapped by inner children elements
   outside?: SchemaComponent; // The container in which the element is wrapped
   readOnly?: boolean; // is readonly?
@@ -300,9 +300,9 @@ export interface BaseFieldProps extends SchemaComponent {
 }
 
 export interface FormFieldProps extends FormItemProps, BaseFieldProps {
-  valueGetter?: string | ((...args: any[]) => any); // 拦截输出项
-  valueSetter?: string | ((value: any) => any); // 拦截输入项
-  properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
+  valueGetter?: string | ((...args: any[]) => any); // output getter
+  valueSetter?: string | ((value: any) => any); // input setter
+  properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // Nested form controls Nested objects when they are objects, or collections of arrays when they are array types
 }
 ```
 
