@@ -6,7 +6,7 @@ English | [中文说明](./README_CN.md)
 
 # Introduction?
 
-High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development),Two components are provided: (1) the default export component comes with a `Form` container component for rendering, is Full form component (2) The exported `RenderFormChildren` component does not have a `Form` container, but only provides the rendering of form fields. need to be used with the `Form` container component to have full form functionality.
+High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
 # version log
 - v4.x:
@@ -17,20 +17,20 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - v3.1.x:
   - Adjusted the `layout` property of the form field to add `inline`, `labelWidth` properties
   - Changed `onPropertiesChange` to `onSchemaChange` for the default export component
-  - Changed `customChild` to `customInner`
+  - ~~Changed `customChild` to `customInner`~~
 - v3.0.x:
   - String expression for form values changed from `$form` to `$formvalues`.
   - Added `$store` to string expression to represent an instance of `FormRenderStore`, which can retrieve the form's associated methods and data.
   - If you need to introduce a built-in component (the add/drop button for a list), you need to `import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
   - Remove the `dependencies` property and replace it with `formvalues` that are automatically injected into the widget component.
-  - Changing the api of the `RenderFormChildren` component
+  - ~~Changing the api of the `RenderFormChildren` component~~
   - Change the Methods of `FormRenderStore`.
 - v1.x:
    - FormRenderStore Methods changed
    - `onValuesChange` optimise
-   - Change `component` and `props` to `widget` and `widgetProps` in schema
-   - Change `render` in schema to `readOnlyWidget` and `readOnlyRender`
+   - ~~Change `component` and `props` to `widget` and `widgetProps` in schema~~
+   - ~~Change `render` in schema to `readOnlyWidget` and `readOnlyRender`~~
    - Version matches version 1.1.x of react-easy-formcore
 
 # Default export component
@@ -38,12 +38,6 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
 - Render the form through the `schema` attribute, It includes three parts: 1. the props of the outermost form container.2.the `FormFieldProps` corresponding to the fields are used to describe the properties of the form field. 3. `props` in FormFieldProps is used to describe the `controls` component
 - String expressions are fully supported for simple types of property fields in `schema`
-
-# RenderFormChildren component
-
-- Rendering a form field through the `properties` property。
-- `onPropertiesChange`: `(newValue: SchemaData['properties'], oldValue?: SchemaData['properties']) => void;` Callback function when `properties` is changed
-- the only one component can be used.
 
 ## install
 
@@ -87,12 +81,6 @@ export const AntdBaseControls = {
   "TimePicker.RangePicker": TimePicker.RangePicker
 }
 
-export function RenderFormChildren(props: RenderFormChildrenProps) {
-  return (
-    <RenderFormChilds {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
-  );
-}
-
 export default function FormRender(props: RenderFormProps) {
   return (
     <RenderBaseForm {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
@@ -103,7 +91,7 @@ export default function FormRender(props: RenderFormProps) {
 ```javascript
 import { Button } from 'antd';
 import React, { useState } from 'react';
-import RenderForm, {Form, RenderFormChildren, useFormRenderStore } from './form-render';
+import RenderForm, {Form, useFormRenderStore } from './form-render';
 export default function Demo5(props) {
 
   const watch = {

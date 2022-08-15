@@ -6,7 +6,7 @@
 
 # 适用场景
 
-高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成), 提供两种组件： (1)默认导出组件自带`Form`容器组件进行渲染,可以实现完整的表单功能(2)导出`RenderFormChildren`组件不带`Form`容器, 只提供表单域的控件渲染, 需要配合`Form`容器组件使用才具有完整表单功能.
+高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成).
 
 # version log
 - v4.x:
@@ -17,20 +17,20 @@
 - v3.1.x:
   - 调整表单域的`layout`属性，增加`inline`, `labelWidth`属性
   - 调整默认导出组件的`onPropertiesChange`改为`onSchemaChange`
-  - 调整`customChild`改为`customInner`
+  - ~~调整`customChild`改为`customInner`~~
 - v3.0.x:
   - 字符串表达式中表示表单值的字符由`$form`改为`$formvalues`.
   - 字符串表达式中增加`$store`表示`FormRenderStore`的实例，可以获取表单的相关方法和数据.
   - 如果需要引入内置组件(列表的增删按钮), 则需要`import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
   - 移除 `dependencies` 属性，改为给widget组件自动注入表单值`formvalues`.
-  - 更改`RenderFormChildren`组件的api
+  - ~~更改`RenderFormChildren`组件的api~~
   - 更改`FormRenderStore`的Methods
 - v1.x:
    - 更改表单控件的方法
    - 优化`onValuesChange`使用
-   - 更改schema中的`component`和`props`为`widget`和`widgetProps`
-   - 更改schema中的`render`为`readOnlyWidget`和`readOnlyRender`
+   - ~~更改schema中的`component`和`props`为`widget`和`widgetProps`~~
+   - ~~更改schema中的`render`为`readOnlyWidget`和`readOnlyRender`~~
    - 版本匹配react-easy-formcore的1.1.x版本以上
 
 # 默认导出组件
@@ -38,12 +38,6 @@
 - 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
 - 通过`schema`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`props`用来描述`controls`组件
 - `schema`中关于表单域属性字段已全面支持字符串表达式
-
-# RenderFormChildren组件
-
-- 通过`properties`属性渲染表单域
-- `onPropertiesChange`: `(newValue: SchemaData['properties'], oldValue?: SchemaData['properties']) => void;` `properties`更改时回调函数
-- 该组件在`Form`组件内只能使用一个。
 
 ## 安装
 
@@ -58,7 +52,7 @@ yarn add react-easy-formrender
 1. 首先注册基本组件(以antd@4.20.2组件库为例)
 ```javascript
 // register
-import RenderBaseForm, {RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
+import RenderBaseForm, { RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
 export * from 'react-easy-formrender';
@@ -85,13 +79,6 @@ export const AntdBaseControls = {
   "Switch": Switch, // 切换组件
   "TimePicker": TimePicker, // 时分秒控件
   "TimePicker.RangePicker": TimePicker.RangePicker, // 时分秒范围控件
-}
-
-// 重新包装子元素渲染组件
-export function RenderFormChildren(props: RenderFormChildrenProps) {
-  return (
-    <RenderFormChilds {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
-  );
 }
 
 export default function FormRender(props: RenderFormProps) {
