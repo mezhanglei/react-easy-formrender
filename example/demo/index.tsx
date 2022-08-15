@@ -2,7 +2,7 @@ import React from 'react';
 import "./index.less";
 import RenderForm, { Form, FormRenderStore, RenderFormChildren } from '../../src/index';
 // import '../../lib/css/main.css';
-import { Button, Checkbox, Input, Radio, Select } from 'antd';
+import { Button, Checkbox, Col, Input, Radio, Row, Select } from 'antd';
 
 // 原子组件
 export const defaultControls: { [key: string]: any } = {
@@ -35,10 +35,14 @@ class demo extends React.Component {
       schema: {
         title: '1111',
         className: 'form-wrapper',
+        inside: {
+          type: 'row'
+        },
         properties: {
           name1: {
             label: "name1",
             type: 'Input',
+            outside: { type: 'col', props: { span: 12 } },
             required: true,
             readOnly: true,
             readOnlyRender: 1111,
@@ -51,6 +55,7 @@ class demo extends React.Component {
           name2: {
             label: "name2",
             required: true,
+            outside: { type: 'col', props: { span: 12 } },
             footer: {
               type: 'add',
               props: {
@@ -102,6 +107,7 @@ class demo extends React.Component {
           name3: {
             label: 'name3',
             required: true,
+            outside: { type: 'col', props: { span: 12 } },
             properties: {
               first: {
                 rules: [{ required: true, message: 'name3.first空了' }],
@@ -124,6 +130,7 @@ class demo extends React.Component {
           name4: {
             label: 'name4',
             type: 'Select',
+            outside: { type: 'col', props: { span: 12 } },
             initialValue: { span: 12 },
             valueSetter: "{{(value)=> (value && value['span'])}}",
             valueGetter: "{{(value) => ({span: value})}}",
@@ -139,6 +146,7 @@ class demo extends React.Component {
           name5: {
             label: 'name5',
             type: 'Checkbox',
+            outside: { type: 'col', props: { span: 12 } },
             required: true,
             valueProp: 'checked',
             initialValue: true,
@@ -165,7 +173,7 @@ class demo extends React.Component {
         {/* <Form store={this.store}>
                     <RenderFormChildren watch={watch} controls={defaultControls} properties={this.state.schema?.properties} />
                 </Form> */}
-        <RenderForm watch={watch} controls={defaultControls} store={this.store} schema={this.state.schema} />
+        <RenderForm components={{ row: Row, col: Col }} watch={watch} controls={defaultControls} store={this.store} schema={this.state.schema} />
         <div style={{ marginLeft: '140px' }}>
           <Button onClick={this.onSubmit}>submit</Button>
         </div>
