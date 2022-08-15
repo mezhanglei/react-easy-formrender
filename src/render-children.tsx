@@ -29,10 +29,12 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     watch,
     renderList,
     renderItem,
+    index,
     onPropertiesChange,
     inside,
   } = props;
 
+  const propertiesProps = props?.properties;
   const mergeFields = { ...defaultFields, ...Fields };
   const mergeComponents = { ...defaultComponents, ...components };
 
@@ -63,9 +65,9 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   // 收集properties到store中
   useEffect(() => {
     if (store) {
-      store.setProperties(props?.properties)
+      store.setProperties(propertiesProps)
     }
-  }, [props?.properties]);
+  }, [propertiesProps]);
 
   // 变化时更新
   useEffect(() => {
@@ -294,3 +296,5 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
 
   return renderChildrenList(generateChild);
 }
+
+RenderFormChildren.displayName = 'Form.Children';
