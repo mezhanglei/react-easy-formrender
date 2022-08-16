@@ -75,6 +75,4 @@ export interface FormItemInfo {
 export interface GeneratePrams extends FormItemInfo {
     store?: FormRenderStore;
 }
-export declare type getChildrenList = (generate: generateChildFunc, parent?: FormItemInfo) => any;
-export declare type generateChildFunc = (params: FormItemInfo) => JSX.Element | undefined;
 export {};
