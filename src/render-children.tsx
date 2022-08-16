@@ -173,7 +173,9 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     if (field?.properties instanceof Array) {
       return 'Form.List';
     }
-    return 'Form.Item';
+    if(field?.type) {
+      return 'Form.Item';
+    }
   }
 
   // 组件生成实例
