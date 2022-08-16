@@ -59,7 +59,7 @@ export interface BaseRenderProps {
     }>;
 }
 export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderProps {
-    onSchemaChange?: (newValue: SchemaData) => void;
+    onSchemaChange?: (newValue: SchemaData, oldValue?: SchemaData) => void;
     schema: SchemaData;
 }
 export interface RenderFormChildrenProps extends BaseRenderProps {

@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-4.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-4.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -278,7 +278,7 @@ const watch = {
 The full props are as follows：
 ```javascript
 export interface BaseFieldProps extends SchemaComponent {
-  category?: string; // The current node type, container when it is container, is not used as a component of the form value.
+  category?: string; // The current node type, container when it is container, Only this container is displayed without the form field
   inside?: SchemaComponent; // Containers wrapped by inner children elements
   outside?: SchemaComponent; // The container in which the element is wrapped
   readOnly?: boolean; // is readonly?

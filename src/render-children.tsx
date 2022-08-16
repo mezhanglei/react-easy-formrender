@@ -29,7 +29,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     watch,
     renderList,
     renderItem,
-    index,
     onPropertiesChange,
     inside,
   } = props;
@@ -232,11 +231,12 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     const formvalues = store?.getFieldValue();
     const fieldProps = {
       key: name,
-      ...restField,
       name: name,
+      path: path,
       onValuesChange: valuesCallback,
       footer: footerInstance,
-      suffix: suffixInstance
+      suffix: suffixInstance,
+      ...restField
     }
     const fieldChildProps = {
       ...params,

@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-4.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-4.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -278,7 +278,7 @@ const watch = {
 完整属性类型如下：
 ```javascript
 export interface BaseFieldProps extends SchemaComponent {
-  category?: string; // 当前节点类型，为container时表示容器节点,不作为表单值的组成。
+  category?: string; // 当前节点类型，为container时表示容器节点, 只显示该容器不显示表单域。
   inside?: SchemaComponent; // 内层子元素包裹的容器
   outside?: SchemaComponent; // 元素外层包裹的容器
   readOnly?: boolean; // 只读模式
