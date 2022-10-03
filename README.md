@@ -2,17 +2,20 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-4.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
 # version log
+- v5.x:
+  - The underlying library `react-easy-formcore` is updated, you need to remove the old package and install the new version again
+  - `readOnlyItem` is deprecated, only `readOnlyRender` remains
 - v4.x:
   - Major update to deprecate fixed container properties `col` and `customInner` and add custom containers `inside` and `outside`;
   - `widgets` change to `controls`, `widget` and `widgetProps` change to `type` and `props`;
-  - `readOnlyWidget` change to `readOnlyItem`;
+  - ~~`readOnlyWidget` change to `readOnlyItem`;~~
   - add `components` to register other;
 - v3.1.x:
   - Adjusted the `layout` property of the form field to add `inline`, `labelWidth` properties
@@ -278,12 +281,11 @@ const watch = {
 The full props are as follows：
 ```javascript
 export interface BaseFieldProps extends SchemaComponent {
-  category?: string; // The current node type, container when it is container, Only this container is displayed without the form field
-  inside?: SchemaComponent; // Containers wrapped by inner children elements
-  outside?: SchemaComponent; // The container in which the element is wrapped
-  readOnly?: boolean; // is readonly?
-  readOnlyItem?: string; // // Only one of the components in read-only mode, need register in `controls`,and readOnlyRender, can be active, with readOnlyRender having the highest priority.
-  readOnlyRender?: any; // Only one of the components in read-only mode, and readOnlyWidget, can be active, with readOnlyRender having the highest priority.
+  fieldComponent?: FieldUnionType; // field display component
+  inside?: FieldUnionType; // Form field component inner nested components
+  outside?: FieldUnionType; // Form field component outside nested components
+  readOnly?: boolean; // readonly？
+  readOnlyRender?: FieldUnionType | ReactNode; // readonly display component
   typeRender?: any; // form field's control render
 }
 

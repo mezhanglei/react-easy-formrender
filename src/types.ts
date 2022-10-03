@@ -1,5 +1,5 @@
+import { ReactNode } from "react";
 import { FormItemProps, FormProps } from "react-easy-formcore";
-import { defaultFields } from "./fields";
 import { FormRenderStore } from "./formrender-store";
 
 // 从原接口中提取属性，然后用新的替换它们
@@ -11,23 +11,23 @@ interface Extension {
   valueSetter?: string | ((value: any) => any);
 }
 
-// 组件描述基本属性
+// 组件JSON描述
 export interface SchemaComponent {
   type?: string;
-  props?: {
-    [key: string]: any;
-    children?: any | Array<SchemaComponent>
-  };
+  props?: any;
+  children?: any | Array<SchemaComponent>;
   hidden?: string | boolean;
 }
 
+// 表单上的组件联合类型：包括SchemaComponent，组件声明
+export type FieldUnionType = SchemaComponent | Array<SchemaComponent> | React.ComponentType<any> | Function
+
 export interface BaseFieldProps extends SchemaComponent {
-  category?: string; // 当前节点类型，为container时表示容器节点.只显示容器不显示表单域
-  inside?: SchemaComponent;
-  outside?: SchemaComponent;
+  fieldComponent?: FieldUnionType; // 表单域组件
+  inside?: FieldUnionType; // 表单域组件内层嵌套组件
+  outside?: FieldUnionType; // 表单域组件外层嵌套组件
   readOnly?: boolean; // 只读模式
-  readOnlyItem?: string; // 只读模式下的组件，和readOnlyRender只能生效一个，readOnlyRender优先级最高
-  readOnlyRender?: any; // 只读模式下的组件，和readOnlyItem只能生效一个，readOnlyRender优先级最高
+  readOnlyRender?: FieldUnionType | ReactNode; // 只读模式下的组件
   typeRender?: any; // 表单控件自定义渲染
 }
 
@@ -52,12 +52,11 @@ export interface BaseRenderProps {
   watch?: { [key: string]: { immediate?: boolean, handler: WatchHandler } | WatchHandler };
   controls?: any;
   components?: any;
-  inside?: SchemaComponent;
-  Fields?: typeof defaultFields;
+  inside?: FieldUnionType;
   // 自定义渲染列表
-  renderList?: React.ComponentType<GeneratePrams & { children: any }>;
+  renderList?: React.ComponentType<GeneratePrams>;
   // 自定义渲染子元素
-  renderItem?: React.ComponentType<GeneratePrams & { children: any }>;
+  renderItem?: React.ComponentType<GeneratePrams>;
 }
 
 // 带form容器的渲染组件props
@@ -73,7 +72,5 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
 };
 
 export type ValueOf<T> = T[keyof T];
-// 表单节点信息
-export interface FormItemInfo { name?: string, field: OverwriteFormFieldProps, path?: string };
-// 生成组件的传递的参数
-export interface GeneratePrams extends FormItemInfo { store?: FormRenderStore };
+// 组件公共的参数
+export interface GeneratePrams { name?: string, field?: OverwriteFormFieldProps, parent?: string, store?: FormRenderStore, children?: any };

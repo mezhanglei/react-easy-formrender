@@ -2,17 +2,20 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-4.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成).
 
 # version log
+- v5.x:
+  - 底层库`react-easy-formcore`更新，需要删除旧包，再安装新版本的包
+  - `readOnlyItem`废弃，只保留`readOnlyRender`
 - v4.x:
   - 大版本更新，废除固定容器属性`col`和`customInner`，增加自定义容器`inside`和`outside`;
   - `widgets` 改为 `controls`, `widget`和`widgetProps`改为`type`和`props`;
-  - `readOnlyWidget` 改为 `readOnlyItem`;
+  - ~~`readOnlyWidget` 改为 `readOnlyItem`;~~
   - 增加非表单控件的注册: `components`;
 - v3.1.x:
   - 调整表单域的`layout`属性，增加`inline`, `labelWidth`属性
@@ -269,7 +272,7 @@ const watch = {
 - `components`：注册表单中控件以外的其他组件(容器组件，按钮等);
 - `renderList`：提供自定义渲染列表.
 - `renderItem`：提供自定义渲染表单项.
-- `inside` 表单项的容器.
+- `inside` 表单项的显示容器.
 - `onSchemaChange`: `(newValue: SchemaData) => void;` `schema`更改时回调函数
 
 ### 表单域属性(FormFieldProps)
@@ -278,12 +281,11 @@ const watch = {
 完整属性类型如下：
 ```javascript
 export interface BaseFieldProps extends SchemaComponent {
-  category?: string; // 当前节点类型，为container时表示容器节点, 只显示该容器不显示表单域。
-  inside?: SchemaComponent; // 内层子元素包裹的容器
-  outside?: SchemaComponent; // 元素外层包裹的容器
+  fieldComponent?: FieldUnionType; // 表单域组件
+  inside?: FieldUnionType; // 表单域组件内层嵌套组件
+  outside?: FieldUnionType; // 表单域组件外层嵌套组件
   readOnly?: boolean; // 只读模式
-  readOnlyItem?: string; // 只读模式下的组件，和readOnlyRender只能生效一个，readOnlyRender优先级最高
-  readOnlyRender?: any; // 只读模式下的组件，和readOnlyItem只能生效一个，readOnlyRender优先级最高
+  readOnlyRender?: FieldUnionType | ReactNode; // 只读模式下的组件
   typeRender?: any; // 表单控件自定义渲染
 }
 
