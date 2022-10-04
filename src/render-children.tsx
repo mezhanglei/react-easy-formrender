@@ -232,7 +232,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       footer: footerInstance,
       suffix: suffixInstance,
       component: fieldComponentParse,
-      readOnly,
+      isContainer: readOnly,
       ...restField
     }
     // 表单域组件

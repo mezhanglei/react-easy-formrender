@@ -16,9 +16,7 @@ export declare const treeItemToListItem: (name: string, field: FormFieldProps) =
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[] | undefined;
-    readOnly?: boolean | undefined;
     label?: string | undefined;
-    labelStyle?: import("react").CSSProperties | undefined;
     inline?: boolean | undefined;
     layout?: string | undefined;
     className?: string | undefined;
@@ -28,6 +26,7 @@ export declare const treeItemToListItem: (name: string, field: FormFieldProps) =
     required?: boolean | undefined;
     labelWidth?: number | undefined;
     labelAlign?: import("csstype").Property.TextAlign | undefined;
+    labelStyle?: import("react").CSSProperties | undefined;
     gutter?: number | undefined;
     compact?: boolean | undefined;
     error?: string | undefined;
@@ -51,11 +50,13 @@ export declare const treeItemToListItem: (name: string, field: FormFieldProps) =
         value: any;
     }) => void) | undefined;
     component?: any;
+    isContainer?: boolean | undefined;
     valueGetter?: string | ((...args: any[]) => any) | undefined;
     valueSetter?: string | ((value: any) => any) | undefined;
     fieldComponent?: import("../types").FieldUnionType | undefined;
     inside?: import("../types").FieldUnionType | undefined;
     outside?: import("../types").FieldUnionType | undefined;
+    readOnly?: boolean | undefined;
     readOnlyRender?: import("../types").FieldUnionType | import("react").ReactNode;
     typeRender?: any;
     type?: string | undefined;
@@ -66,9 +67,7 @@ export declare const toList: (properties: SchemaData['properties']) => {
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[] | undefined;
-    readOnly?: boolean | undefined;
     label?: string | undefined;
-    labelStyle?: import("react").CSSProperties | undefined;
     inline?: boolean | undefined;
     layout?: string | undefined;
     className?: string | undefined;
@@ -78,6 +77,7 @@ export declare const toList: (properties: SchemaData['properties']) => {
     required?: boolean | undefined;
     labelWidth?: number | undefined;
     labelAlign?: import("csstype").Property.TextAlign | undefined;
+    labelStyle?: import("react").CSSProperties | undefined;
     gutter?: number | undefined;
     compact?: boolean | undefined;
     error?: string | undefined;
@@ -101,11 +101,13 @@ export declare const toList: (properties: SchemaData['properties']) => {
         value: any;
     }) => void) | undefined;
     component?: any;
+    isContainer?: boolean | undefined;
     valueGetter?: string | ((...args: any[]) => any) | undefined;
     valueSetter?: string | ((value: any) => any) | undefined;
     fieldComponent?: import("../types").FieldUnionType | undefined;
     inside?: import("../types").FieldUnionType | undefined;
     outside?: import("../types").FieldUnionType | undefined;
+    readOnly?: boolean | undefined;
     readOnlyRender?: import("../types").FieldUnionType | import("react").ReactNode;
     typeRender?: any;
     type?: string | undefined;
