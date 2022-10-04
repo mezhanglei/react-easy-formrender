@@ -41,7 +41,6 @@ class demo extends React.Component {
         properties: {
           name1: {
             label: "name1",
-            type: 'Input',
             outside: { type: 'col', props: { span: 12 } },
             required: true,
             readOnly: true,
@@ -50,6 +49,7 @@ class demo extends React.Component {
             initialValue: 1111,
             // layout: 'vertical',
             hidden: '{{$formvalues.name5 == true}}',
+            type: 'Input',
             props: {}
           },
           name2: {
@@ -77,11 +77,11 @@ class demo extends React.Component {
               }
             },
             properties: [{
-              type: 'Select',
               required: true,
               rules: [{ required: true, message: 'name2[0]空了' }],
               initialValue: { label: '选项1', value: '1', key: '1' },
               suffix: { type: 'delete' },
+              type: 'Select',
               props: {
                 labelInValue: true,
                 style: { width: '100%' },
@@ -91,10 +91,10 @@ class demo extends React.Component {
                 ]
               }
             }, {
-              type: 'Select',
               required: true,
               suffix: { type: 'delete' },
               rules: [{ required: true, message: 'name2[1]空了' }],
+              type: 'Select',
               props: {
                 labelInValue: true,
                 style: { width: '100%' },
@@ -129,11 +129,11 @@ class demo extends React.Component {
           },
           name4: {
             label: 'name4',
-            type: 'Select',
             outside: { type: 'col', props: { span: 12 } },
             initialValue: { span: 12 },
             valueSetter: "{{(value)=> (value && value['span'])}}",
             valueGetter: "{{(value) => ({span: value})}}",
+            type: 'Select',
             props: {
               style: { width: '100%' },
               children: [
@@ -145,12 +145,12 @@ class demo extends React.Component {
           },
           name5: {
             label: 'name5',
-            type: 'Checkbox',
             outside: { type: 'col', props: { span: 12 } },
             required: true,
             valueProp: 'checked',
             initialValue: true,
             rules: [{ required: true, message: 'name4空了' }],
+            type: 'Checkbox',
             props: {
               style: { width: '100%' },
               children: '多选框'

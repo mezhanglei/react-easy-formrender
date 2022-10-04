@@ -116,23 +116,23 @@ export default function Demo5(props) {
     properties: {
       name1: {
         label: "只读展示",
-        type: 'Input',
         required: true,
         readOnly: true,
         readOnlyRender: "只读展示组件",
         initialValue: 1111,
         // outside: { type: 'col', props: { span: 6 } },
         hidden: '{{$formvalues.name6 == true}}',
+        type: 'Input',
         props: {}
       },
       name2: {
         label: "输入框",
-        type: 'Input',
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
         rules: [{ required: true, message: 'name2空了' }],
         initialValue: 1,
         hidden: '{{$formvalues.name6 == true}}',
+        type: 'Input',
         props: {}
       },
       name3: {
@@ -140,10 +140,10 @@ export default function Demo5(props) {
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: [{
-          type: 'Select',
           required: true,
           rules: [{ required: true, message: 'name3[0]空了' }],
           initialValue: { label: '选项1', value: '1', key: '1' },
+          type: 'Select',
           props: {
             labelInValue: true,
             style: { width: '100%' },
@@ -153,9 +153,9 @@ export default function Demo5(props) {
             ]
           }
         }, {
-          type: 'Select',
           required: true,
           rules: [{ required: true, message: 'name3[1]空了' }],
+          type: 'Select',
           props: {
             labelInValue: true,
             style: { width: '100%' },
@@ -191,10 +191,10 @@ export default function Demo5(props) {
       },
       name5: {
         label: 'name5',
-        type: 'Select',
         initialValue: { span: 12 },
         valueSetter: "{{(value)=> (value && value['span'])}}",
         valueGetter: "{{(value) => ({span: value})}}",
+        type: 'Select',
         props: {
           style: { width: '100%' },
           children: [
@@ -206,12 +206,12 @@ export default function Demo5(props) {
       },
       name6: {
         label: 'name6',
-        type: 'Checkbox',
         required: true,
         valueProp: 'checked',
         // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
         rules: [{ required: true, message: 'name6空了' }],
+        type: 'Checkbox',
         props: {
           style: { width: '100%' },
           children: '多选框'
