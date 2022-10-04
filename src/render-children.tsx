@@ -232,6 +232,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       footer: footerInstance,
       suffix: suffixInstance,
       component: fieldComponentParse,
+      readOnly,
       ...restField
     }
     // 表单域组件
@@ -247,7 +248,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     // children
     let fieldChildren;
     if (typeof properties === 'object') {
-      fieldChildren = renderChildrenList(properties, commonParams)
+      fieldChildren = renderChildrenList(properties, inside, commonParams)
     } else {
       fieldChildren = fieldChild
     }
@@ -263,7 +264,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   // 渲染children
-  const renderChildrenList = (properties: FormFieldProps['properties'], commonParams: GeneratePrams): any => {
+  const renderChildrenList = (properties: FormFieldProps['properties'], inside: FieldUnionType | undefined,commonParams: GeneratePrams): any => {
     const { name, parent } = commonParams;
     const currentPath = getCurrentPath(name, parent);
     const childs = Object.entries(properties || {})?.map(([key, formField], index: number) => {
@@ -278,7 +279,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     return withInside(childs, inside, commonParams)
   }
 
-  return renderChildrenList(properties, { store });
+  return renderChildrenList(properties, inside, { store });
 }
 
 RenderFormChildren.displayName = 'Form.Children';
