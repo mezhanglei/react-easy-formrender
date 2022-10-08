@@ -16,6 +16,7 @@ export declare const treeItemToListItem: (name: string, field: FormFieldProps) =
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[] | undefined;
+    ignore?: boolean | undefined;
     label?: string | undefined;
     inline?: boolean | undefined;
     layout?: string | undefined;
@@ -50,9 +51,8 @@ export declare const treeItemToListItem: (name: string, field: FormFieldProps) =
         value: any;
     }) => void) | undefined;
     component?: any;
-    isContainer?: boolean | undefined;
-    valueGetter?: string | ((...args: any[]) => any) | undefined;
-    valueSetter?: string | ((value: any) => any) | undefined;
+    valueGetter?: any;
+    valueSetter?: any;
     fieldComponent?: import("../types").FieldUnionType | undefined;
     inside?: import("../types").FieldUnionType | undefined;
     outside?: import("../types").FieldUnionType | undefined;
@@ -67,6 +67,7 @@ export declare const toList: (properties: SchemaData['properties']) => {
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[] | undefined;
+    ignore?: boolean | undefined;
     label?: string | undefined;
     inline?: boolean | undefined;
     layout?: string | undefined;
@@ -101,9 +102,8 @@ export declare const toList: (properties: SchemaData['properties']) => {
         value: any;
     }) => void) | undefined;
     component?: any;
-    isContainer?: boolean | undefined;
-    valueGetter?: string | ((...args: any[]) => any) | undefined;
-    valueSetter?: string | ((value: any) => any) | undefined;
+    valueGetter?: any;
+    valueSetter?: any;
     fieldComponent?: import("../types").FieldUnionType | undefined;
     inside?: import("../types").FieldUnionType | undefined;
     outside?: import("../types").FieldUnionType | undefined;

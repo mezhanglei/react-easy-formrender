@@ -3,8 +3,8 @@ import { FormItemProps, FormProps } from "react-easy-formcore";
 import { FormRenderStore } from "./formrender-store";
 declare type Overwrite<T, U> = Omit<T, keyof U> & U;
 interface Extension {
-    valueGetter?: string | ((...args: any[]) => any);
-    valueSetter?: string | ((value: any) => any);
+    valueGetter?: string | ((...args: any[]) => any) | any;
+    valueSetter?: string | ((value: any) => any) | any;
 }
 export interface SchemaComponent {
     type?: string;
@@ -14,6 +14,7 @@ export interface SchemaComponent {
 }
 export declare type FieldUnionType = SchemaComponent | Array<SchemaComponent> | React.ComponentType<any> | Function;
 export interface BaseFieldProps extends SchemaComponent {
+    ignore?: boolean;
     fieldComponent?: FieldUnionType;
     inside?: FieldUnionType;
     outside?: FieldUnionType;
@@ -25,11 +26,6 @@ export interface FormFieldProps extends Overwrite<FormItemProps, Extension>, Bas
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[];
-}
-export interface OverwriteFormFieldProps extends FormItemProps, BaseFieldProps {
-    properties?: {
-        [name: string]: OverwriteFormFieldProps;
-    } | OverwriteFormFieldProps[];
 }
 export interface SchemaData extends FormProps<FormRenderStore> {
     properties?: {
@@ -47,8 +43,8 @@ export interface BaseRenderProps {
     controls?: any;
     components?: any;
     inside?: FieldUnionType;
-    renderList?: React.ComponentType<GeneratePrams>;
-    renderItem?: React.ComponentType<GeneratePrams>;
+    renderList?: React.ComponentType<GeneratePrams<any>>;
+    renderItem?: React.ComponentType<GeneratePrams<any>>;
 }
 export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderProps {
     onSchemaChange?: (newValue: SchemaData, oldValue?: SchemaData) => void;
@@ -59,9 +55,9 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
     properties?: SchemaData['properties'];
 }
 export declare type ValueOf<T> = T[keyof T];
-export interface GeneratePrams {
+export interface GeneratePrams<T = FormFieldProps> {
     name?: string;
-    field?: OverwriteFormFieldProps;
+    field?: T;
     parent?: string;
     store?: FormRenderStore;
     children?: any;
