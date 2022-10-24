@@ -34,12 +34,12 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     onValuesChange
   } = options;
 
-  const valuesCallback: ItemCoreProps['onValuesChange'] = (params) => {
-    onValuesChange && onValuesChange(params)
+  const valuesCallback: ItemCoreProps['onValuesChange'] = (...args) => {
+    onValuesChange && onValuesChange(...args)
     handleFieldProps();
   }
 
-  // 订阅更新properties的函数,j将传值更新到state里面
+  // 订阅更新properties的函数,将传值更新到state里面
   useEffect(() => {
     if (!store) return
     // 订阅目标控件
@@ -93,19 +93,22 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   const handleFieldProps = () => {
     const fieldPropsMap = {};
     // 遍历处理对象树中的非properties字段
-    const deepHandle = (formField: FormFieldProps, parent: string) => {
+    const deepHandle = (formField: FormFieldProps, path: string) => {
       for (const propsKey in formField) {
-        const value = formField[propsKey];
         if (propsKey !== 'properties') {
-          const path = getCurrentPath(propsKey, parent) as string;
-          const result = calcExpression(value);
-          fieldPropsMap[path] = result;
+          const propsValue = formField[propsKey];
+          const propsPath = getCurrentPath(propsKey, path) as string;
+          const result = calcExpression(propsValue);
+          fieldPropsMap[propsPath] = result;
         } else {
-          for (const childKey in value) {
-            const name = value instanceof Array ? `[${childKey}]` : childKey;
-            const path = getCurrentPath(name, parent) as string;
-            const childField = value[childKey];
-            deepHandle(childField, path);
+          const children = formField[propsKey];
+          for (const childKey in children) {
+            const childField = children[childKey];
+            const childName = children instanceof Array ? `[${childKey}]` : childKey;
+            if (childName) {
+              const childPath = getCurrentPath(childName, path) as string;
+              deepHandle(childField, childPath);
+            }
           }
         }
       }
@@ -114,7 +117,9 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     for (const key in properties) {
       const formField = properties[key];
       const name = properties instanceof Array ? `[${key}]` : key;
-      deepHandle(formField, name);
+      if(name) {
+        deepHandle(formField, name);
+      }
     }
     setFieldPropsMap(fieldPropsMap);
   }
@@ -124,8 +129,9 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     return Object.fromEntries(
       Object.entries(field || {})?.map(
         ([propsKey]) => {
-          const currentPath = getCurrentPath(propsKey, path) as string;
-          return [propsKey, fieldPropsMap[currentPath] ?? field[propsKey]];
+          const currentPath = propsKey ? `${path}.${propsKey}` : undefined
+          const propsValue = (currentPath && fieldPropsMap[currentPath]) ?? field[propsKey]
+          return [propsKey, propsValue];
         }
       )
     );
@@ -154,10 +160,10 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   // 根据传递参数生成实例
-  const createInstance = (target?: any, typeMap?: any, extra?: any, finalChildren?: any): any => {
+  const createInstance = (target?: any, typeMap?: any, commonProps?: any, finalChildren?: any): any => {
     if (target instanceof Array) {
       return target?.map((item) => {
-        return createInstance(item, typeMap, extra, finalChildren);
+        return createInstance(item, typeMap, commonProps, finalChildren);
       });
     } else {
       const Child = componentParse(target, typeMap);
@@ -165,8 +171,8 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       if (Child) {
         const { children, ...restProps } = (target as SchemaComponent)?.props || {};
         return (
-          <Child {...extra} {...restProps}>
-            {children ? createInstance(children, typeMap, extra, finalChildren) : finalChildren}
+          <Child {...commonProps} {...restProps}>
+            {children ? createInstance(children, typeMap, commonProps, finalChildren) : finalChildren}
           </Child>
         );
       } else {
@@ -195,19 +201,20 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     }
   }
 
+  const ignoreTag = { "data-type": "ignore" }
   // 给目标内部添加inside
   const withInside = (children: any, inside?: FieldUnionType, commonProps?: any) => {
     const RenderList = renderList as any;
-    const childsWithList = RenderList ? <RenderList data-type="ignore" {...commonProps}>{children}</RenderList> : children;
-    const childsWithSide = inside ? createInstance(inside, mergeComponents, { ...commonProps, "data-type": "ignore" }, childsWithList) : childsWithList;
+    const childsWithList = RenderList ? <RenderList {...ignoreTag} {...commonProps}>{children}</RenderList> : children;
+    const childsWithSide = inside ? createInstance(inside, mergeComponents, { ...commonProps, ...ignoreTag }, childsWithList) : childsWithList;
     return childsWithSide;
   }
 
   // 给目标外面添加outside
   const withOutside = (children: any, outside?: FieldUnionType, commonProps?: any) => {
     const RenderItem = renderItem as any;
-    const childWithItem = RenderItem ? <RenderItem data-type="ignore" {...commonProps}>{children}</RenderItem> : children;
-    const childWithSide = outside ? createInstance(outside, mergeComponents, { ...commonProps, "data-type": "ignore" }, childWithItem) : childWithItem;
+    const childWithItem = RenderItem ? <RenderItem {...ignoreTag} {...commonProps}>{children}</RenderItem> : children;
+    const childWithSide = outside ? createInstance(outside, mergeComponents, { ...commonProps, ...ignoreTag }, childWithItem) : childWithItem;
     return childWithSide;
   }
 
@@ -263,17 +270,19 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   // 渲染children
-  const renderChildrenList = (properties: FormFieldProps['properties'], inside: FieldUnionType | undefined,commonParams: GeneratePrams): any => {
+  const renderChildrenList = (properties: FormFieldProps['properties'], inside: FieldUnionType | undefined, commonParams: GeneratePrams): any => {
     const { name, parent } = commonParams;
     const currentPath = getCurrentPath(name, parent);
     const childs = Object.entries(properties || {})?.map(([key, formField], index: number) => {
       const childName = properties instanceof Array ? `[${key}]` : key;
-      const childPath = getCurrentPath(childName, currentPath)
-      const childField = showCalcFieldProps(formField, childPath);
-      if (childField) {
-        childField['index'] = index;
+      if (childName) {
+        const childPath = getCurrentPath(childName, currentPath)
+        const childField = showCalcFieldProps(formField, childPath);
+        if (childField) {
+          childField['index'] = index;
+        }
+        return generateChild(childName, childField, currentPath);
       }
-      return generateChild(childName, childField, currentPath);
     })
     return withInside(childs, inside, commonParams)
   }

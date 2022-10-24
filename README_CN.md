@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-5.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -11,6 +11,7 @@
 # version log
 - v5.x:
   - 底层库`react-easy-formcore`更新，需要删除旧包，再安装新版本的包
+  - `readOnlyItem`废弃，只保留`readOnlyRender`
   - `readOnlyItem`废弃，只保留`readOnlyRender`
 - v4.x:
   - 大版本更新，废除固定容器属性`col`和`customInner`，增加自定义容器`inside`和`outside`;

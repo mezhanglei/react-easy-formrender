@@ -1,6 +1,7 @@
 import { arraySwap } from "./array";
 import { FormFieldProps, SchemaData } from "../types";
 import { formatName, getCurrentPath, pathToArr, deepSet } from "react-easy-formcore";
+import { deepClone } from "./object";
 
 export const pathToArray = (pathStr?: string) => pathStr ? pathToArr(pathStr) : [];
 // 根据路径更新数据
@@ -254,19 +255,22 @@ export const swapDiffLevel = (properties: SchemaData['properties'], from: { pare
 export const getInitialValues = (properties: SchemaData['properties']) => {
   let initialValues = {};
   // 遍历处理对象树中的非properties字段
-  const deepHandle = (formField: FormFieldProps, parent: string) => {
+  const deepHandle = (formField: FormFieldProps, path: string) => {
     for (const propsKey in formField) {
-      const value = formField[propsKey];
       if (propsKey !== 'properties') {
-        if (propsKey === 'initialValue' && value !== undefined) {
-          initialValues = deepSet(initialValues, parent, value);
+        const propsValue = formField[propsKey]
+        if (propsKey === 'initialValue' && propsValue !== undefined) {
+          initialValues = deepSet(initialValues, path, propsValue);
         }
       } else {
-        for (const childKey in value) {
-          const name = value instanceof Array ? `[${childKey}]` : childKey;
-          const path = getCurrentPath(name, parent) as string;
-          const childField = value[childKey];
-          deepHandle(childField, path);
+        const children = formField[propsKey]
+        for (const childKey in children) {
+          const childField = children[childKey];
+          const childName = children instanceof Array ? `[${childKey}]` : childKey;
+          if (childName) {
+            const childPath = getCurrentPath(childName, path) as string;
+            deepHandle(childField, childPath);
+          }
         }
       }
     }
@@ -275,7 +279,9 @@ export const getInitialValues = (properties: SchemaData['properties']) => {
   for (const key in properties) {
     const formField = properties[key];
     const name = properties instanceof Array ? `[${key}]` : key;
-    deepHandle(formField, name);
+    if (name) {
+      deepHandle(formField, name);
+    }
   }
   return initialValues;
 }

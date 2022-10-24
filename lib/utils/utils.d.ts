@@ -41,15 +41,15 @@ export declare const treeItemToListItem: (name: string, field: FormFieldProps) =
     initialValue?: any;
     errorClassName?: string | undefined;
     onFieldsChange?: ((obj: {
-        parent?: string | undefined;
+        parent: string;
         name?: string | undefined;
         value: any;
-    }) => void) | undefined;
+    }, values?: unknown) => void) | undefined;
     onValuesChange?: ((obj: {
         parent?: string | undefined;
         name?: string | undefined;
         value: any;
-    }) => void) | undefined;
+    }, values?: unknown) => void) | undefined;
     component?: any;
     valueGetter?: any;
     valueSetter?: any;
@@ -92,15 +92,15 @@ export declare const toList: (properties: SchemaData['properties']) => {
     initialValue?: any;
     errorClassName?: string | undefined;
     onFieldsChange?: ((obj: {
-        parent?: string | undefined;
+        parent: string;
         name?: string | undefined;
         value: any;
-    }) => void) | undefined;
+    }, values?: unknown) => void) | undefined;
     onValuesChange?: ((obj: {
         parent?: string | undefined;
         name?: string | undefined;
         value: any;
-    }) => void) | undefined;
+    }, values?: unknown) => void) | undefined;
     component?: any;
     valueGetter?: any;
     valueSetter?: any;
