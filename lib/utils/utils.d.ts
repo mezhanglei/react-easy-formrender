@@ -1,6 +1,11 @@
 /// <reference types="react" />
 import { FormFieldProps, SchemaData } from "../types";
-export declare const pathToArray: (pathStr?: string) => string[];
+export declare const joinPath: (name?: string, parent?: string) => string | undefined;
+export declare const getPathEnd: (path: string) => string | undefined;
+export declare const getParent: (path: string) => string | undefined;
+export declare const endIsListItem: (path: string) => boolean | undefined;
+export declare const changePathEnd: (oldPath: string, endName: string) => string | undefined;
+export declare const getPathEndIndex: (path: string, properties?: SchemaData['properties']) => number;
 export declare const updateItemByPath: (properties: SchemaData['properties'], pathStr: string, data?: Partial<FormFieldProps>) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
@@ -125,21 +130,21 @@ export declare const addItemByIndex: (properties: SchemaData['properties'], data
     [key: string]: FormFieldProps;
 } | undefined;
 export declare const swapSameLevel: (properties: SchemaData['properties'], from: {
-    parentPath?: string;
+    parent?: string;
     index: number;
 }, to: {
-    parentPath?: string;
+    parent?: string;
     index?: number;
 }) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
 export declare const swapDiffLevel: (properties: SchemaData['properties'], from: {
-    parentPath?: string;
+    parent?: string;
     index: number;
 }, to: {
-    parentPath?: string;
+    parent?: string;
     index?: number;
 }) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
-export declare const getInitialValues: (properties: SchemaData['properties']) => {};
+export declare const getInitialValues: (properties?: SchemaData['properties']) => {} | undefined;

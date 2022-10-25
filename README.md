@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-5.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -12,6 +12,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - v5.x:
   - The underlying library `react-easy-formcore` is updated, you need to remove the old package and install the new version again
   - `readOnlyItem` is deprecated, only `readOnlyRender` remains
+   - 5.1.0 change `store.swapItemByPath`
 - v4.x:
   - Major update to deprecate fixed container properties `col` and `customInner` and add custom containers `inside` and `outside`;
   - `widgets` change to `controls`, `widget` and `widgetProps` change to `type` and `props`;
@@ -320,13 +321,21 @@ The `rules` rules in the form control are derived from the `rules` property in [
  - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Override set the information corresponding to `path` in schema.
  - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the path.
  - `delItemByPath`: `(path: string) => void` delete the information corresponding to `path` in schema.
- - `addItemByIndex`: `(data: { name: string, field: FormFieldProps }, index?: number, parentPath?: string) => void` Add option based on `index` and `parentPath`.
+ - `addItemByIndex`: `(data: AddItem | AddItem[], index?: number, parent?: string) => void` Add item based on `index` and `parent`.
+ - `addAfterByPath`: `(data: AddItem | AddItem[], path: string) => void` Add item after `path`
+ - `addBeforeByPath`: `(data: AddItem | AddItem[], path: string) => void` add item before `path`
  - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in schema.
- - `swapItemByPath`: `(from: { parentPath?: string, index: number }, to: { parentPath?: string, index?: number })` move option in the tree from one position to another
+ - `swapItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` move option in the tree from one position to another
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` set the `properties`.
 2. Methods for form controls
   Inherits the `FormStore Methods` properties and methods from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
+```javascript
+interface AddItem {
+  name: string
+  field: FormFieldProps
+}
+```
 ### Hooks
 
 - `useFormRenderStore(defaultValues)` create FormRenderStore by hook。

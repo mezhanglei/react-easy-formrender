@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-5.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -12,7 +12,7 @@
 - v5.x:
   - 底层库`react-easy-formcore`更新，需要删除旧包，再安装新版本的包
   - `readOnlyItem`废弃，只保留`readOnlyRender`
-  - `readOnlyItem`废弃，只保留`readOnlyRender`
+  - 5.1.0 调整`store.swapItemByPath` 方法
 - v4.x:
   - 大版本更新，废除固定容器属性`col`和`customInner`，增加自定义容器`inside`和`outside`;
   - `widgets` 改为 `controls`, `widget`和`widgetProps`改为`type`和`props`;
@@ -322,13 +322,21 @@ export interface SchemaComponent {
  - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 设置schema中`path`对应的信息
  - `updateNameByPath`: `(path: string, newName?: string) => void` 更新指定路径的name键
  - `delItemByPath`: `(path: string) => void` 删除schema中`path`对应的信息
- - `addItemByIndex`: `(data: { name: string, field: FormFieldProps }, index?: number, parentPath?: string) => void` 根据序号和父节点路径添加选项
+ - `addItemByIndex`: `(data: AddItem | AddItem[], index?: number, parent?: string) => void` 根据序号和父节点路径添加选项
+ - `addAfterByPath`: `(data: AddItem | AddItem[], path: string) => void` 在目标路径后面添加选项
+ - `addBeforeByPath`: `(data: AddItem | AddItem[], path: string) => void` 在目标节点前面添加选项
  - `getItemByPath`: `(path: string) => void` 获取schema中`path`对应的信息
- - `swapItemByPath`: `(from: { parentPath?: string, index: number }, to: { parentPath?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
+ - `swapItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` 设置`properties`;
 2. 表单控件的方法
   继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`FormStore Methods`属性和方法
 
+```javascript
+interface AddItem {
+  name: string
+  field: FormFieldProps 
+}
+```
 ### Hooks
 
 - `useFormRenderStore(defaultValues)` 使用 hooks 创建 FormRenderStore。

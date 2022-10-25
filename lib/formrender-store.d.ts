@@ -15,16 +15,18 @@ export declare class FormRenderStore<T extends Object = any> extends FormStore {
     updateItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
     setItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
     updateNameByPath: (path: string, newName?: string) => void;
-    addItemByIndex: (data: AddItem | AddItem[], index?: number, parentPath?: string) => void;
+    addItemByIndex: (data: AddItem | AddItem[], index?: number, parent?: string) => void;
     delItemByPath: (path: string) => void;
     getItemByPath: (path: string) => any;
     swapItemByPath: (from: {
-        parentPath?: string;
+        parent?: string;
         index: number;
     }, to: {
-        parentPath?: string;
+        parent?: string;
         index?: number;
     }) => void;
     subscribeProperties(listener: FormRenderListener): () => void;
     private notifyProperties;
+    addAfterByPath: (data: AddItem | AddItem[], path: string) => void;
+    addBeforeByPath: (data: AddItem | AddItem[], path: string) => void;
 }
