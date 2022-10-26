@@ -17,7 +17,7 @@ export declare const getKeyValueByIndex: (properties: SchemaData['properties'], 
     name: string;
     field: any;
 };
-export declare const treeItemToListItem: (name: string, field: FormFieldProps) => {
+export declare const mergeField: (name: string, field: FormFieldProps) => {
     properties?: {
         [name: string]: FormFieldProps;
     } | FormFieldProps[] | undefined;
