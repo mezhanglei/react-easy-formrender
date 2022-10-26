@@ -1,4 +1,4 @@
-import { arraySwap } from "./array";
+import { arrayMove } from "./array";
 import { FormFieldProps, SchemaData } from "../types";
 import { formatName, getCurrentPath, pathToArr, deepSet, isListItem } from "react-easy-formcore";
 import { isEmpty } from "./type";
@@ -252,7 +252,7 @@ export const addItemByIndex = (properties: SchemaData['properties'], data: AddIt
 };
 
 // 同级调换位置
-export const swapSameLevel = (properties: SchemaData['properties'], from: { parent?: string, index: number }, to: { parent?: string, index?: number }) => {
+export const moveSameLevel = (properties: SchemaData['properties'], from: { parent?: string, index: number }, to: { parent?: string, index?: number }) => {
   // 拖拽源
   const fromParentPath = from?.parent;
   const fromIndex = from?.index;
@@ -266,9 +266,9 @@ export const swapSameLevel = (properties: SchemaData['properties'], from: { pare
     // 转成列表以便排序
     const childList = toList(childProperties);
     toIndex = typeof toIndex === 'number' ? toIndex : childList?.length;
-    const swapList = arraySwap(childList, fromIndex, toIndex);
+    const moveList = arrayMove(childList, fromIndex, toIndex);
     const isList = childProperties instanceof Array;
-    const result = restoreFromList(swapList, isList);
+    const result = restoreFromList(moveList, isList);
     if (fromParentPath) {
       parent.properties = result;
       return properties;
@@ -279,7 +279,7 @@ export const swapSameLevel = (properties: SchemaData['properties'], from: { pare
 };
 
 // 跨级调换位置
-export const swapDiffLevel = (properties: SchemaData['properties'], from: { parent?: string, index: number }, to: { parent?: string, index?: number }) => {
+export const moveDiffLevel = (properties: SchemaData['properties'], from: { parent?: string, index: number }, to: { parent?: string, index?: number }) => {
   // 拖拽源
   const fromParentPath = from?.parent;
   const fromIndex = from?.index;

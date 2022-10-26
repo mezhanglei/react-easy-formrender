@@ -129,7 +129,7 @@ export interface AddItem {
 export declare const addItemByIndex: (properties: SchemaData['properties'], data: AddItem | AddItem[], index?: number, parentPath?: string) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
-export declare const swapSameLevel: (properties: SchemaData['properties'], from: {
+export declare const moveSameLevel: (properties: SchemaData['properties'], from: {
     parent?: string;
     index: number;
 }, to: {
@@ -138,7 +138,7 @@ export declare const swapSameLevel: (properties: SchemaData['properties'], from:
 }) => FormFieldProps[] | {
     [key: string]: FormFieldProps;
 } | undefined;
-export declare const swapDiffLevel: (properties: SchemaData['properties'], from: {
+export declare const moveDiffLevel: (properties: SchemaData['properties'], from: {
     parent?: string;
     index: number;
 }, to: {

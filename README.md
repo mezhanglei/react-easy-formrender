@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-5.1.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.1.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -12,7 +12,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - v5.x:
   - The underlying library `react-easy-formcore` is updated, you need to remove the old package and install the new version again
   - `readOnlyItem` is deprecated, only `readOnlyRender` remains
-   - 5.1.0 change `store.swapItemByPath`
+  - 5.1.0 `store.swapItemByPath` => `store.moveItemByPath`
 - v4.x:
   - Major update to deprecate fixed container properties `col` and `customInner` and add custom containers `inside` and `outside`;
   - `widgets` change to `controls`, `widget` and `widgetProps` change to `type` and `props`;
@@ -325,7 +325,7 @@ The `rules` rules in the form control are derived from the `rules` property in [
  - `addAfterByPath`: `(data: AddItem | AddItem[], path: string) => void` Add item after `path`
  - `addBeforeByPath`: `(data: AddItem | AddItem[], path: string) => void` add item before `path`
  - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in schema.
- - `swapItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` move option in the tree from one position to another
+ - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` move option in the tree from one position to another
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` set the `properties`.
 2. Methods for form controls
   Inherits the `FormStore Methods` properties and methods from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)

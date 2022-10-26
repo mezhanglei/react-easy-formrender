@@ -18,7 +18,7 @@ export declare class FormRenderStore<T extends Object = any> extends FormStore {
     addItemByIndex: (data: AddItem | AddItem[], index?: number, parent?: string) => void;
     delItemByPath: (path: string) => void;
     getItemByPath: (path: string) => any;
-    swapItemByPath: (from: {
+    moveItemByPath: (from: {
         parent?: string;
         index: number;
     }, to: {

@@ -1,1 +1,1 @@
-export declare const arraySwap: <T = any>(arr: T[], preIndex: number, nextIndex: number) => T[];
+export declare const arrayMove: <T = any>(arr: T[], preIndex: number, nextIndex: number) => T[];
