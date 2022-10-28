@@ -4,6 +4,7 @@ export declare const joinPath: (name?: string, parent?: string) => string | unde
 export declare const getPathEnd: (path: string) => string | undefined;
 export declare const getParent: (path: string) => string | undefined;
 export declare const endIsListItem: (path: string) => boolean | undefined;
+export declare const isPathEnd: (path: string, name: string) => boolean | undefined;
 export declare const changePathEnd: (oldPath: string, endName: string) => string | undefined;
 export declare const getPathEndIndex: (path: string, properties?: SchemaData['properties']) => number;
 export declare const updateItemByPath: (properties: SchemaData['properties'], pathStr: string, data?: Partial<FormFieldProps>) => FormFieldProps[] | {

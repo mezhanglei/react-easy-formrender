@@ -43,8 +43,8 @@ export interface BaseRenderProps {
     controls?: any;
     components?: any;
     inside?: FieldUnionType;
-    renderList?: React.ComponentType<GeneratePrams<any>>;
-    renderItem?: React.ComponentType<GeneratePrams<any>>;
+    renderList?: (params: GeneratePrams<any>) => any;
+    renderItem?: (params: GeneratePrams<any>) => any;
 }
 export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderProps {
     onSchemaChange?: (newValue: SchemaData, oldValue?: SchemaData) => void;

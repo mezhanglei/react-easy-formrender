@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-5.1.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.1.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -271,8 +271,8 @@ const watch = {
 ```
 - `controls`：注册表单控件.
 - `components`：注册表单中控件以外的其他组件(容器组件，按钮等);
-- `renderList`：提供自定义渲染列表.
-- `renderItem`：提供自定义渲染表单项.
+- `renderList`：提供自定义渲染列表的函数.
+- `renderItem`：提供自定义渲染表单项的函数.
 - `inside` 表单项的显示容器.
 - `onSchemaChange`: `(newValue: SchemaData) => void;` `schema`更改时回调函数
 

@@ -4,9 +4,9 @@ import { defaultComponents } from './components';
 import { Form, FormOptionsContext, FormStoreContext, getCurrentPath, ItemCoreProps } from 'react-easy-formcore';
 import { FormRenderStore } from './formrender-store';
 import { isEqual } from './utils/object';
-import './iconfont/iconfont.css';
 import { isReactComponent, isValidElement } from './utils/ReactIs';
 import 'react-easy-formcore/lib/css/main.css';
+import './iconfont/iconfont.css';
 
 // 不带Form容器的组件
 export default function RenderFormChildren(props: RenderFormChildrenProps) {
@@ -117,7 +117,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     for (const key in properties) {
       const formField = properties[key];
       const name = properties instanceof Array ? `[${key}]` : key;
-      if(name) {
+      if (name) {
         deepHandle(formField, name);
       }
     }
@@ -204,16 +204,14 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   const ignoreTag = { "data-type": "ignore" }
   // 给目标内部添加inside
   const withInside = (children: any, inside?: FieldUnionType, commonProps?: any) => {
-    const RenderList = renderList as any;
-    const childsWithList = RenderList ? <RenderList {...ignoreTag} {...commonProps}>{children}</RenderList> : children;
+    const childsWithList = renderList ? renderList?.({ ...commonProps, ...ignoreTag, children }) : children
     const childsWithSide = inside ? createInstance(inside, mergeComponents, { ...commonProps, ...ignoreTag }, childsWithList) : childsWithList;
     return childsWithSide;
   }
 
   // 给目标外面添加outside
   const withOutside = (children: any, outside?: FieldUnionType, commonProps?: any) => {
-    const RenderItem = renderItem as any;
-    const childWithItem = RenderItem ? <RenderItem {...ignoreTag} {...commonProps}>{children}</RenderItem> : children;
+    const childWithItem = renderItem ? renderItem?.({ ...commonProps, ...ignoreTag, children }) : children
     const childWithSide = outside ? createInstance(outside, mergeComponents, { ...commonProps, ...ignoreTag }, childWithItem) : childWithItem;
     return childWithSide;
   }
