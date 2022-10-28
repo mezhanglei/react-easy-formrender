@@ -39,7 +39,7 @@ export const endIsListItem = (path: string) => {
 // 判断字符串是否为路径的尾部
 export const isPathEnd = (path: string, name: string) => {
   if (path && name) {
-    return new RegExp(`\\[\\d+\\]$|\\.${name}$|${name}$`).test(name)
+    return new RegExp(`\\[\\d+\\]$|\\.${name}$|${name}$`).test(path)
   }
 }
 
