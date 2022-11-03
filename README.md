@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-5.1.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.2.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -42,6 +42,13 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
 - Render the form through the `schema` attribute, It includes three parts: 1. the props of the outermost form container.2.the `FormFieldProps` corresponding to the fields are used to describe the properties of the form field. 3. `props` in FormFieldProps is used to describe the `controls` component
 - String expressions are fully supported for simple types of property fields in `schema`
+
+# Path rules involved in the form
+Forms are allowed to be nested, so they will involve finding a certain property. The paths follow certain rules
+
+for Example:
+- `a[0]` means the first option under the array `a`
+- `a[0]b` or `a[0].b` means the `b` attribute of the first option under the array `a`
 
 ## install
 
@@ -315,27 +322,21 @@ interface SchemaComponent {
 The `rules` rules in the form control are derived from the `rules` property in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)。
 
 ### FormRenderStore Methods
-  There are two parts: methods for rendering forms and methods for form controls
-1. Methods for rendering forms. (the path rule: `a.b[0]`, representing the 0th item of the b array of properties under the a property)
+  There are two parts: methods for rendering forms and form's values
+1. Methods for rendering forms.
  - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Update the information corresponding to `path` in schema.
  - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Override set the information corresponding to `path` in schema.
  - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the path.
  - `delItemByPath`: `(path: string) => void` delete the information corresponding to `path` in schema.
- - `addItemByIndex`: `(data: AddItem | AddItem[], index?: number, parent?: string) => void` Add item based on `index` and `parent`.
- - `addAfterByPath`: `(data: AddItem | AddItem[], path: string) => void` Add item after `path`
- - `addBeforeByPath`: `(data: AddItem | AddItem[], path: string) => void` add item before `path`
+ - `addItemByIndex`: `(data: FormFieldProps | FormFieldProps[], index?: number, parent?: string) => void` Add item based on `index` and `parent`.
+ - `addAfterByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` Add item after `path`
+ - `addBeforeByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` add item before `path`
  - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in schema.
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` move option in the tree from one position to another
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` set the `properties`.
-2. Methods for form controls
+2. form's values
   Inherits the `FormStore Methods` properties and methods from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
-```javascript
-interface AddItem {
-  name: string
-  field: FormFieldProps
-}
-```
 ### Hooks
 
 - `useFormRenderStore(defaultValues)` create FormRenderStore by hook。

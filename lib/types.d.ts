@@ -22,15 +22,14 @@ export interface BaseFieldProps extends SchemaComponent {
     readOnlyRender?: FieldUnionType | ReactNode;
     typeRender?: any;
 }
+export declare type PropertiesData = {
+    [name: string]: FormFieldProps;
+} | FormFieldProps[];
 export interface FormFieldProps extends Overwrite<FormItemProps, Extension>, BaseFieldProps {
-    properties?: {
-        [name: string]: FormFieldProps;
-    } | FormFieldProps[];
+    properties?: PropertiesData;
 }
 export interface SchemaData extends FormProps<FormRenderStore> {
-    properties?: {
-        [key: string]: FormFieldProps;
-    } | FormFieldProps[];
+    properties?: PropertiesData;
 }
 export declare type WatchHandler = (newValue: any, oldValue: any) => void;
 export interface BaseRenderProps {
@@ -56,7 +55,7 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
 }
 export declare type ValueOf<T> = T[keyof T];
 export interface GeneratePrams<T = FormFieldProps> {
-    name?: string;
+    name?: string | number;
     field?: T;
     parent?: string;
     store?: FormRenderStore;

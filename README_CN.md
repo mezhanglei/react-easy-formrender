@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-5.1.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-5.2.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -13,6 +13,7 @@
   - 底层库`react-easy-formcore`更新，需要删除旧包，再安装新版本的包
   - `readOnlyItem`废弃，只保留`readOnlyRender`
   - 5.1.0 `store.swapItemByPath` => `store.moveItemByPath`
+  - 5.2.x 删除旧包，再安装新版本的包，更改了`store.addItemByIndex`、`store.addAfterByPath`和`store.addBeforeByPath`的第二个参数。
 - v4.x:
   - 大版本更新，废除固定容器属性`col`和`customInner`，增加自定义容器`inside`和`outside`;
   - `widgets` 改为 `controls`, `widget`和`widgetProps`改为`type`和`props`;
@@ -42,6 +43,13 @@
 - 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
 - 通过`schema`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`props`用来描述`controls`组件
 - `schema`中关于表单域属性字段已全面支持字符串表达式
+
+# 表单的中涉及的path路径规则
+表单允许嵌套，所以表单中会涉及寻找某个属性。其路径遵循一定的规则
+
+举例：
+- `a[0]`表示数组a下面的第一个选项
+- `a[0]b`或`a[0].b`表示数组a下面的第一个选项的b属性
 
 ## 安装
 
@@ -316,27 +324,21 @@ export interface SchemaComponent {
 表单控件中的`rules`规则来自于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`rules`属性。
 
 ### FormRenderStore Methods
-  包括两部分：渲染表单的方法以及表单控件的方法
-1. 渲染表单的方法。(其中path的规则：`a.b[0]`, 表示a属性下的b数组属性的第0项)
+  包括两部分：表单渲染和表单的值
+1. 表单渲染的方法。
  - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 更新schema中`path`对应的信息
  - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 设置schema中`path`对应的信息
  - `updateNameByPath`: `(path: string, newName?: string) => void` 更新指定路径的name键
  - `delItemByPath`: `(path: string) => void` 删除schema中`path`对应的信息
- - `addItemByIndex`: `(data: AddItem | AddItem[], index?: number, parent?: string) => void` 根据序号和父节点路径添加选项
- - `addAfterByPath`: `(data: AddItem | AddItem[], path: string) => void` 在目标路径后面添加选项
- - `addBeforeByPath`: `(data: AddItem | AddItem[], path: string) => void` 在目标节点前面添加选项
+ - `addItemByIndex`: `(data: FormFieldProps | FormFieldProps[], index?: number, parent?: string) => void` 根据序号和父节点路径添加选项
+ - `addAfterByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` 在目标路径后面添加选项
+ - `addBeforeByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` 在目标节点前面添加选项
  - `getItemByPath`: `(path: string) => void` 获取schema中`path`对应的信息
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` 设置`properties`;
-2. 表单控件的方法
+2. 表单的值的方法
   继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`FormStore Methods`属性和方法
 
-```javascript
-interface AddItem {
-  name: string
-  field: FormFieldProps 
-}
-```
 ### Hooks
 
 - `useFormRenderStore(defaultValues)` 使用 hooks 创建 FormRenderStore。

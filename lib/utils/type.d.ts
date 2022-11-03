@@ -22,3 +22,4 @@ export declare function isArrayBufferView(val: any): any;
 export declare function isFile(data: any): boolean;
 export declare function isBlob(data: any): boolean;
 export declare function isStream(val: any): boolean;
+export declare const isNumberStr: (str?: string | Number) => true | undefined;

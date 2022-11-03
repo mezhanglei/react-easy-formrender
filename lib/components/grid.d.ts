@@ -25,13 +25,14 @@ export declare const getColProps: (props: FromColProps, inline?: boolean) => {
     suppressContentEditableWarning?: boolean | undefined;
     suppressHydrationWarning?: boolean | undefined;
     accessKey?: string | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | undefined;
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
     hidden?: boolean | undefined;
     id?: string | undefined;
     lang?: string | undefined;
+    nonce?: string | undefined;
     placeholder?: string | undefined;
     slot?: string | undefined;
     spellCheck?: (boolean | "true" | "false") | undefined;
