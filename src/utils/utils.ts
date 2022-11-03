@@ -14,7 +14,7 @@ export const getPathEnd = (path: string) => {
 export const getParent = (path: string) => {
   const end = getPathEnd(path);
   if (typeof end === 'string' && path) {
-    const endReg = new RegExp(`\\[\\d+\\]$|\\.${end}$|${end}$`)
+    const endReg = new RegExp(`\\[\\d+\\]$|\\.${end}$|\\]${end}$`)
     return path.replace(endReg, '')
   }
 }
@@ -30,7 +30,7 @@ export const endIsListItem = (path: string) => {
 // 判断字符串是否为路径的尾部
 export const isPathEnd = (path: string, name: string) => {
   if (path && !isEmpty(name)) {
-    return new RegExp(`\\[\\d+\\]$|\\.${name}$|${name}$`).test(path)
+    return new RegExp(`\\[\\d+\\]$|\\.${name}$|\\]${name}$`).test(path)
   }
 }
 
@@ -197,11 +197,12 @@ const parseList = (dataList: FormFieldProps[], isList?: boolean) => {
 export const updateName = (properties: SchemaData['properties'], pathStr: string, newName?: string) => {
   if (typeof newName !== 'string' || !pathStr || isPathEnd(pathStr, newName)) return properties;
   const parentPath = getParent(pathStr);
+  const end = getPathEnd(pathStr)
   const parent = getItemByPath(properties, parentPath);
   const childProperties = parentPath ? parent?.properties : parent;
   const childList = toList(childProperties);
-  childList?.map((item, index) => {
-    if (index === childList?.length - 1) {
+  childList?.map((item) => {
+    if (item.name === end && end) {
       item.name = newName;
     }
   });
