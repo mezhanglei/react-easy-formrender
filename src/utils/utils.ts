@@ -14,7 +14,7 @@ export const getPathEnd = (path: string) => {
 export const getParent = (path: string) => {
   const end = getPathEnd(path);
   if (typeof end === 'string' && path) {
-    const endReg = new RegExp(`\\[\\d+\\]$|\\.${end}$|\\]${end}$`)
+    const endReg = new RegExp(`\\[\\d+\\]$|\\.${end}$|${end}$`)
     return path.replace(endReg, '')
   }
 }
@@ -30,7 +30,7 @@ export const endIsListItem = (path: string) => {
 // 判断字符串是否为路径的尾部
 export const isPathEnd = (path: string, name: string) => {
   if (path && !isEmpty(name)) {
-    return new RegExp(`\\[\\d+\\]$|\\.${name}$|\\]${name}$`).test(path)
+    return path === name || new RegExp(`\\[\\d+\\]$|\\.${name}$|\\]${name}$`).test(path)
   }
 }
 
