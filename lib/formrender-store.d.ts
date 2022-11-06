@@ -1,14 +1,14 @@
 import { FormStore } from "react-easy-formcore";
-import { FormFieldProps, SchemaData } from "./types";
+import { FormFieldProps, PropertiesData } from "./types";
 export declare type FormRenderListener = (newValue?: any, oldValue?: any) => void;
-export declare type Properties = SchemaData['properties'];
 export declare class FormRenderStore<T extends Object = any> extends FormStore {
     private properties;
     private lastProperties;
     private propertiesListeners;
     constructor(values?: Partial<T>);
-    getProperties(): import("./types").PropertiesData | undefined;
-    setProperties(data?: SchemaData['properties']): void;
+    getProperties(): PropertiesData;
+    setProperties(data?: PropertiesData): void;
+    updateProperties(data?: PropertiesData): void;
     updateItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
     setItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
     updateNameByPath: (path: string, newName?: string) => void;

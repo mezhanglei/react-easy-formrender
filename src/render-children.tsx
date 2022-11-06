@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FormFieldProps, RenderFormChildrenProps, SchemaData, GeneratePrams, FieldUnionType, SchemaComponent } from './types';
+import { FormFieldProps, RenderFormChildrenProps, GeneratePrams, FieldUnionType, FormComponent, PropertiesData } from './types';
 import { defaultComponents } from './components';
 import { Form, formatName, FormOptionsContext, FormStoreContext, getCurrentPath, ItemCoreProps } from 'react-easy-formcore';
 import { FormRenderStore } from './formrender-store';
@@ -15,7 +15,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   const options = useContext(FormOptionsContext);
 
   const [fieldPropsMap, setFieldPropsMap] = useState<Partial<FormFieldProps>>({});
-  const [properties, setProperties] = useState<SchemaData['properties']>({});
+  const [properties, setProperties] = useState<PropertiesData>({});
 
   const {
     controls,
@@ -25,9 +25,9 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     renderItem,
     renderList,
     inside,
+    properties: propertiesProps
   } = props;
 
-  const propertiesProps = props?.properties;
   const mergeComponents = { ...defaultComponents, ...components };
 
   const {
@@ -57,7 +57,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   // 收集properties到store中
   useEffect(() => {
     if (store) {
-      store.setProperties(propertiesProps)
+      store.updateProperties(propertiesProps)
     }
   }, [propertiesProps]);
 
@@ -170,7 +170,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       const Child = componentParse(target, typeMap);
       // 声明组件
       if (Child) {
-        const { children, ...restProps } = (target as SchemaComponent)?.props || {};
+        const { children, ...restProps } = (target as FormComponent)?.props || {};
         return (
           <Child {...commonProps} {...restProps}>
             {children ? createInstance(children, typeMap, commonProps, finalChildren) : finalChildren}
@@ -190,7 +190,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     }
     // 是否为已注册的组件声明
     if (typeof target === 'object') {
-      const targetInfo = target as SchemaComponent
+      const targetInfo = target as FormComponent;
       const hidden = calcExpression(targetInfo?.hidden);
       if (hidden === true) {
         return;

@@ -2,46 +2,51 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-5.2.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
 # version log
+- v6.x
+  6.x has two major updates from v5.x.
+  - The component is split into `Form` and `RenderFormChildren` components, the `Form` component handles the form values, the `RenderFormChildren` renders the form based on the information provided, a `Form` component can wrap multiple `RenderFormChildren` components, if multiple ` RenderFormChildren` components have the same properties as each other, the later will override the previous
+  - ~~`schema`~~ properties are flattened, so you need to use `properties` to render the form instead, and ~~`onSchemaChange`~~ needs to be replaced with `onPropertiesChange`
 - v5.x:
-  - The underlying library `react-easy-formcore` is updated, you need to remove the old package and install the new version again
-  - `readOnlyItem` is deprecated, only `readOnlyRender` remains
+  This update completes the decoupling of the form display component from the form value related logic. api tend to be stable
+  - The underlying library `react-easy-formcore` is updated, you need to remove the old package and install the new version
+  - ~~ `readOnlyItem` is deprecated~~, only `readOnlyRender` is kept
   - 5.1.0 `store.swapItemByPath` => `store.moveItemByPath`
+  - 5.2.x Remove the old package and install the new version again, changed the second parameter of `store.addItemByIndex`, `store.addAfterByPath` and `store.addBeforeByPath`.
 - v4.x:
-  - Major update to deprecate fixed container properties `col` and `customInner` and add custom containers `inside` and `outside`;
-  - `widgets` change to `controls`, `widget` and `widgetProps` change to `type` and `props`;
-  - ~~`readOnlyWidget` change to `readOnlyItem`;~~
-  - add `components` to register other;
+  v4.x and previous versions mostly adjust some method naming and parameter passing changes.
+  - Deprecate fixed container properties ~~`col`~~ and ~~`customInner`~, add custom containers `inside` and `outside`;
+  - ~~`widgets`~~ to `controls`, ~~`widget`~~ and ~~`widgetProps`~ to `type` and `props`;
+  - ~~`readOnlyWidget` to `readOnlyItem`;~~
+  - Add registration for non-form controls: `components`;
 - v3.1.x:
-  - Adjusted the `layout` property of the form field to add `inline`, `labelWidth` properties
-  - Changed `onPropertiesChange` to `onSchemaChange` for the default export component
-  - ~~Changed `customChild` to `customInner`~~
+  - Adjust the `layout` property of form fields, add `inline`, `labelWidth` properties
+  - ~~ Adjust `onPropertiesChange` of default export component to `onSchemaChange`~~
+  - ~~ Adjust `customChild` to `customInner`~~
 - v3.0.x:
-  - String expression for form values changed from `$form` to `$formvalues`.
-  - Added `$store` to string expression to represent an instance of `FormRenderStore`, which can retrieve the form's associated methods and data.
-  - If you need to introduce a built-in component (the add/drop button for a list), you need to `import 'react-easy-formrender/lib/css/main.css'`.
+  - String expressions representing form values changed from ~~`$form`~~ to `$formvalues`.
+  - Add `$store` to the string expression to represent an instance of `FormRenderStore`, which can get the form related methods and data.
+  - If you need to introduce a built-in component (add/remove buttons for lists), you need to `import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
-  - Remove the `dependencies` property and replace it with `formvalues` that are automatically injected into the widget component.
-  - ~~Changing the api of the `RenderFormChildren` component~~
-  - Change the Methods of `FormRenderStore`.
+  - ~~ remove the `dependencies` property ~~ and instead inject the form values `formvalues` to the widget component automatically.
+  - ~~ change api of `RenderFormChildren` component ~~
 - v1.x:
-   - FormRenderStore Methods changed
-   - `onValuesChange` optimise
-   - ~~Change `component` and `props` to `widget` and `widgetProps` in schema~~
-   - ~~Change `render` in schema to `readOnlyWidget` and `readOnlyRender`~~
-   - Version matches version 1.1.x of react-easy-formcore
+  - Change the method of the form control
+  - ~~ Change `component` and `props` in schema to `widget` and `widgetProps` ~~
+  - ~~ change `render` in schema to `readOnlyWidget` and `readOnlyRender` ~~
+  - Version matching react-easy-formcore version 1.1.x or higher
 
 # Default export component
 
 - The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
-- Render the form through the `schema` attribute, It includes three parts: 1. the props of the outermost form container.2.the `FormFieldProps` corresponding to the fields are used to describe the properties of the form field. 3. `props` in FormFieldProps is used to describe the `controls` component
-- String expressions are fully supported for simple types of property fields in `schema`
+- Render the form through the `properties` attribute, It includes three parts: 1. the props of the outermost form container.2.the `FormFieldProps` corresponding to the fields are used to describe the properties of the form field. 3. `props` in FormFieldProps is used to describe the `controls` component
+- String expressions are fully supported for simple types of property fields in `properties`
 
 # Path rules involved in the form
 Forms are allowed to be nested, so they will involve finding a certain property. The paths follow certain rules
@@ -117,7 +122,7 @@ export default function Demo5(props) {
     }
   }
 
-  const [schema, setSchema] = useState({
+  const [properties, setProperties] = useState({
     // inside: {
     //   type: 'row'
     // },
@@ -238,7 +243,7 @@ export default function Demo5(props) {
 
   return (
     <div>
-      <RenderForm store={store} schema={schema} watch={watch} />
+      <RenderForm store={store} properties={properties} watch={watch} />
       <div style={{ marginLeft: '120px' }}>
         <Button onClick={onSubmit}>submit</Button>
       </div>
@@ -249,11 +254,10 @@ export default function Demo5(props) {
 
 ### Form Component Props
 - base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- `schema`: Rendering json data in the form of a DSL for a form.
+- `properties`: Rendering json data in the form of a DSL for a form.
 ```javascript
-export interface SchemaData extends FormProps<FormRenderStore> {
-  properties: { [key: string]: FormFieldProps } | FormFieldProps[]
-}
+// properties 属性
+type PropertiesData = { [name: string]: FormFieldProps } | FormFieldProps[]
 ```
 - `watch`：can listen to changes in the value of any field, for example:
 ```javascript
@@ -281,14 +285,14 @@ const watch = {
 - `renderList`: function that provides custom rendering List.
 - `renderItem`: function that provides custom render field item.
 - `inside`: the container of form children.
-- `onSchemaChange`: `(newValue: SchemaData) => void;` Callback function when `schema` is changed
+- `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
 
 ### FormFieldProps
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$formvalues.xxx === xxx}}` means that a field value of the form is equal to a value, where `$formvalues` represents the form value object
 The full props are as follows：
 ```javascript
-export interface BaseFieldProps extends SchemaComponent {
+export interface BaseFieldProps extends FormComponent {
   ignore?: boolean; // ignore current form field
   fieldComponent?: FieldUnionType; // field display component
   inside?: FieldUnionType; // Form field component inner nested components
@@ -308,11 +312,11 @@ export interface FormFieldProps extends FormItemProps, BaseFieldProps {
 ### Description of the components used in the form
   The container components, form controls and buttons used in the form are uniformly described in the same structure.
 ```javascript
-interface SchemaComponent {
+interface FormComponent {
   type?: string;
   props?: {
     [key: string]: any;
-    children?: any | Array<SchemaComponent>
+    children?: any | Array<FormComponent>
   };
   hidden?: string | boolean;
 }
@@ -324,14 +328,14 @@ The `rules` rules in the form control are derived from the `rules` property in [
 ### FormRenderStore Methods
   There are two parts: methods for rendering forms and form's values
 1. Methods for rendering forms.
- - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Update the information corresponding to `path` in schema.
- - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Override set the information corresponding to `path` in schema.
+ - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Update the information corresponding to `path` in properties.
+ - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Override set the information corresponding to `path` in properties.
  - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the path.
- - `delItemByPath`: `(path: string) => void` delete the information corresponding to `path` in schema.
+ - `delItemByPath`: `(path: string) => void` delete the information corresponding to `path` in properties.
  - `addItemByIndex`: `(data: FormFieldProps | FormFieldProps[], index?: number, parent?: string) => void` Add item based on `index` and `parent`.
  - `addAfterByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` Add item after `path`
  - `addBeforeByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` add item before `path`
- - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in schema.
+ - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in properties.
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` move option in the tree from one position to another
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` set the `properties`.
 2. form's values

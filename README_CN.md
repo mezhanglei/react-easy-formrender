@@ -2,38 +2,42 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-5.2.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成).
 
 # version log
+- v6.x
+  6.x在v5.x版本基础上有两大更新：
+  - 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
+  - ~~`schema`~~属性被展平，所以需要用`properties`来代替渲染表单，并且~~`onSchemaChange`~~也需要换成`onPropertiesChange`
 - v5.x:
+  本次更新完成了表单的显示组件与表单值相关逻辑的解耦，api趋于稳定
   - 底层库`react-easy-formcore`更新，需要删除旧包，再安装新版本的包
-  - `readOnlyItem`废弃，只保留`readOnlyRender`
+  - ~~`readOnlyItem`废弃~~，只保留`readOnlyRender`
   - 5.1.0 `store.swapItemByPath` => `store.moveItemByPath`
   - 5.2.x 删除旧包，再安装新版本的包，更改了`store.addItemByIndex`、`store.addAfterByPath`和`store.addBeforeByPath`的第二个参数。
 - v4.x:
-  - 大版本更新，废除固定容器属性`col`和`customInner`，增加自定义容器`inside`和`outside`;
-  - `widgets` 改为 `controls`, `widget`和`widgetProps`改为`type`和`props`;
+  v4.x及之前的版本多数是调整一些方法命名和传参更改
+  - 废除固定容器属性~~`col`~~和~~`customInner`~~，增加自定义容器`inside`和`outside`;
+  - ~~`widgets`~~ 改为 `controls`, ~~`widget`~~和~~`widgetProps`~~改为`type`和`props`;
   - ~~`readOnlyWidget` 改为 `readOnlyItem`;~~
   - 增加非表单控件的注册: `components`;
 - v3.1.x:
   - 调整表单域的`layout`属性，增加`inline`, `labelWidth`属性
-  - 调整默认导出组件的`onPropertiesChange`改为`onSchemaChange`
+  - ~~调整默认导出组件的`onPropertiesChange`改为`onSchemaChange`~~
   - ~~调整`customChild`改为`customInner`~~
 - v3.0.x:
-  - 字符串表达式中表示表单值的字符由`$form`改为`$formvalues`.
+  - 字符串表达式中表示表单值的字符由~~`$form`~~改为`$formvalues`.
   - 字符串表达式中增加`$store`表示`FormRenderStore`的实例，可以获取表单的相关方法和数据.
   - 如果需要引入内置组件(列表的增删按钮), 则需要`import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
-  - 移除 `dependencies` 属性，改为给widget组件自动注入表单值`formvalues`.
+  - ~~移除`dependencies`属性~~，改为给widget组件自动注入表单值`formvalues`.
   - ~~更改`RenderFormChildren`组件的api~~
-  - 更改`FormRenderStore`的Methods
 - v1.x:
    - 更改表单控件的方法
-   - 优化`onValuesChange`使用
    - ~~更改schema中的`component`和`props`为`widget`和`widgetProps`~~
    - ~~更改schema中的`render`为`readOnlyWidget`和`readOnlyRender`~~
    - 版本匹配react-easy-formcore的1.1.x版本以上
@@ -41,8 +45,8 @@
 # 默认导出组件
 
 - 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
-- 通过`schema`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`props`用来描述`controls`组件
-- `schema`中关于表单域属性字段已全面支持字符串表达式
+- 通过`properties`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`props`用来描述`controls`组件
+- `properties`中关于表单域属性字段已全面支持字符串表达式
 
 # 表单的中涉及的path路径规则
 表单允许嵌套，所以表单中会涉及寻找某个属性。其路径遵循一定的规则
@@ -118,11 +122,7 @@ export default function Demo5(props) {
     }
   }
 
-  const [schema, setSchema] = useState({
-    // inside: {
-    //   type: 'row'
-    // },
-    properties: {
+  const [properties, setProperties] = useState({
       name1: {
         label: "只读展示",
         required: true,
@@ -226,8 +226,7 @@ export default function Demo5(props) {
           children: '多选框'
         }
       },
-    }
-  })
+    })
 
   const store = useFormRenderStore();
 
@@ -239,7 +238,7 @@ export default function Demo5(props) {
 
   return (
     <div>
-      <RenderForm store={store} schema={schema} watch={watch} />
+      <RenderForm store={store} properties={properties} watch={watch} />
       <div style={{ marginLeft: '120px' }}>
         <Button onClick={onSubmit}>submit</Button>
       </div>
@@ -250,12 +249,10 @@ export default function Demo5(props) {
 
 ### 表单容器的props
 - 基础属性：继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
-- `schema`: 渲染表单的DSL形式的json数据
+- `properties`: 渲染表单的DSL形式的json数据
 ```javascript
-// schema 属性
-export interface SchemaData extends FormProps<FormRenderStore> {
-  properties: { [key: string]: FormFieldProps } | FormFieldProps[]
-}
+// properties 属性
+type PropertiesData = { [name: string]: FormFieldProps } | FormFieldProps[]
 ```
 - `watch`属性：可以监听任意字段的值的变化，例如：
 ```javascript
@@ -282,14 +279,14 @@ const watch = {
 - `renderList`：提供自定义渲染列表的函数.
 - `renderItem`：提供自定义渲染表单项的函数.
 - `inside` 表单项的显示容器.
-- `onSchemaChange`: `(newValue: SchemaData) => void;` `schema`更改时回调函数
+- `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
 
 ### 表单域属性(FormFieldProps)
 1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
 2. 表单域的全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象
 完整属性类型如下：
 ```javascript
-export interface BaseFieldProps extends SchemaComponent {
+export interface BaseFieldProps extends FormComponent {
   ignore?: boolean; // 忽略当前节点不会作为表单值
   fieldComponent?: FieldUnionType; // 表单域组件
   inside?: FieldUnionType; // 表单域组件内层嵌套组件
@@ -310,11 +307,11 @@ export interface FormFieldProps extends FormItemProps, BaseFieldProps {
   表单中使用的容器组件、表单控件、按钮，统一用同样的结构描述。
 ```javascript
 // 组件描述基本属性
-export interface SchemaComponent {
+export interface FormComponent {
   type?: string;
   props?: {
     [key: string]: any;
-    children?: any | Array<SchemaComponent>
+    children?: any | Array<FormComponent>
   };
   hidden?: string | boolean;
 }
@@ -326,14 +323,14 @@ export interface SchemaComponent {
 ### FormRenderStore Methods
   包括两部分：表单渲染和表单的值
 1. 表单渲染的方法。
- - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 更新schema中`path`对应的信息
- - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 设置schema中`path`对应的信息
+ - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 更新properties中`path`对应的信息
+ - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 设置properties中`path`对应的信息
  - `updateNameByPath`: `(path: string, newName?: string) => void` 更新指定路径的name键
- - `delItemByPath`: `(path: string) => void` 删除schema中`path`对应的信息
+ - `delItemByPath`: `(path: string) => void` 删除properties中`path`对应的信息
  - `addItemByIndex`: `(data: FormFieldProps | FormFieldProps[], index?: number, parent?: string) => void` 根据序号和父节点路径添加选项
  - `addAfterByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` 在目标路径后面添加选项
  - `addBeforeByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` 在目标节点前面添加选项
- - `getItemByPath`: `(path: string) => void` 获取schema中`path`对应的信息
+ - `getItemByPath`: `(path: string) => void` 获取properties中`path`对应的信息
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` 设置`properties`;
 2. 表单的值的方法
