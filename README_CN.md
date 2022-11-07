@@ -10,9 +10,9 @@
 
 # version log
 - v6.x
-  6.x在v5.x版本基础上有两大更新：
+  6.x在v5.x版本基础上有两大更新(暂未更新)：
   - 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
-  - ~~`schema`~~属性被展平，所以需要用`properties`来代替渲染表单，并且~~`onSchemaChange`~~也需要换成`onPropertiesChange`
+  - `schema`属性被展平，所以需要用`properties`来代替渲染表单，并且`onSchemaChange`也需要换成`onPropertiesChange`
 - v5.x:
   本次更新完成了表单的显示组件与表单值相关逻辑的解耦，api趋于稳定
   - 底层库`react-easy-formcore`更新，需要删除旧包，再安装新版本的包

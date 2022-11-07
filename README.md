@@ -10,7 +10,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 # version log
 - v6.x
-  6.x has two major updates from v5.x.
+  6.x has two major updates from v5.x(not update yet).
   - The component is split into `Form` and `RenderFormChildren` components, the `Form` component handles the form values, the `RenderFormChildren` renders the form based on the information provided, a `Form` component can wrap multiple `RenderFormChildren` components, if multiple ` RenderFormChildren` components have the same properties as each other, the later will override the previous
   - ~~`schema`~~ properties are flattened, so you need to use `properties` to render the form instead, and ~~`onSchemaChange`~~ needs to be replaced with `onPropertiesChange`
 - v5.x:
