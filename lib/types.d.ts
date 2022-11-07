@@ -1,11 +1,7 @@
 import { ReactNode } from "react";
-import { FormItemProps, FormProps } from "react-easy-formcore";
+import { FormItemProps, FormProps, FormStore } from "react-easy-formcore";
 import { FormRenderStore } from "./formrender-store";
 declare type Overwrite<T, U> = Omit<T, keyof U> & U;
-interface Extension {
-    valueGetter?: string | ((...args: any[]) => any) | any;
-    valueSetter?: string | ((value: any) => any) | any;
-}
 export interface FormComponent {
     type?: string;
     props?: any;
@@ -25,7 +21,10 @@ export interface BaseFieldProps extends FormComponent {
 export declare type PropertiesData = {
     [name: string]: FormFieldProps;
 } | FormFieldProps[];
-export interface FormFieldProps extends Overwrite<FormItemProps, Extension>, BaseFieldProps {
+export interface FormFieldProps extends Overwrite<FormItemProps, {
+    valueGetter?: string | ((...args: any[]) => any) | any;
+    valueSetter?: string | ((value: any) => any) | any;
+}>, BaseFieldProps {
     properties?: PropertiesData;
 }
 export declare type WatchHandler = (newValue: any, oldValue: any) => void;
@@ -42,13 +41,17 @@ export interface BaseRenderProps {
     renderList?: (params: GeneratePrams<any>) => any;
     renderItem?: (params: GeneratePrams<any>) => any;
 }
-export interface RenderFormProps extends FormProps<FormRenderStore>, BaseRenderProps {
+export interface RenderFormProps extends Overwrite<FormProps, {
+    store?: FormRenderStore;
+}>, BaseRenderProps {
     onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
     properties?: PropertiesData;
+    form?: FormStore;
 }
 export interface RenderFormChildrenProps extends BaseRenderProps {
     onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
     properties?: PropertiesData;
+    store?: FormRenderStore;
 }
 export declare type ValueOf<T> = T[keyof T];
 export interface GeneratePrams<T = FormFieldProps> {
@@ -56,6 +59,7 @@ export interface GeneratePrams<T = FormFieldProps> {
     field?: T;
     parent?: string;
     store?: FormRenderStore;
+    form: FormStore;
     children?: any;
 }
 export {};

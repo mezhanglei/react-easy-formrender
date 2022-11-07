@@ -27,4 +27,3 @@ export declare const moveDiffLevel: (properties: PropertiesData, from: {
     index?: number;
 }) => PropertiesData | undefined;
 export declare const getInitialValues: (properties?: PropertiesData) => {} | undefined;
-export declare function mergeProperties(oldValue: any, newValue: any): any;

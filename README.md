@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -10,7 +10,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 # version log
 - v6.x
-  6.x has two major updates from v5.x(not update yet).
+  6.x has two major updates from v5.x.
   - The component is split into `Form` and `RenderFormChildren` components, the `Form` component handles the form values, the `RenderFormChildren` renders the form based on the information provided, a `Form` component can wrap multiple `RenderFormChildren` components, if multiple ` RenderFormChildren` components have the same properties as each other, the later will override the previous
   - ~~`schema`~~ properties are flattened, so you need to use `properties` to render the form instead, and ~~`onSchemaChange`~~ needs to be replaced with `onPropertiesChange`
 - v5.x:
@@ -68,7 +68,7 @@ yarn add react-easy-formrender
 1. First register the basic components(Take the `antd@4.20.2` UI library as an example)
 ```javascript
 // register
-import RenderBaseForm, { RenderFormProps } from 'react-easy-formrender';
+import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
 export * from 'react-easy-formrender';
@@ -97,9 +97,15 @@ export const AntdBaseControls = {
   "TimePicker.RangePicker": TimePicker.RangePicker
 }
 
+export function RenderFormChildren(props: RenderFormChildrenProps) {
+  return (
+    <RenderFormChilds {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
+  );
+}
+
 export default function FormRender(props: RenderFormProps) {
   return (
-    <RenderBaseForm {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
+    <RenderFormDefault {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
   );
 }
 ```
@@ -107,7 +113,7 @@ export default function FormRender(props: RenderFormProps) {
 ```javascript
 import { Button } from 'antd';
 import React, { useState } from 'react';
-import RenderForm, {Form, useFormRenderStore } from './form-render';
+import RenderForm, { useFormStore } from './form-render';
 export default function Demo5(props) {
 
   const watch = {
@@ -123,10 +129,6 @@ export default function Demo5(props) {
   }
 
   const [properties, setProperties] = useState({
-    // inside: {
-    //   type: 'row'
-    // },
-    properties: {
       name1: {
         label: "只读展示",
         required: true,
@@ -149,7 +151,7 @@ export default function Demo5(props) {
         props: {}
       },
       name3: {
-        label: "数组",
+        label: "数组name3",
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: [{
@@ -180,12 +182,12 @@ export default function Demo5(props) {
         }]
       },
       name4: {
-        label: 'name4',
+        label: '对象嵌套',
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: {
           first: {
-            rules: [{ required: true, message: 'first空了' }],
+            rules: [{ required: true, message: 'name4空了' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
@@ -193,7 +195,7 @@ export default function Demo5(props) {
             }
           },
           second: {
-            rules: [{ required: true, message: 'second空了' }],
+            rules: [{ required: true, message: 'name2空了' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
@@ -223,27 +225,26 @@ export default function Demo5(props) {
         valueProp: 'checked',
         // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
-        rules: [{ required: true, message: 'name6空了' }],
+        rules: [{ required: true, message: 'name5空了' }],
         type: 'Checkbox',
         props: {
           style: { width: '100%' },
           children: '多选框'
         }
       },
-    }
-  })
+    })
 
-  const store = useFormRenderStore();
+  const form = useFormStore();
 
   const onSubmit = async (e) => {
     e?.preventDefault?.();
-    const result = await store.validate();
+    const result = await form.validate();
     console.log(result, 'result');
   };
 
   return (
     <div>
-      <RenderForm store={store} properties={properties} watch={watch} />
+      <RenderForm form={form} properties={properties} watch={watch} />
       <div style={{ marginLeft: '120px' }}>
         <Button onClick={onSubmit}>submit</Button>
       </div>
@@ -252,13 +253,74 @@ export default function Demo5(props) {
 }
 ```
 
-### Form Component Props
-- base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- `properties`: Rendering json data in the form of a DSL for a form.
+### multiple RenderFormChildren demo
+  The form engine also supports multiple `RenderFormChildren` components to render and then the `Form` component to handle the form values in a unified manner.
+ - `useFormStore` hook: hook to provide a class for form value processing.
+ - `useFormRenderStore` hook: hook to provide a class for form rendering, provided by the default component itself, or passed in by external props.
 ```javascript
-// properties 属性
-type PropertiesData = { [name: string]: FormFieldProps } | FormFieldProps[]
+import React, { useState } from 'react';
+import RenderForm, { RenderFormChildren, Form, useFormStore } from './form-render';
+import { Button } from 'antd';
+export default function Demo(props) {
+  
+  const [properties1, setProperties1] = useState({
+    part1: {
+      label: "part1input",
+      required: true,
+      outside: { type: 'col', props: { span: 6 } },
+      rules: [{ required: true, message: 'name1空了' }],
+      initialValue: 1,
+      hidden: '{{$formvalues.name6 == true}}',
+      type: 'Input',
+      props: {}
+    },
+  })
+
+  const [properties2, setProperties2] = useState({
+    part2: {
+      label: "part2input",
+      required: true,
+      outside: { type: 'col', props: { span: 6 } },
+      rules: [{ required: true, message: 'name1空了' }],
+      initialValue: 1,
+      hidden: '{{$formvalues.name6 == true}}',
+      type: 'Input',
+      props: {}
+    },
+  })
+
+  const form = useFormStore();
+  // const formRenderStore = useFormRenderStore()
+
+  const onSubmit = async (e) => {
+    e?.preventDefault?.();
+    const result = await form.validate();
+    console.log(result, 'result');
+  };
+
+  return (
+    <div style={{ padding: '0 8px' }}>
+      <Form store={form}>
+        <div>
+          <p>part1</p>
+          <RenderFormChildren inside={{ type: 'row' }} properties={properties1} watch={watch} />
+        </div>
+        <div>
+          <p>part2</p>
+          <RenderFormChildren inside={{ type: 'row' }} properties={properties2} watch={watch} />
+        </div>
+      </Form>
+      <div style={{ marginLeft: '120px' }}>
+        <Button onClick={onSubmit}>submit</Button>
+      </div>
+    </div>
+  );
+}
 ```
+
+### RenderFormChildren or RenderForm's props
+- base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+- `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` Rendering json data in the form of a DSL for a form.
 - `watch`：can listen to changes in the value of any field, for example:
 ```javascript
 
@@ -286,6 +348,8 @@ const watch = {
 - `renderItem`: function that provides custom render field item.
 - `inside`: the container of form children.
 - `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
+- `form`: the `FormStore` class responsible for form values, created by `useFormStore()`, only `RenderForm` component need.
+- `store`: The form class responsible for rendering. Created with `useFormRenderStore()`.
 
 ### FormFieldProps
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
@@ -326,8 +390,7 @@ interface FormComponent {
 The `rules` rules in the form control are derived from the `rules` property in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)。
 
 ### FormRenderStore Methods
-  There are two parts: methods for rendering forms and form's values
-1. Methods for rendering forms.
+  Only responsible for the rendering of the form
  - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Update the information corresponding to `path` in properties.
  - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Override set the information corresponding to `path` in properties.
  - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the path.
@@ -338,9 +401,8 @@ The `rules` rules in the form control are derived from the `rules` property in [
  - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in properties.
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` move option in the tree from one position to another
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` set the `properties`.
-2. form's values
-  Inherits the `FormStore Methods` properties and methods from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
 ### Hooks
 
-- `useFormRenderStore(defaultValues)` create FormRenderStore by hook。
+- `useFormRenderStore()` create FormRenderStore by hook。
+- `useFormStore(defaultValues)` create FormStore by hook。

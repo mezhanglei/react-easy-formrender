@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 适用场景
 
@@ -10,8 +10,8 @@
 
 # version log
 - v6.x
-  6.x在v5.x版本基础上有两大更新(暂未更新)：
-  - 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
+  6.x在v5.x版本基础上有两大更新(文档已更新)：
+  - 6.0.1版本: 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
   - `schema`属性被展平，所以需要用`properties`来代替渲染表单，并且`onSchemaChange`也需要换成`onPropertiesChange`
 - v5.x:
   本次更新完成了表单的显示组件与表单值相关逻辑的解耦，api趋于稳定
@@ -68,38 +68,44 @@ yarn add react-easy-formrender
 1. 首先注册基本组件(以antd@4.20.2组件库为例)
 ```javascript
 // register
-import RenderBaseForm, { RenderFormProps } from 'react-easy-formrender';
+import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
 export * from 'react-easy-formrender';
-// 提供开发过程中的基础控件(控件需要满足具有value传参，onChange回调函数的props)
+
 export const AntdBaseControls = {
-  "Input": Input, // 输入控件
-  "Input.TextArea": Input.TextArea, // 输入文本域
-  "Input.Password": Input.Password, // 输入密码组件
-  "Input.Search": Input.Search, // 输入搜索组件
-  "InputNumber": InputNumber, // 数字输入控件
-  "Mentions": Mentions, // 携带@提示的输入控件
-  "Mentions.Option": Mentions.Option, // 提示控件的option
-  "Checkbox": Checkbox, // 多选组件
-  'Checkbox.Group': Checkbox.Group, // 多选列表组件
-  "Radio": Radio, // 单选组件
-  "Radio.Group": Radio.Group, // 单选列表组件
-  "Radio.Button": Radio.Button, // 单选按钮组件
-  "DatePicker": DatePicker, // 日期控件
-  "DatePicker.RangePicker": DatePicker.RangePicker, // 日期范围控件
-  "Rate": Rate, // 星星评分控件
-  "Select": Select, // 选择控件
-  "Select.Option": Select.Option, // 选择的选项
-  "Slider": Slider, // 滑动输入项
-  "Switch": Switch, // 切换组件
-  "TimePicker": TimePicker, // 时分秒控件
-  "TimePicker.RangePicker": TimePicker.RangePicker, // 时分秒范围控件
+  "Input": Input,
+  "Input.TextArea": Input.TextArea,
+  "Input.Password": Input.Password,
+  "Input.Search": Input.Search,
+  "InputNumber": InputNumber,
+  "Mentions": Mentions,
+  "Mentions.Option": Mentions.Option,
+  "Checkbox": Checkbox,
+  'Checkbox.Group': Checkbox.Group,
+  "Radio": Radio,
+  "Radio.Group": Radio.Group,
+  "Radio.Button": Radio.Button,
+  "DatePicker": DatePicker,
+  "DatePicker.RangePicker": DatePicker.RangePicker,
+  "Rate": Rate,
+  "Select": Select,
+  "Select.Option": Select.Option,
+  "Slider": Slider,
+  "Switch": Switch,
+  "TimePicker": TimePicker,
+  "TimePicker.RangePicker": TimePicker.RangePicker
+}
+
+export function RenderFormChildren(props: RenderFormChildrenProps) {
+  return (
+    <RenderFormChilds {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
+  );
 }
 
 export default function FormRender(props: RenderFormProps) {
   return (
-    <RenderBaseForm {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
+    <RenderFormDefault {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
   );
 }
 ```
@@ -107,7 +113,7 @@ export default function FormRender(props: RenderFormProps) {
 ```javascript
 import { Button } from 'antd';
 import React, { useState } from 'react';
-import RenderForm, { useFormRenderStore } from './form-render';
+import RenderForm, { useFormStore } from './form-render';
 export default function Demo5(props) {
 
   const watch = {
@@ -228,17 +234,17 @@ export default function Demo5(props) {
       },
     })
 
-  const store = useFormRenderStore();
+  const form = useFormStore();
 
   const onSubmit = async (e) => {
     e?.preventDefault?.();
-    const result = await store.validate();
+    const result = await form.validate();
     console.log(result, 'result');
   };
 
   return (
     <div>
-      <RenderForm store={store} properties={properties} watch={watch} />
+      <RenderForm form={form} properties={properties} watch={watch} />
       <div style={{ marginLeft: '120px' }}>
         <Button onClick={onSubmit}>submit</Button>
       </div>
@@ -247,13 +253,74 @@ export default function Demo5(props) {
 }
 ```
 
-### 表单容器的props
-- 基础属性：继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
-- `properties`: 渲染表单的DSL形式的json数据
+### 多模块渲染
+  表单引擎还支持多个`RenderFormChildren`组件渲染，然后由`Form`组件统一处理表单值.
+ - `useFormStore` hook: 给表单值的处理提供类的hook.
+ - `useFormRenderStore` hook: 给表单的渲染提供类的hook，默认组件内自己提供，也可以外面props传递进去.
 ```javascript
-// properties 属性
-type PropertiesData = { [name: string]: FormFieldProps } | FormFieldProps[]
+import React, { useState } from 'react';
+import RenderForm, { RenderFormChildren, Form, useFormStore } from './form-render';
+import { Button } from 'antd';
+export default function Demo(props) {
+  
+  const [properties1, setProperties1] = useState({
+    part1: {
+      label: "part1input",
+      required: true,
+      outside: { type: 'col', props: { span: 6 } },
+      rules: [{ required: true, message: 'name1空了' }],
+      initialValue: 1,
+      hidden: '{{$formvalues.name6 == true}}',
+      type: 'Input',
+      props: {}
+    },
+  })
+
+  const [properties2, setProperties2] = useState({
+    part2: {
+      label: "part2input",
+      required: true,
+      outside: { type: 'col', props: { span: 6 } },
+      rules: [{ required: true, message: 'name1空了' }],
+      initialValue: 1,
+      hidden: '{{$formvalues.name6 == true}}',
+      type: 'Input',
+      props: {}
+    },
+  })
+
+  const form = useFormStore();
+  // const formRenderStore = useFormRenderStore()
+
+  const onSubmit = async (e) => {
+    e?.preventDefault?.();
+    const result = await form.validate();
+    console.log(result, 'result');
+  };
+
+  return (
+    <div style={{ padding: '0 8px' }}>
+      <Form store={form}>
+        <div>
+          <p>part1</p>
+          <RenderFormChildren inside={{ type: 'row' }} properties={properties1} watch={watch} />
+        </div>
+        <div>
+          <p>part2</p>
+          <RenderFormChildren inside={{ type: 'row' }} properties={properties2} watch={watch} />
+        </div>
+      </Form>
+      <div style={{ marginLeft: '120px' }}>
+        <Button onClick={onSubmit}>submit</Button>
+      </div>
+    </div>
+  );
+}
 ```
+
+### RenderFormChildren或默认导出组件RenderForm的props
+- 基础属性：继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
+- `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` 渲染表单的DSL形式的json数据
 - `watch`属性：可以监听任意字段的值的变化，例如：
 ```javascript
 // 声明式传值
@@ -280,6 +347,8 @@ const watch = {
 - `renderItem`：提供自定义渲染表单项的函数.
 - `inside` 表单项的显示容器.
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
+- `form`: 负责表单值的`FormStore`类，通过`useFormStore()`创建, 必填。
+- `store`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
 
 ### 表单域属性(FormFieldProps)
 1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
@@ -321,8 +390,7 @@ export interface FormComponent {
 表单控件中的`rules`规则来自于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`rules`属性。
 
 ### FormRenderStore Methods
-  包括两部分：表单渲染和表单的值
-1. 表单渲染的方法。
+  仅仅负责表单的渲染
  - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 更新properties中`path`对应的信息
  - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 设置properties中`path`对应的信息
  - `updateNameByPath`: `(path: string, newName?: string) => void` 更新指定路径的name键
@@ -333,9 +401,8 @@ export interface FormComponent {
  - `getItemByPath`: `(path: string) => void` 获取properties中`path`对应的信息
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` 设置`properties`;
-2. 表单的值的方法
-  继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`FormStore Methods`属性和方法
 
 ### Hooks
 
-- `useFormRenderStore(defaultValues)` 使用 hooks 创建 FormRenderStore。
+- `useFormRenderStore()` 使用 hooks 创建 FormRenderStore。
+- `useFormStore(defaultValues)` 使用 hooks 创建 FormStore。
