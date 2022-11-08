@@ -303,11 +303,11 @@ export default function Demo(props) {
       <Form store={form}>
         <div>
           <p>part1</p>
-          <RenderFormChildren inside={{ type: 'row' }} properties={properties1} watch={watch} />
+          <RenderFormChildren properties={properties1} watch={watch} />
         </div>
         <div>
           <p>part2</p>
-          <RenderFormChildren inside={{ type: 'row' }} properties={properties2} watch={watch} />
+          <RenderFormChildren properties={properties2} watch={watch} />
         </div>
       </Form>
       <div style={{ marginLeft: '120px' }}>
@@ -346,7 +346,6 @@ const watch = {
 - `components`：register other component for form to use.
 - `renderList`: function that provides custom rendering List.
 - `renderItem`: function that provides custom render field item.
-- `inside`: the container of form children.
 - `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
 - `form`: the `FormStore` class responsible for form values, created by `useFormStore()`, only `RenderForm` component need.
 - `store`: The form class responsible for rendering. Created with `useFormRenderStore()`.

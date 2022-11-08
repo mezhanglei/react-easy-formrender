@@ -303,11 +303,11 @@ export default function Demo(props) {
       <Form store={form}>
         <div>
           <p>part1</p>
-          <RenderFormChildren inside={{ type: 'row' }} properties={properties1} watch={watch} />
+          <RenderFormChildren properties={properties1} watch={watch} />
         </div>
         <div>
           <p>part2</p>
-          <RenderFormChildren inside={{ type: 'row' }} properties={properties2} watch={watch} />
+          <RenderFormChildren properties={properties2} watch={watch} />
         </div>
       </Form>
       <div style={{ marginLeft: '120px' }}>
@@ -345,7 +345,6 @@ const watch = {
 - `components`：注册表单中控件以外的其他组件(容器组件，按钮等);
 - `renderList`：提供自定义渲染列表的函数.
 - `renderItem`：提供自定义渲染表单项的函数.
-- `inside` 表单项的显示容器.
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
 - `form`: 负责表单值的`FormStore`类，通过`useFormStore()`创建, 必填。
 - `store`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
