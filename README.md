@@ -104,7 +104,7 @@ export default function FormRender(props: RenderFormProps) {
 ```javascript
 import { Button } from 'antd';
 import React, { useState } from 'react';
-import RenderForm, { useFormStore } from './form-render';
+import RenderForm, { useFormStore, useFormRenderStore } from './form-render';
 export default function Demo5(props) {
 
   const watch = {
@@ -226,6 +226,7 @@ export default function Demo5(props) {
     })
 
   const form = useFormStore();
+  // const formRenderStore = useFormRenderStore()
 
   const onSubmit = async (e) => {
     e?.preventDefault?.();
@@ -235,7 +236,11 @@ export default function Demo5(props) {
 
   return (
     <div>
-      <RenderForm form={form} properties={properties} watch={watch} />
+      <RenderForm
+        form={form}
+        // store={formRenderStore}
+        properties={properties}
+        watch={watch} />
       <div style={{ marginLeft: '120px' }}>
         <Button onClick={onSubmit}>submit</Button>
       </div>
@@ -250,7 +255,7 @@ export default function Demo5(props) {
  - `useFormRenderStore` hook: hook to provide a class for form rendering, provided by the default component itself, or passed in by external props.
 ```javascript
 import React, { useState } from 'react';
-import RenderForm, { RenderFormChildren, Form, useFormStore } from './form-render';
+import RenderForm, { RenderFormChildren, Form, useFormStore, useFormRenderStore } from './form-render';
 import { Button } from 'antd';
 export default function Demo(props) {
   
@@ -281,7 +286,8 @@ export default function Demo(props) {
   })
 
   const form = useFormStore();
-  // const formRenderStore = useFormRenderStore()
+  // const formRenderStore1 = useFormRenderStore()
+  // const formRenderStore2 = useFormRenderStore()
 
   const onSubmit = async (e) => {
     e?.preventDefault?.();
@@ -294,11 +300,17 @@ export default function Demo(props) {
       <Form store={form}>
         <div>
           <p>part1</p>
-          <RenderFormChildren properties={properties1} watch={watch} />
+          <RenderFormChildren
+            // store={formRenderStore1}
+            properties={properties1}
+            watch={watch} />
         </div>
         <div>
           <p>part2</p>
-          <RenderFormChildren properties={properties2} watch={watch} />
+          <RenderFormChildren
+            // store={formRenderStore2}
+            properties={properties2}
+            watch={watch} />
         </div>
       </Form>
       <div style={{ marginLeft: '120px' }}>
