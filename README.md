@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -354,7 +354,7 @@ const watch = {
 ### FormFieldProps
 Used to describe a form field
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
-2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$formvalues.xxx === xxx}}` means that a field value of the form is equal to a value, where `$formvalues` represents the form value object
+2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$formvalues.xxx === xxx}}` means that a field value of the form is equal to a value, where `$formvalues` represents the form value object, Similarly, `$store` means that `useFormRenderStore()` creates an instance, and `$form` means that `useFormStore()` creates an instance.
 The full props are as follows：
 ```javascript
 export interface BaseFieldProps extends FormItemProps, FormComponent {

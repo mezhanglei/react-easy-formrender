@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -353,7 +353,7 @@ const watch = {
 ### 表单域属性(FormFieldProps)
 用来描述一个表单节点.
 1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
-2. 表单域的全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象
+2. 表单域的全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象。同理, `$store`表示`useFormRenderStore()`创建实例, `$form`表示`useFormStore()`创建的实例
 完整属性类型如下：
 ```javascript
 export interface BaseFieldProps extends FormItemProps, FormComponent {
