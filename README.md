@@ -16,30 +16,30 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - v5.x:
   This update completes the decoupling of the form display component from the form value related logic. api tend to be stable
   - The underlying library `react-easy-formcore` is updated, you need to remove the old package and install the new version
-  - ~~ `readOnlyItem` is deprecated~~, only `readOnlyRender` is kept
+  - ~~`readOnlyItem` is deprecated~~, only `readOnlyRender` is kept
   - 5.1.0 `store.swapItemByPath` => `store.moveItemByPath`
   - 5.2.x Remove the old package and install the new version again, changed the second parameter of `store.addItemByIndex`, `store.addAfterByPath` and `store.addBeforeByPath`.
 - v4.x:
   v4.x and previous versions mostly adjust some method naming and parameter passing changes.
-  - Deprecate fixed container properties ~~`col`~~ and ~~`customInner`~, add custom containers `inside` and `outside`;
-  - ~~`widgets`~~ to `controls`, ~~`widget`~~ and ~~`widgetProps`~ to `type` and `props`;
+  - Deprecate fixed container properties ~~`col`~~ and ~~`customInner`~~, add custom containers `inside` and `outside`;
+  - ~~`widgets`~~ to `controls`, ~~`widget`~~ and ~~`widgetProps`~~ to `type` and `props`;
   - ~~`readOnlyWidget` to `readOnlyItem`;~~
   - Add registration for non-form controls: `components`;
 - v3.1.x:
   - Adjust the `layout` property of form fields, add `inline`, `labelWidth` properties
-  - ~~ Adjust `onPropertiesChange` of default export component to `onSchemaChange`~~
-  - ~~ Adjust `customChild` to `customInner`~~
+  - ~~Adjust `onPropertiesChange` of default export component to `onSchemaChange`~~
+  - ~~Adjust `customChild` to `customInner`~~
 - v3.0.x:
   - String expressions representing form values changed from ~~`$form`~~ to `$formvalues`.
   - Add `$store` to the string expression to represent an instance of `FormRenderStore`, which can get the form related methods and data.
   - If you need to introduce a built-in component (add/remove buttons for lists), you need to `import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
-  - ~~ remove the `dependencies` property ~~ and instead inject the form values `formvalues` to the widget component automatically.
-  - ~~ change api of `RenderFormChildren` component ~~
+  - ~~remove the `dependencies` property~~ and instead inject the form values `formvalues` to the widget component automatically.
+  - ~~change api of `RenderFormChildren` component~~
 - v1.x:
   - Change the method of the form control
-  - ~~ Change `component` and `props` in schema to `widget` and `widgetProps` ~~
-  - ~~ change `render` in schema to `readOnlyWidget` and `readOnlyRender` ~~
+  - ~~Change `component` and `props` in schema to `widget` and `widgetProps`~~
+  - ~~change `render` in schema to `readOnlyWidget` and `readOnlyRender`~~
   - Version matching react-easy-formcore version 1.1.x or higher
 
 # Default export component

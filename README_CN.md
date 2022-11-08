@@ -21,8 +21,8 @@
   - 5.2.x 删除旧包，再安装新版本的包，更改了`store.addItemByIndex`、`store.addAfterByPath`和`store.addBeforeByPath`的第二个参数。
 - v4.x:
   v4.x及之前的版本多数是调整一些方法命名和传参更改
-  - 废除固定容器属性~~`col`~~和~~`customInner`~~，增加自定义容器`inside`和`outside`;
-  - ~~`widgets`~~ 改为 `controls`, ~~`widget`~~和~~`widgetProps`~~改为`type`和`props`;
+  - 废除固定容器属性~~`col`和`customInner`~~，增加自定义容器`inside`和`outside`;
+  - ~~`widgets`~~ 改为 `controls`, ~~`widget`和`widgetProps`~~改为`type`和`props`;
   - ~~`readOnlyWidget` 改为 `readOnlyItem`;~~
   - 增加非表单控件的注册: `components`;
 - v3.1.x:
@@ -30,11 +30,11 @@
   - ~~调整默认导出组件的`onPropertiesChange`改为`onSchemaChange`~~
   - ~~调整`customChild`改为`customInner`~~
 - v3.0.x:
-  - 字符串表达式中表示表单值的字符由~~`$form`~~改为`$formvalues`.
+  - 字符串表达式中表示表单值的字符由~`$form`~改为`$formvalues`.
   - 字符串表达式中增加`$store`表示`FormRenderStore`的实例，可以获取表单的相关方法和数据.
   - 如果需要引入内置组件(列表的增删按钮), 则需要`import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
-  - ~~移除`dependencies`属性~~，改为给widget组件自动注入表单值`formvalues`.
+  - 移除~`dependencies`~属性，改为给widget组件自动注入表单值`formvalues`.
   - ~~更改`RenderFormChildren`组件的api~~
 - v1.x:
    - 更改表单控件的方法
