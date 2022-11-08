@@ -14,7 +14,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
   - The component is split into `Form` and `RenderFormChildren` components, the `Form` component handles the form values, the `RenderFormChildren` renders the form based on the information provided, a `Form` component can wrap multiple `RenderFormChildren` components, if multiple ` RenderFormChildren` components have the same properties as each other, the later will override the previous
   - ~~`schema`~~ properties are flattened, so you need to use `properties` to render the form instead, and ~~`onSchemaChange`~~ needs to be replaced with `onPropertiesChange`
 - v5.x:
-  This update completes the decoupling of the form display component from the form value related logic. api tend to be stable
+  This update completes the decoupling of the form display component from the form value related logic. basic version.
   - The underlying library `react-easy-formcore` is updated, you need to remove the old package and install the new version
   - ~~`readOnlyItem` is deprecated~~, only `readOnlyRender` is kept
   - 5.1.0 `store.swapItemByPath` => `store.moveItemByPath`

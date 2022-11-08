@@ -12,16 +12,16 @@
 - v6.x
   6.x在v5.x版本基础上有两大更新(文档已更新)：
   - 6.0.1版本: 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
-  - `schema`属性被展平，所以需要用`properties`来代替渲染表单，并且`onSchemaChange`也需要换成`onPropertiesChange`
+  - ~~`schema`~~ 属性被展平，所以需要用`properties`来代替渲染表单，并且 ~~`onSchemaChange`~~ 也需要换成`onPropertiesChange`
 - v5.x:
-  本次更新完成了表单的显示组件与表单值相关逻辑的解耦，api趋于稳定
+  本次更新完成了表单的显示组件与表单值相关逻辑的解耦，后续的基础版本。
   - 底层库`react-easy-formcore`更新，需要删除旧包，再安装新版本的包
   - ~~`readOnlyItem`废弃~~，只保留`readOnlyRender`
-  - 5.1.0 `store.swapItemByPath` => `store.moveItemByPath`
+  - 5.1.0 ~~`store.swapItemByPath`~~ => `store.moveItemByPath`
   - 5.2.x 删除旧包，再安装新版本的包，更改了`store.addItemByIndex`、`store.addAfterByPath`和`store.addBeforeByPath`的第二个参数。
 - v4.x:
   v4.x及之前的版本多数是调整一些方法命名和传参更改
-  - 废除固定容器属性~~`col`~~ 和 ~~`customInner`~~，增加自定义容器`inside`和`outside`;
+  - 废除固定容器属性 ~~`col`~~ 和 ~~`customInner`~~，增加自定义容器`inside`和`outside`;
   - ~~`widgets`~~ 改为 `controls`, ~~`widget`~~ 和 ~~`widgetProps`~~ 改为`type`和`props`;
   - ~~`readOnlyWidget` 改为 `readOnlyItem`;~~
   - 增加非表单控件的注册: `components`;
