@@ -22,6 +22,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     onPropertiesChange,
     renderItem,
     renderList,
+    inside,
     properties: propertiesProps,
     store
   } = props;
@@ -287,7 +288,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     return withInside(childs, inside, commonParams)
   }
 
-  return renderChildrenList(properties, undefined, { store: formRenderStore, form: form });
+  return renderChildrenList(properties, inside, { store: formRenderStore, form: form });
 }
 
 RenderFormChildren.displayName = 'Form.Children';

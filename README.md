@@ -8,6 +8,10 @@ English | [中文说明](./README_CN.md)
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
+- Component structure: default export component = combination of `Form` component and `RenderFormChildren` (`Form` component is responsible for the form values, `RenderFormChildren` component is responsible for the rendering of the form)
+- Component description: `properties` as properties for rendering forms, support for arrays, objects, nesting
+- Component rendering: a `Form` component can wrap multiple `RenderFormChildren` components
+
 # version log
 - v6.x
   6.x has two major updates from v5.x.
@@ -42,19 +46,6 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
   - ~~change `render` in schema to `readOnlyWidget` and `readOnlyRender`~~
   - Version matching react-easy-formcore version 1.1.x or higher
 
-# Default export component
-
-- The atomic components used in the form are fully decoupled from the form Engine, and can be replaced with any ui library component or other custom component with `value` (or set via `valueProp`) and `onChange` interface props before the form is used
-- Render the form through the `properties` attribute, It includes three parts: 1. the props of the outermost form container.2.the `FormFieldProps` corresponding to the fields are used to describe the properties of the form field. 3. `props` in FormFieldProps is used to describe the `controls` component
-- String expressions are fully supported for simple types of property fields in `properties`
-
-# Path rules involved in the form
-Forms are allowed to be nested, so they will involve finding a certain property. The paths follow certain rules
-
-for Example:
-- `a[0]` means the first option under the array `a`
-- `a[0]b` or `a[0].b` means the `b` attribute of the first option under the array `a`
-
 ## install
 
 ```bash
@@ -65,7 +56,7 @@ yarn add react-easy-formrender
 
 ## example
 
-1. First register the basic components(Take the `antd@4.20.2` UI library as an example)
+### 1.First register the basic components(Take the `antd@4.20.2` UI library as an example)
 ```javascript
 // register
 import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
@@ -109,7 +100,7 @@ export default function FormRender(props: RenderFormProps) {
   );
 }
 ```
-2. import registered components
+### 2.import registered components
 ```javascript
 import { Button } from 'antd';
 import React, { useState } from 'react';
@@ -318,8 +309,19 @@ export default function Demo(props) {
 }
 ```
 
-### RenderFormChildren or RenderForm's props
-- base Attributes：from `Form Props` in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+## API
+
+### Path rules involved in the form
+Forms are allowed to be nested, so they will involve finding a certain property. The paths follow certain rules
+
+for Example:
+- `a[0]` means the first option under the array `a`
+- `a[0]b` or `a[0].b` means the `b` attribute of the first option under the array `a`
+
+### Form Component
+来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+
+### RenderFormChildren's props
 - `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` Rendering json data in the form of a DSL for a form.
 - `watch`：can listen to changes in the value of any field, for example:
 ```javascript
@@ -347,15 +349,15 @@ const watch = {
 - `renderList`: function that provides custom rendering List.
 - `renderItem`: function that provides custom render field item.
 - `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
-- `form`: the `FormStore` class responsible for form values, created by `useFormStore()`, only `RenderForm` component need.
 - `store`: The form class responsible for rendering. Created with `useFormRenderStore()`.
 
 ### FormFieldProps
+Used to describe a form field
 1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$formvalues.xxx === xxx}}` means that a field value of the form is equal to a value, where `$formvalues` represents the form value object
 The full props are as follows：
 ```javascript
-export interface BaseFieldProps extends FormComponent {
+export interface BaseFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // ignore current form field
   fieldComponent?: FieldUnionType; // field display component
   inside?: FieldUnionType; // Form field component inner nested components
@@ -363,9 +365,6 @@ export interface BaseFieldProps extends FormComponent {
   readOnly?: boolean; // readonly？
   readOnlyRender?: FieldUnionType | ReactNode; // readonly display component
   typeRender?: any; // form field's control render
-}
-
-export interface FormFieldProps extends FormItemProps, BaseFieldProps {
   valueGetter?: string | ((...args: any[]) => any); // output getter
   valueSetter?: string | ((value: any) => any); // input setter
   properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // Nested form controls Nested objects when they are objects, or collections of arrays when they are array types

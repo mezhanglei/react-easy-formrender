@@ -4,9 +4,13 @@
 
 [![Version](https://img.shields.io/badge/version-6.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
-# 适用场景
+# 介绍
 
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成).
+
+- 组件结构：默认导出组件 = `Form`组件和`RenderFormChildren`的组合(`Form`组件负责表单的值，`RenderFormChildren`组件负责表单的渲染)
+- 组件描述：`properties`作为渲染表单的属性，支持数组，支持对象，支持嵌套
+- 组件渲染：一个`Form`组件可以支持多个`RenderFormChildren`组件在内部渲染
 
 # version log
 - v6.x
@@ -42,19 +46,6 @@
    - ~~更改schema中的`render`为`readOnlyWidget`和`readOnlyRender`~~
    - 版本匹配react-easy-formcore的1.1.x版本以上
 
-# 默认导出组件
-
-- 原子组件和表单引擎完全解耦，在使用表单前可以更换为任意具有`value`(或通过`valueProp`设置)和`onChange`接口`props`的ui库控件或自定义的其他控件
-- 通过`properties`属性渲染表单，主要分为三部分, 1. 最外层表单容器的props. 2. 字段对应的`FormFieldProps`用来描述表单域的属性. 3. FormFieldProps中的`props`用来描述`controls`组件
-- `properties`中关于表单域属性字段已全面支持字符串表达式
-
-# 表单的中涉及的path路径规则
-表单允许嵌套，所以表单中会涉及寻找某个属性。其路径遵循一定的规则
-
-举例：
-- `a[0]`表示数组a下面的第一个选项
-- `a[0]b`或`a[0].b`表示数组a下面的第一个选项的b属性
-
 ## 安装
 
 ```bash
@@ -65,7 +56,7 @@ yarn add react-easy-formrender
 
 ## 基本使用
 
-1. 首先注册基本组件(以antd@4.20.2组件库为例)
+### 1.首先注册基本组件(以antd@4.20.2组件库为例)
 ```javascript
 // register
 import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
@@ -109,7 +100,7 @@ export default function FormRender(props: RenderFormProps) {
   );
 }
 ```
-2. 引入第一步已经注册完的组件
+### 2. 引入第一步已经注册完的组件
 ```javascript
 import { Button } from 'antd';
 import React, { useState } from 'react';
@@ -253,7 +244,7 @@ export default function Demo5(props) {
 }
 ```
 
-### 多模块渲染
+### 3. 多模块渲染
   表单引擎还支持多个`RenderFormChildren`组件渲染，然后由`Form`组件统一处理表单值.
  - `useFormStore` hook: 给表单值的处理提供类的hook.
  - `useFormRenderStore` hook: 给表单的渲染提供类的hook，默认组件内自己提供，也可以外面props传递进去.
@@ -318,8 +309,19 @@ export default function Demo(props) {
 }
 ```
 
-### RenderFormChildren或默认导出组件RenderForm的props
-- 基础属性：继承[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form Props`.
+## API
+
+### 表单的中涉及的path路径规则
+表单允许嵌套，所以表单中会涉及寻找某个属性。其路径遵循一定的规则
+
+举例：
+- `a[0]`表示数组a下面的第一个选项
+- `a[0]b`或`a[0].b`表示数组a下面的第一个选项的b属性
+
+### Form组件
+来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+
+### RenderFormChildren's props
 - `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` 渲染表单的DSL形式的json数据
 - `watch`属性：可以监听任意字段的值的变化，例如：
 ```javascript
@@ -346,15 +348,15 @@ const watch = {
 - `renderList`：提供自定义渲染列表的函数.
 - `renderItem`：提供自定义渲染表单项的函数.
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
-- `form`: 负责表单值的`FormStore`类，通过`useFormStore()`创建, 必填。
 - `store`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
 
 ### 表单域属性(FormFieldProps)
+用来描述一个表单节点.
 1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
 2. 表单域的全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象
 完整属性类型如下：
 ```javascript
-export interface BaseFieldProps extends FormComponent {
+export interface BaseFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 忽略当前节点不会作为表单值
   fieldComponent?: FieldUnionType; // 表单域组件
   inside?: FieldUnionType; // 表单域组件内层嵌套组件
@@ -362,9 +364,6 @@ export interface BaseFieldProps extends FormComponent {
   readOnly?: boolean; // 只读模式
   readOnlyRender?: FieldUnionType | ReactNode; // 只读模式下的组件
   typeRender?: any; // 表单控件自定义渲染
-}
-
-export interface FormFieldProps extends FormItemProps, BaseFieldProps {
   valueGetter?: string | ((...args: any[]) => any); // 拦截输出项
   valueSetter?: string | ((value: any) => any); // 拦截输入项
   properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
@@ -372,7 +371,7 @@ export interface FormFieldProps extends FormItemProps, BaseFieldProps {
 ```
 
 ### 表单中的使用的组件描述
-  表单中使用的容器组件、表单控件、按钮，统一用同样的结构描述。
+  可以发现，表单中使用的容器组件、表单控件、按钮，统一用同样的结构描述。
 ```javascript
 // 组件描述基本属性
 export interface FormComponent {
