@@ -328,6 +328,7 @@ Forms are allowed to be nested, so they will involve finding a certain property.
 
 for Example:
 - `a[0]` means the first option under the array `a`
+- `a.b` denotes the `b` attribute of the `a` object
 - `a[0]b` or `a[0].b` means the `b` attribute of the first option under the array `a`
 
 ### Form Component
@@ -369,6 +370,17 @@ Used to describe a form field
 2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$formvalues.xxx === xxx}}` means that a field value of the form is equal to a value, where `$formvalues` represents the form value object, Similarly, `$store` means that `useFormRenderStore()` creates an instance, and `$form` means that `useFormStore()` creates an instance.
 The full props are as follows：
 ```javascript
+
+// Description of the component in the form
+export interface FormComponent {
+  type?: string; // String designator for the registered component
+  props?: { // The props passed to the component
+    [key: string]: any;
+    children?: any | Array<FormComponent> // Some fields are allowed to continue nesting
+  };
+  hidden?: string | boolean;
+}
+
 export interface BaseFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // ignore current form field
   fieldComponent?: FieldUnionType; // field display component
@@ -380,19 +392,6 @@ export interface BaseFieldProps extends FormItemProps, FormComponent {
   valueGetter?: string | ((...args: any[]) => any); // output getter
   valueSetter?: string | ((value: any) => any); // input setter
   properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // Nested form controls Nested objects when they are objects, or collections of arrays when they are array types
-}
-```
-
-### Description of the components used in the form
-  The container components, form controls and buttons used in the form are uniformly described in the same structure.
-```javascript
-interface FormComponent {
-  type?: string;
-  props?: {
-    [key: string]: any;
-    children?: any | Array<FormComponent>
-  };
-  hidden?: string | boolean;
 }
 ```
 

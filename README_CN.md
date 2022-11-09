@@ -328,6 +328,7 @@ export default function Demo(props) {
 
 举例：
 - `a[0]`表示数组a下面的第一个选项
+- `a.b` 表示a对象的b属性
 - `a[0]b`或`a[0].b`表示数组a下面的第一个选项的b属性
 
 ### Form组件
@@ -365,9 +366,19 @@ const watch = {
 ### 表单域属性(FormFieldProps)
 用来描述一个表单节点.
 1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
-2. 表单域的全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象。同理, `$store`表示`useFormRenderStore()`创建实例, `$form`表示`useFormStore()`创建的实例
+2. 表单域中字段全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象。同理, `$store`表示`useFormRenderStore()`创建实例, `$form`表示`useFormStore()`创建的实例
 完整属性类型如下：
 ```javascript
+// 表单中的组件描述
+export interface FormComponent {
+  type?: string; // 注册组件的字符串代号
+  props?: { // 传递给组件的props
+    [key: string]: any;
+    children?: any | Array<FormComponent> // 部分字段允许继续嵌套
+  };
+  hidden?: string | boolean;
+}
+
 export interface BaseFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 忽略当前节点不会作为表单值
   fieldComponent?: FieldUnionType; // 表单域组件
@@ -379,20 +390,6 @@ export interface BaseFieldProps extends FormItemProps, FormComponent {
   valueGetter?: string | ((...args: any[]) => any); // 拦截输出项
   valueSetter?: string | ((value: any) => any); // 拦截输入项
   properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
-}
-```
-
-### 表单中的使用的组件描述
-  可以发现，表单中使用的容器组件、表单控件、按钮，统一用同样的结构描述。
-```javascript
-// 组件描述基本属性
-export interface FormComponent {
-  type?: string;
-  props?: {
-    [key: string]: any;
-    children?: any | Array<FormComponent>
-  };
-  hidden?: string | boolean;
 }
 ```
 
