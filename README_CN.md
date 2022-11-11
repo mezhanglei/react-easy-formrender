@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.0.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -303,14 +303,14 @@ export default function Demo(props) {
           <RenderFormChildren
             // store={formRenderStore1}
             properties={properties1}
-            watch={watch} />
+          />
         </div>
         <div>
           <p>part2</p>
           <RenderFormChildren
             // store={formRenderStore2}
             properties={properties2}
-            watch={watch} />
+          />
         </div>
       </Form>
       <div style={{ marginLeft: '120px' }}>
