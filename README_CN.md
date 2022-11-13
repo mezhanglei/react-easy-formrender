@@ -62,6 +62,7 @@ yarn add react-easy-formrender
 import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
+import 'react-easy-formrender/lib/css/main.css'
 export * from 'react-easy-formrender';
 
 export const AntdBaseControls = {
