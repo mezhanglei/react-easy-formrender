@@ -13,7 +13,7 @@ export interface FormComponent {
   hidden?: string | boolean;
 }
 
-// 表单上的组件联合类型
+// 组件联合类型
 export type FieldUnionType = FormComponent | Array<FormComponent> | React.ComponentType<any> | Function
 
 export interface BaseFieldProps extends FormComponent {
@@ -46,7 +46,7 @@ export interface BaseRenderProps {
   inside?: FieldUnionType;
   // 自定义渲染列表组件
   renderList?: (params: GeneratePrams<any>) => any;
-  // 自定义渲染子元素
+  // 自定义渲染子表单域
   renderItem?: (params: GeneratePrams<any>) => any;
 }
 
@@ -66,4 +66,11 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
 
 export type ValueOf<T> = T[keyof T];
 // 组件公共的参数
-export interface GeneratePrams<T = FormFieldProps> { name?: string | number; field?: T; parent?: string; store?: FormRenderStore; form: FormStore; children?: any };
+export interface GeneratePrams<T = FormFieldProps> {
+  name?: string | number;
+  field?: T;
+  parent?: string;
+  store?: FormRenderStore;
+  form: FormStore;
+  children?: any
+};

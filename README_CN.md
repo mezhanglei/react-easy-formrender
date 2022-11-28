@@ -377,8 +377,11 @@ export interface FormComponent {
     [key: string]: any;
     children?: any | Array<FormComponent> // 部分字段允许继续嵌套
   };
-  hidden?: string | boolean;
+  hidden?: string | boolean; // 支持字符串表达式或者布尔值
 }
+
+// 组件联合类型
+export type FieldUnionType = FormComponent | Array<FormComponent> | React.ComponentType<any> | Function
 
 export interface BaseFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 忽略当前节点不会作为表单值

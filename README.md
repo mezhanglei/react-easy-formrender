@@ -379,8 +379,11 @@ export interface FormComponent {
     [key: string]: any;
     children?: any | Array<FormComponent> // Some fields are allowed to continue nesting
   };
-  hidden?: string | boolean;
+  hidden?: string | boolean; // Support string expressions or boolean values
 }
+
+// Component union type
+export type FieldUnionType = FormComponent | Array<FormComponent> | React.ComponentType<any> | Function
 
 export interface BaseFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // ignore current form field
