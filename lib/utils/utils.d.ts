@@ -1,10 +1,11 @@
 import { FormFieldProps, PropertiesData } from "../types";
 export declare const getPathEnd: (path: string) => string | undefined;
 export declare const getParent: (path: string) => string | undefined;
-export declare const endIsListItem: (path: string) => boolean | undefined;
+export declare const endIsListItem: (path?: string) => boolean | undefined;
 export declare const isPathEnd: (path: string, name: string) => boolean | undefined;
 export declare const changePathEnd: (oldPath: string, endName: string | number) => string | undefined;
 export declare const getPathEndIndex: (path: string, properties?: PropertiesData) => number;
+export declare const getEndIndex: (end?: string, properties?: PropertiesData, parentPath?: string) => number;
 export declare const updateItemByPath: (properties: PropertiesData, pathStr: string, data?: Partial<FormFieldProps>) => PropertiesData;
 export declare const setItemByPath: (properties: PropertiesData, pathStr: string, data?: Partial<FormFieldProps>) => PropertiesData;
 export declare const getItemByPath: (properties?: PropertiesData, pathStr?: string) => any;
