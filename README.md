@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.1.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.1.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -333,7 +333,7 @@ for Example:
 - `a[0]b` or `a[0].b` means the `b` attribute of the first option under the array `a`
 
 ### Form Component
-来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
 ### RenderFormChildren's props
 - `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` Rendering json data in the form of a DSL for a form.
@@ -385,7 +385,7 @@ export interface FormComponent {
 // Component union type
 export type FieldUnionType = FormComponent | Array<FormComponent> | React.ComponentType<any> | Function
 
-export interface BaseFieldProps extends FormItemProps, FormComponent {
+export interface FormFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // ignore current form field
   fieldComponent?: FieldUnionType; // field display component
   inside?: FieldUnionType; // Form field component inner nested components

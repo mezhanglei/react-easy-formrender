@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.1.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.1.2-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -383,7 +383,7 @@ export interface FormComponent {
 // 组件联合类型
 export type FieldUnionType = FormComponent | Array<FormComponent> | React.ComponentType<any> | Function
 
-export interface BaseFieldProps extends FormItemProps, FormComponent {
+export interface FormFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 忽略当前节点不会作为表单值
   fieldComponent?: FieldUnionType; // 表单域组件
   inside?: FieldUnionType; // 表单域组件内层嵌套组件

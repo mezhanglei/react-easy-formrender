@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColProps, RowProps } from "react-flexbox-grid";
+import { ColProps, RowProps } from "antd";
 import { GeneratePrams } from '../types';
 import './grid.less';
 export interface FromColProps extends ColProps {
@@ -10,21 +10,20 @@ export interface FromColProps extends ColProps {
     lg?: number;
 }
 export declare const getColProps: (props: FromColProps, inline?: boolean) => {
-    xl?: import("react-flexbox-grid").ColumnSizeType | undefined;
-    xsOffset?: number | undefined;
-    smOffset?: number | undefined;
-    mdOffset?: number | undefined;
-    lgOffset?: number | undefined;
-    xlOffset?: number | undefined;
-    first?: import("react-flexbox-grid").ViewportSizeType | undefined;
-    last?: import("react-flexbox-grid").ViewportSizeType | undefined;
-    className?: string | undefined;
-    tagName?: string | undefined;
+    flex?: (string | number) | undefined;
+    order?: (string | number) | undefined;
+    offset?: (string | number) | undefined;
+    push?: (string | number) | undefined;
+    pull?: (string | number) | undefined;
+    xl?: (string | number) | import("antd/lib/grid").ColSize | undefined;
+    xxl?: (string | number) | import("antd/lib/grid").ColSize | undefined;
+    prefixCls?: string | undefined;
     defaultChecked?: boolean | undefined;
     defaultValue?: string | number | readonly string[] | undefined;
     suppressContentEditableWarning?: boolean | undefined;
     suppressHydrationWarning?: boolean | undefined;
     accessKey?: string | undefined;
+    className?: string | undefined;
     contentEditable?: (boolean | "true" | "false") | "inherit" | undefined;
     contextMenu?: string | undefined;
     dir?: string | undefined;
