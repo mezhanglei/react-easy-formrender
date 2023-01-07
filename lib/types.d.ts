@@ -8,7 +8,8 @@ export interface FormComponent {
     children?: any | Array<FormComponent>;
     hidden?: string | boolean;
 }
-export declare type FieldUnionType = FormComponent | Array<FormComponent> | React.ComponentType<any> | Function;
+export declare type UnionComponent<P> = React.ComponentType<P> | React.ForwardRefExoticComponent<P> | React.FC<P> | keyof React.ReactHTML;
+export declare type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function;
 export interface BaseFieldProps extends FormComponent {
     ignore?: boolean;
     fieldComponent?: FieldUnionType;
