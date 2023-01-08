@@ -364,6 +364,7 @@ const watch = {
 - `renderItem`: function that provides custom render field item.
 - `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
 - `store`: The form class responsible for rendering. Created with `useFormRenderStore()`.
+- `uneval`: Do not execute string expressions in the form.
 
 ### FormFieldProps
 Used to describe a form field
@@ -383,7 +384,12 @@ export interface FormComponent {
 }
 
 // Component union type
-export type FieldUnionType = FormComponent | Array<FormComponent> | React.ComponentType<any> | Function
+export type UnionComponent<P> =
+  | React.ComponentType<P>
+  | React.ForwardRefExoticComponent<P>
+  | React.FC<P>
+  | keyof React.ReactHTML;
+export type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function
 
 export interface FormFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // ignore current form field

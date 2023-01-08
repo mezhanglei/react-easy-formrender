@@ -363,6 +363,7 @@ const watch = {
 - `renderItem`：提供自定义渲染表单项的函数.
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
 - `store`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
+- `uneval`: 不执行表单中的字符串表达式.
 
 ### 表单域属性(FormFieldProps)
 用来描述一个表单节点.
@@ -380,8 +381,13 @@ export interface FormComponent {
   hidden?: string | boolean; // 支持字符串表达式或者布尔值
 }
 
-// 组件联合类型
-export type FieldUnionType = FormComponent | Array<FormComponent> | React.ComponentType<any> | Function
+// 表单上的组件联合类型
+export type UnionComponent<P> =
+  | React.ComponentType<P>
+  | React.ForwardRefExoticComponent<P>
+  | React.FC<P>
+  | keyof React.ReactHTML;
+export type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function
 
 export interface FormFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 忽略当前节点不会作为表单值
