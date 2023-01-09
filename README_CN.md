@@ -8,9 +8,9 @@
 
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成).
 
-- 组件结构：默认导出组件 = `Form`组件和`RenderFormChildren`的组合(`Form`组件负责表单的值，`RenderFormChildren`组件负责表单的渲染)
-- 组件描述：`properties`作为渲染表单的属性，支持数组，支持对象，支持嵌套
-- 组件渲染：一个`Form`组件可以支持多个`RenderFormChildren`组件在内部渲染
+- 组件结构：`Form`组件和`RenderFormChildren`(`Form`组件负责表单的值，`RenderFormChildren`组件负责表单的渲染).
+- 组件描述：`properties`作为渲染表单的属性，支持数组，支持对象，支持嵌套, `properties`中的每个节点包含表单域属性的配置以及表单控件的配置(`type`, `props`和`typeRender`).
+- 组件渲染：一个`Form`组件可以支持多个`RenderFormChildren`组件在内部渲染.
 
 # version log
 - v6.x
@@ -122,10 +122,10 @@ export default function Demo5(props) {
 
   const [properties, setProperties] = useState({
       name1: {
-        label: "只读展示",
+        label: "readonly",
         required: true,
         readOnly: true,
-        readOnlyRender: "只读展示组件",
+        readOnlyRender: "readonly component",
         initialValue: 1111,
         // outside: { type: 'col', props: { span: 6 } },
         hidden: '{{$formvalues.name6 == true}}',
@@ -133,57 +133,57 @@ export default function Demo5(props) {
         props: {}
       },
       name2: {
-        label: "输入框",
+        label: "input",
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
-        rules: [{ required: true, message: 'name2空了' }],
+        rules: [{ required: true, message: 'input empty' }],
         initialValue: 1,
         hidden: '{{$formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
       name3: {
-        label: "数组name3",
+        label: "list",
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: [{
           required: true,
-          rules: [{ required: true, message: 'name3[0]空了' }],
-          initialValue: { label: '选项1', value: '1', key: '1' },
+          rules: [{ required: true, message: 'list[0]空了' }],
+          initialValue: { label: 'option1', value: '1', key: '1' },
           type: 'Select',
           props: {
             labelInValue: true,
             style: { width: '100%' },
             children: [
-              { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
-              { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
+              { type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } },
+              { type: 'Select.Option', props: { key: 2, value: '2', children: 'option2' } }
             ]
           }
         }, {
           required: true,
-          rules: [{ required: true, message: 'name3[1]空了' }],
+          rules: [{ required: true, message: 'list[1] empty' }],
           type: 'Select',
           props: {
             labelInValue: true,
             style: { width: '100%' },
             children: [
-              { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
-              { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
+              { type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } },
+              { type: 'Select.Option', props: { key: 2, value: '2', children: 'option2' } }
             ]
           }
         }]
       },
       name4: {
-        label: '对象嵌套',
+        label: 'object',
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: {
           first: {
-            rules: [{ required: true, message: 'name4空了' }],
+            rules: [{ required: true, message: 'object empty' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
-              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
+              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
             }
           },
           second: {
@@ -191,7 +191,7 @@ export default function Demo5(props) {
             type: 'Select',
             props: {
               style: { width: '100%' },
-              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
+              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
             }
           }
         }
@@ -205,23 +205,23 @@ export default function Demo5(props) {
         props: {
           style: { width: '100%' },
           children: [
-            { type: 'Select.Option', props: { key: 1, value: 12, children: '一行一列' } },
-            { type: 'Select.Option', props: { key: 2, value: 6, children: '一行二列' } },
-            { type: 'Select.Option', props: { key: 3, value: 4, children: '一行三列' } }
+            { type: 'Select.Option', props: { key: 1, value: 12, children: 'option1' } },
+            { type: 'Select.Option', props: { key: 2, value: 6, children: 'option2' } },
+            { type: 'Select.Option', props: { key: 3, value: 4, children: 'option3' } }
           ]
         }
       },
       name6: {
-        label: 'name6',
+        label: 'checkbox',
         required: true,
         valueProp: 'checked',
         // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
-        rules: [{ required: true, message: 'name5空了' }],
+        rules: [{ required: true, message: 'checkbox empty' }],
         type: 'Checkbox',
         props: {
           style: { width: '100%' },
-          children: '多选框'
+          children: 'option'
         }
       },
     })
@@ -267,7 +267,6 @@ export default function Demo(props) {
       outside: { type: 'col', props: { span: 6 } },
       rules: [{ required: true, message: 'name1空了' }],
       initialValue: 1,
-      hidden: '{{$formvalues.name6 == true}}',
       type: 'Input',
       props: {}
     },
@@ -280,7 +279,6 @@ export default function Demo(props) {
       outside: { type: 'col', props: { span: 6 } },
       rules: [{ required: true, message: 'name1空了' }],
       initialValue: 1,
-      hidden: '{{$formvalues.name6 == true}}',
       type: 'Input',
       props: {}
     },
@@ -339,7 +337,7 @@ export default function Demo(props) {
 - `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` 渲染表单的DSL形式的json数据
 - `watch`属性：可以监听任意字段的值的变化，例如：
 ```javascript
-// 声明式传值
+
 const watch = {
   'name1': (newValue, oldValue) => {
     // console.log(newValue, oldValue)
@@ -421,5 +419,5 @@ export interface FormFieldProps extends FormItemProps, FormComponent {
 
 ### Hooks
 
-- `useFormRenderStore()` 使用 hooks 创建 FormRenderStore。
-- `useFormStore(defaultValues)` 使用 hooks 创建 FormStore。
+- `useFormRenderStore()` 使用 hooks 创建 FormRenderStore.
+- `useFormStore(defaultValues)` 使用 hooks 创建 FormStore.

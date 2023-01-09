@@ -8,9 +8,9 @@ English | [中文说明](./README_CN.md)
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
-- Component structure: default export component = combination of `Form` component and `RenderFormChildren` (`Form` component is responsible for the form values, `RenderFormChildren` component is responsible for the rendering of the form)
-- Component description: `properties` as properties for rendering forms, support for arrays, objects, nesting
-- Component rendering: a `Form` component can wrap multiple `RenderFormChildren` components
+- Component structure: `Form` component and `RenderFormChildren` (`Form` component is responsible for the value of the form, `RenderFormChildren` component is responsible for the rendering of the form)
+- Component description: `properties` as properties for rendering forms, supporting arrays, objects and nesting, each node in `properties` contains the configuration of the form field properties and the configuration of the form controls (`type`, `props` and `typeRender`)
+- Component rendering: a `Form` component can support multiple `RenderFormChildren` components rendering internally
 
 # version log
 - v6.x
@@ -122,10 +122,10 @@ export default function Demo5(props) {
 
   const [properties, setProperties] = useState({
       name1: {
-        label: "只读展示",
+        label: "readonly",
         required: true,
         readOnly: true,
-        readOnlyRender: "只读展示组件",
+        readOnlyRender: "readonly component",
         initialValue: 1111,
         // outside: { type: 'col', props: { span: 6 } },
         hidden: '{{$formvalues.name6 == true}}',
@@ -133,57 +133,57 @@ export default function Demo5(props) {
         props: {}
       },
       name2: {
-        label: "输入框",
+        label: "input",
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
-        rules: [{ required: true, message: 'name2空了' }],
+        rules: [{ required: true, message: 'input empty' }],
         initialValue: 1,
         hidden: '{{$formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
       name3: {
-        label: "数组name3",
+        label: "list",
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: [{
           required: true,
-          rules: [{ required: true, message: 'name3[0]空了' }],
-          initialValue: { label: '选项1', value: '1', key: '1' },
+          rules: [{ required: true, message: 'list[0]空了' }],
+          initialValue: { label: 'option1', value: '1', key: '1' },
           type: 'Select',
           props: {
             labelInValue: true,
             style: { width: '100%' },
             children: [
-              { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
-              { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
+              { type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } },
+              { type: 'Select.Option', props: { key: 2, value: '2', children: 'option2' } }
             ]
           }
         }, {
           required: true,
-          rules: [{ required: true, message: 'name3[1]空了' }],
+          rules: [{ required: true, message: 'list[1] empty' }],
           type: 'Select',
           props: {
             labelInValue: true,
             style: { width: '100%' },
             children: [
-              { type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } },
-              { type: 'Select.Option', props: { key: 2, value: '2', children: '选项2' } }
+              { type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } },
+              { type: 'Select.Option', props: { key: 2, value: '2', children: 'option2' } }
             ]
           }
         }]
       },
       name4: {
-        label: '对象嵌套',
+        label: 'object',
         required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: {
           first: {
-            rules: [{ required: true, message: 'name4空了' }],
+            rules: [{ required: true, message: 'object empty' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
-              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
+              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
             }
           },
           second: {
@@ -191,7 +191,7 @@ export default function Demo5(props) {
             type: 'Select',
             props: {
               style: { width: '100%' },
-              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: '选项1' } }]
+              children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
             }
           }
         }
@@ -205,23 +205,23 @@ export default function Demo5(props) {
         props: {
           style: { width: '100%' },
           children: [
-            { type: 'Select.Option', props: { key: 1, value: 12, children: '一行一列' } },
-            { type: 'Select.Option', props: { key: 2, value: 6, children: '一行二列' } },
-            { type: 'Select.Option', props: { key: 3, value: 4, children: '一行三列' } }
+            { type: 'Select.Option', props: { key: 1, value: 12, children: 'option1' } },
+            { type: 'Select.Option', props: { key: 2, value: 6, children: 'option2' } },
+            { type: 'Select.Option', props: { key: 3, value: 4, children: 'option3' } }
           ]
         }
       },
       name6: {
-        label: 'name6',
+        label: 'checkbox',
         required: true,
         valueProp: 'checked',
         // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
-        rules: [{ required: true, message: 'name5空了' }],
+        rules: [{ required: true, message: 'checkbox empty' }],
         type: 'Checkbox',
         props: {
           style: { width: '100%' },
-          children: '多选框'
+          children: 'option'
         }
       },
     })
@@ -265,9 +265,8 @@ export default function Demo(props) {
       label: "part1input",
       required: true,
       outside: { type: 'col', props: { span: 6 } },
-      rules: [{ required: true, message: 'name1空了' }],
+      rules: [{ required: true, message: 'empty' }],
       initialValue: 1,
-      hidden: '{{$formvalues.name6 == true}}',
       type: 'Input',
       props: {}
     },
@@ -278,9 +277,8 @@ export default function Demo(props) {
       label: "part2input",
       required: true,
       outside: { type: 'col', props: { span: 6 } },
-      rules: [{ required: true, message: 'name1空了' }],
+      rules: [{ required: true, message: 'empty' }],
       initialValue: 1,
-      hidden: '{{$formvalues.name6 == true}}',
       type: 'Input',
       props: {}
     },
@@ -340,7 +338,6 @@ from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 - `watch`：can listen to changes in the value of any field, for example:
 ```javascript
 
-// 声明式传值
 const watch = {
   'name1': (newValue, oldValue) => {
     // console.log(newValue, oldValue)
@@ -423,5 +420,5 @@ The `rules` rules in the form control are derived from the `rules` property in [
 
 ### Hooks
 
-- `useFormRenderStore()` create FormRenderStore by hook。
-- `useFormStore(defaultValues)` create FormStore by hook。
+- `useFormRenderStore()` create FormRenderStore by hook.
+- `useFormStore(defaultValues)` create FormStore by hook.
