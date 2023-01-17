@@ -8,7 +8,7 @@ import { isReactComponent, isValidElement } from './utils/ReactIs';
 import 'react-easy-formcore/lib/css/main.css';
 import './iconfont/iconfont.css';
 
-// 不带Form容器的组件
+// 表单元素渲染
 export default function RenderFormChildren(props: RenderFormChildrenProps) {
 
   const options = useContext(FormOptionsContext);
@@ -223,7 +223,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     const { readOnly, readOnlyRender, hidden, props, type, typeRender, properties, footer, suffix, fieldComponent, inside, outside, ...restField } = field;
     if (!field) return;
 
-    const commonParams = { name, field, parent, form: form, store: formRenderStore }; // 公共参数
+    const commonParams = { name, field: { ...options, ...field }, parent, form: form, store: formRenderStore }; // 公共参数
     const footerInstance = createInstance(footer, mergeComponents, commonParams);
     const suffixInstance = createInstance(suffix, mergeComponents, commonParams);
     const fieldComponentParse = componentParse(fieldComponent, mergeComponents);
@@ -240,11 +240,11 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     }
     // 表单域组件
     const FormField = properties instanceof Array ? Form.List : Form.Item;
-    // 表单域子元素
+    // 控件元素
     const formItemChild = createInstance(typeRender || { type, props }, controls, commonParams)
     // 只读显示
     const readOnlyChild = createInstance(readOnlyRender, controls, commonParams)
-    // 表单控件
+    // 表单域包裹目标
     const fieldChild = readOnly === true ? readOnlyChild : formItemChild;
     // 容器传参
     const containerProps = { key: name, ...commonParams };
@@ -257,11 +257,9 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     }
 
     const result = (
-      FormField ?
-        <FormField {...fieldProps}>
-          {fieldChildren}
-        </FormField>
-        : fieldChildren
+      <FormField {...fieldProps}>
+        {fieldChildren}
+      </FormField>
     );
     return withSide(result, outside, renderItem, containerProps)
   }
@@ -273,14 +271,14 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     const childs = Object.entries(properties || {})?.map(([key, formField], index: number) => {
       const childName = formatName(key, properties instanceof Array);
       if (typeof childName === 'string' || typeof childName === 'number') {
-        const childPath = getCurrentPath(childName, currentPath)
+        const childPath = getCurrentPath(childName, currentPath);
         const childField = showCalcFieldProps(formField, childPath);
         if (childField) {
           childField['index'] = index;
         }
         return generateChild(childName, childField, currentPath);
       }
-    })
+    });
     return withSide(childs, inside, renderList, commonParams)
   }
 

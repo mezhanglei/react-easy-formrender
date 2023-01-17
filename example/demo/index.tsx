@@ -53,6 +53,7 @@ export default function Demo(props) {
     name3: {
       label: "list",
       required: true,
+      tooltip: '111',
       // outside: { type: 'col', props: { span: 6 } },
       properties: [{
         required: true,
