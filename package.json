@@ -1,6 +1,6 @@
 {
   "name": "react-easy-formrender",
-  "version": "6.1.4",
+  "version": "6.2.0",
   "description": "优秀的动态表单解决方案",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
@@ -73,6 +73,8 @@
     "style-loader": "^3.3.1",
     "stylelint": "^14.7.1",
     "stylelint-webpack-plugin": "^3.2.0",
+    "svg-sprite-loader": "^6.0.11",
+    "svgo-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.1",
     "thread-loader": "^3.0.4",
     "typescript": "^4.4.4",
@@ -90,7 +92,7 @@
     "history": "^5.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-easy-formcore": "^3.1.4",
+    "react-easy-formcore": "^4.0.0",
     "react-fast-compare": "^3.2.0",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^5.2.0"

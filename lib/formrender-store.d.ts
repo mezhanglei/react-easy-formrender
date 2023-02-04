@@ -8,12 +8,12 @@ export declare class FormRenderStore {
     constructor();
     getProperties(): PropertiesData;
     setProperties(data?: PropertiesData): void;
-    updateItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
-    setItemByPath: (path: string, data?: Partial<FormFieldProps>) => void;
-    updateNameByPath: (path: string, newName?: string) => void;
+    updateItemByPath: (path?: string, data?: Partial<FormFieldProps>) => void;
+    setItemByPath: (path?: string, data?: Partial<FormFieldProps>) => void;
+    updateNameByPath: (path?: string, newName?: string) => void;
     addItemByIndex: (data: FormFieldProps | FormFieldProps[], index?: number, parent?: string) => void;
-    delItemByPath: (path: string) => void;
-    getItemByPath: (path: string) => any;
+    delItemByPath: (path?: string) => void;
+    getItemByPath: (path?: string) => any;
     moveItemByPath: (from: {
         parent?: string;
         index: number;
@@ -23,6 +23,6 @@ export declare class FormRenderStore {
     }) => void;
     subscribeProperties(listener: FormRenderListener): () => void;
     private notifyProperties;
-    addAfterByPath: (data: FormFieldProps | FormFieldProps[], path: string) => void;
-    addBeforeByPath: (data: FormFieldProps | FormFieldProps[], path: string) => void;
+    addAfterByPath: (data: FormFieldProps | FormFieldProps[], path?: string) => void;
+    addBeforeByPath: (data: FormFieldProps | FormFieldProps[], path?: string) => void;
 }

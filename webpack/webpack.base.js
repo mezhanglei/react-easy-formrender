@@ -58,7 +58,7 @@ module.exports = {
       type: 'umd', // 这将在所有模块定义下暴露你的库, 允许它与 CommonJS、AMD 和作为全局变量工作
     }
   },
-  externals: isDev ? undefined :[nodeExternals()],
+  externals: isDev ? undefined : [nodeExternals()],
   resolve: {
     // 后缀，引入时可以默认不写
     extensions: [".ts", ".tsx", ".js", "jsx", ".json", ".less"],
@@ -145,7 +145,7 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|gif|jpeg|ico)$/i,
-        exclude: nodeModulesRegex,
+        exclude: [nodeModulesRegex, paths.iconsPath],
         type: "asset",
         parser: {
           dataUrlCondition: {
@@ -156,6 +156,18 @@ module.exports = {
         generator: {
           filename: "img/[name].[ext]"
         }
+      },
+      {
+        test: /\.svg$/,
+        include: paths.iconsPath,
+        use: [
+          { loader: 'svg-sprite-loader' },
+          {
+            loader: 'svgo-loader', options: {
+              plugins: [{ name: "removeAttrs", params: { attrs: 'fill' } }]
+            }
+          },
+        ],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
