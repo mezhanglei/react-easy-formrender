@@ -1,4 +1,5 @@
 import { FormFieldProps, PropertiesData } from "../types";
+export declare const matchExpression: (value?: any) => string | undefined;
 export declare const getPathEnd: (path?: string) => string | undefined;
 export declare const getParent: (path?: string) => string | undefined;
 export declare const endIsListItem: (path?: string) => boolean | undefined;
