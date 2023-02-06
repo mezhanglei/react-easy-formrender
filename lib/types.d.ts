@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { FormItemProps, FormProps, FormStore } from "react-easy-formcore";
+import { FormItemProps, FormProps, FormRule, FormStore } from "react-easy-formcore";
 import { FormRenderStore } from "./formrender-store";
 declare type Overwrite<T, U> = Omit<T, keyof U> & U;
 export interface FormComponent {
@@ -10,7 +10,7 @@ export interface FormComponent {
 }
 export declare type UnionComponent<P> = React.ComponentType<P> | React.ForwardRefExoticComponent<P> | React.FC<P> | keyof React.ReactHTML;
 export declare type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function;
-export interface BaseFieldProps extends FormComponent {
+export interface GenerateFieldProps extends FormComponent, FormItemProps {
     ignore?: boolean;
     fieldComponent?: FieldUnionType;
     inside?: FieldUnionType;
@@ -18,17 +18,16 @@ export interface BaseFieldProps extends FormComponent {
     readOnly?: boolean;
     readOnlyRender?: FieldUnionType | ReactNode;
     typeRender?: any;
+    properties?: PropertiesData;
 }
 export declare type PropertiesData = {
     [name: string]: FormFieldProps;
 } | FormFieldProps[];
-export interface FormFieldProps extends Overwrite<FormItemProps, {
-    valueGetter?: string | ((...args: any[]) => any) | any;
-    valueSetter?: string | ((value: any) => any) | any;
-    rules?: any;
-}>, BaseFieldProps {
-    properties?: PropertiesData;
-}
+export declare type FormFieldProps = GenerateFieldProps & {
+    [key in keyof Omit<GenerateFieldProps, 'properties'>]: key extends 'rules' ? (string | Array<{
+        [key in keyof FormRule]: FormRule[key] | string;
+    }> | GenerateFieldProps[key]) : (string | GenerateFieldProps[key]);
+};
 export declare type WatchHandler = (newValue: any, oldValue: any) => void;
 export interface BaseRenderProps {
     uneval?: boolean;
@@ -57,7 +56,7 @@ export interface RenderFormChildrenProps extends BaseRenderProps {
     store?: FormRenderStore;
 }
 export declare type ValueOf<T> = T[keyof T];
-export interface GeneratePrams<T = FormFieldProps> {
+export interface GeneratePrams<T = GenerateFieldProps> {
     name?: string | number;
     field?: T;
     parent?: string;

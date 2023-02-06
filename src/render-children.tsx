@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FormFieldProps, RenderFormChildrenProps, GeneratePrams, FieldUnionType, FormComponent, PropertiesData } from './types';
+import { FormFieldProps, RenderFormChildrenProps, GeneratePrams, FieldUnionType, FormComponent, PropertiesData, GenerateFieldProps } from './types';
 import { defaultComponents } from './components';
 import { Form, formatName, FormOptionsContext, FormStore, FormStoreContext, joinPath, ItemCoreProps, FormRule } from 'react-easy-formcore';
 import { useFormRenderStore } from './formrender-store';
@@ -120,7 +120,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     }
   }
 
-  // 递归遍历表单域的属性
+  // 递归遍历处理表单域的字符串表达式并存储解析后的信息
   const handleFieldProps = () => {
     const fieldPropsMap = {};
     // 遍历处理对象树中的非properties字段
@@ -166,7 +166,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     setFieldPropsMap(fieldPropsMap);
   }
 
-  // 获取计算完表达式之后的结果
+  // 获取计算表达式之后的结果
   const getEvalFieldProps = (field: FormFieldProps, path?: string) => {
     return Object.fromEntries(
       Object.entries(field || {})?.map(
@@ -253,7 +253,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   // 生成子元素
-  const generateChild = (name: string | number, field: FormFieldProps, parent?: string, formparent?: string) => {
+  const generateChild = (name: string | number, field: GenerateFieldProps, parent?: string, formparent?: string) => {
     if (field?.hidden === true) {
       return;
     }

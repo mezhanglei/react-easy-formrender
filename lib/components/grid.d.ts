@@ -24,7 +24,7 @@ export declare const getColProps: (props: FromColProps, inline?: boolean) => {
     suppressHydrationWarning?: boolean | undefined;
     accessKey?: string | undefined;
     className?: string | undefined;
-    contentEditable?: (boolean | "true" | "false") | "inherit" | undefined;
+    contentEditable?: "inherit" | (boolean | "true" | "false") | undefined;
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
