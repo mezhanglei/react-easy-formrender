@@ -25,6 +25,7 @@ export declare type PropertiesData = {
 export interface FormFieldProps extends Overwrite<FormItemProps, {
     valueGetter?: string | ((...args: any[]) => any) | any;
     valueSetter?: string | ((value: any) => any) | any;
+    rules?: any;
 }>, BaseFieldProps {
     properties?: PropertiesData;
 }

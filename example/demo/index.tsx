@@ -31,7 +31,6 @@ export default function Demo(props) {
   const [properties, setProperties] = useState({
     name1: {
       label: "readonly",
-      required: true,
       readOnly: true,
       readOnlyRender: "readonly component",
       initialValue: 1111,
@@ -42,7 +41,6 @@ export default function Demo(props) {
     },
     name2: {
       label: "input",
-      required: true,
       // outside: { type: 'col', props: { span: 6 } },
       rules: [{ required: true, message: 'input empty' }],
       initialValue: 1,
@@ -52,11 +50,9 @@ export default function Demo(props) {
     },
     name3: {
       label: "list",
-      required: true,
       tooltip: '111',
       // outside: { type: 'col', props: { span: 6 } },
       properties: [{
-        required: true,
         rules: [{ required: true, message: 'list[0]空了' }],
         initialValue: { label: 'option1', value: '1', key: '1' },
         type: 'Select',
@@ -69,7 +65,6 @@ export default function Demo(props) {
           ]
         }
       }, {
-        required: true,
         rules: [{ required: true, message: 'list[1] empty' }],
         type: 'Select',
         props: {
@@ -84,7 +79,6 @@ export default function Demo(props) {
     },
     name4: {
       label: 'object',
-      required: true,
       // outside: { type: 'col', props: { span: 6 } },
       properties: {
         first: {
@@ -122,7 +116,6 @@ export default function Demo(props) {
     },
     name6: {
       label: 'checkbox',
-      required: true,
       valueProp: 'checked',
       // outside: { type: 'col', props: { span: 6 } },
       initialValue: true,

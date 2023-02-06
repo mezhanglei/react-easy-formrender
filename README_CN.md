@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.2.2-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.3-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -124,7 +124,6 @@ export default function Demo5(props) {
   const [properties, setProperties] = useState({
       name1: {
         label: "readonly",
-        required: true,
         readOnly: true,
         readOnlyRender: "readonly component",
         initialValue: 1111,
@@ -135,7 +134,6 @@ export default function Demo5(props) {
       },
       name2: {
         label: "input",
-        required: true,
         // outside: { type: 'col', props: { span: 6 } },
         rules: [{ required: true, message: 'input empty' }],
         initialValue: 1,
@@ -145,10 +143,8 @@ export default function Demo5(props) {
       },
       name3: {
         label: "list",
-        required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: [{
-          required: true,
           rules: [{ required: true, message: 'list[0]空了' }],
           initialValue: { label: 'option1', value: '1', key: '1' },
           type: 'Select',
@@ -161,7 +157,6 @@ export default function Demo5(props) {
             ]
           }
         }, {
-          required: true,
           rules: [{ required: true, message: 'list[1] empty' }],
           type: 'Select',
           props: {
@@ -176,7 +171,6 @@ export default function Demo5(props) {
       },
       name4: {
         label: 'object',
-        required: true,
         // outside: { type: 'col', props: { span: 6 } },
         properties: {
           first: {
@@ -214,7 +208,6 @@ export default function Demo5(props) {
       },
       name6: {
         label: 'checkbox',
-        required: true,
         valueProp: 'checked',
         // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
@@ -264,7 +257,6 @@ export default function Demo(props) {
   const [properties1, setProperties1] = useState({
     part1: {
       label: "part1input",
-      required: true,
       outside: { type: 'col', props: { span: 6 } },
       rules: [{ required: true, message: 'name1空了' }],
       initialValue: 1,
@@ -276,7 +268,6 @@ export default function Demo(props) {
   const [properties2, setProperties2] = useState({
     part2: {
       label: "part2input",
-      required: true,
       outside: { type: 'col', props: { span: 6 } },
       rules: [{ required: true, message: 'name1空了' }],
       initialValue: 1,
