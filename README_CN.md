@@ -318,7 +318,7 @@ export default function Demo(props) {
 - `a[0].b`表示数组a下面的第一个选项的b属性
 
 ### 字符串表达式用法
- 字符串表达式用作描述表单属性联动，通过`eval`执行，字符串表达式用来与前后端通信过程中描述表单中的属性联动，我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失不能进行`JSON`的信息。
+ 字符串表达式用作描述表单属性联动，通过`eval`执行，字符串表达式用来与前后端通信过程中描述表单中的属性联动，我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。
  1. 使用字符串表达式，规则是将需要执行的`javascript`代码用`{{`和`}}`包裹起来, 例如：
 ```javascript
   const [properties, setProperties] = useState({
@@ -368,7 +368,7 @@ export default function Demo(props) {
  2. 字符串表达式的使用规则
   - 一个字符串有且只能有一对`{{`和`}}`.
   - 除了内置的三个变量(`form`: `useFormStore()`实例, `store`: `useFormRenderStore()`实例, `formvalues`: 表单值对象)以外, 还可以通过`expressionImports`引入外部变量, 然后在字符串表达式内直接引用该变量名.
-  - 6.2.5 版本开始, 推荐不写`$`符号. 后续版本可能移除.
+  - 6.2.5 版本开始, 推荐不写`$`符号. 后续版本可能移除该符号.
 ```javascript
  import moment from 'moment'
  import RenderForm from "./form-render"

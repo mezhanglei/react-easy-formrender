@@ -53,7 +53,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 ```bash
 npm install react-easy-formrender --save
-# 或者
+# or
 yarn add react-easy-formrender
 ```
 
@@ -323,7 +323,7 @@ String expressions are used to describe the linkage of form properties, which ar
 ```javascript
   const [properties, setProperties] = useState({
     name1: {
-      label: '联动关联项',
+      label: 'name1',
       valueProp: 'checked',
       initialValue: true,
       type: 'Checkbox',
@@ -333,7 +333,7 @@ String expressions are used to describe the linkage of form properties, which ar
       }
     },
     name2: {
-      label: "联动项",
+      label: "name2",
       rules: '{{[{ required: formvalues.name1 === true, message: "name2 is empty" }]}}',
       initialValue: 1,
       type: 'Input',
