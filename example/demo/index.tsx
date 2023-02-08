@@ -34,26 +34,23 @@ export default function Demo(props) {
       readOnly: true,
       readOnlyRender: "readonly component",
       initialValue: 1111,
-      // outside: { type: 'col', props: { span: 6 } },
-      hidden: '{{$formvalues.name6 == true}}',
+      hidden: '{{formvalues.name6 == true}}',
       type: 'Input',
       props: {}
     },
     name2: {
       label: "input",
-      // outside: { type: 'col', props: { span: 6 } },
       rules: [{ required: true, message: 'input empty' }],
       initialValue: 1,
-      hidden: '{{$formvalues.name6 == true}}',
+      hidden: '{{formvalues.name6 == true}}',
       type: 'Input',
       props: {}
     },
     name3: {
       label: "list",
       tooltip: '111',
-      // outside: { type: 'col', props: { span: 6 } },
       properties: [{
-        rules: [{ required: true, message: 'list[0]空了' }],
+        rules: [{ required: true, message: 'list[0] empty' }],
         initialValue: { label: 'option1', value: '1', key: '1' },
         type: 'Select',
         props: {
@@ -79,10 +76,9 @@ export default function Demo(props) {
     },
     name4: {
       label: 'object',
-      // outside: { type: 'col', props: { span: 6 } },
       properties: {
         first: {
-          rules: [{ required: true, message: 'object empty' }],
+          rules: [{ required: true, message: 'first empty' }],
           type: 'Select',
           props: {
             style: { width: '100%' },
@@ -90,7 +86,7 @@ export default function Demo(props) {
           }
         },
         second: {
-          rules: [{ required: true, message: 'name2空了' }],
+          rules: [{ required: true, message: 'second empty' }],
           type: 'Select',
           props: {
             style: { width: '100%' },
@@ -117,7 +113,6 @@ export default function Demo(props) {
     name6: {
       label: 'checkbox',
       valueProp: 'checked',
-      // outside: { type: 'col', props: { span: 6 } },
       initialValue: true,
       rules: [{ required: true, message: 'checkbox empty' }],
       type: 'Checkbox',

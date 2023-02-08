@@ -3,7 +3,7 @@ import { RenderFormProps } from './types';
 import { Form } from 'react-easy-formcore';
 import RenderFormChildren from './render-children';
 
-// 带form容器的表单渲染
+// 表单元素渲染
 export default function RenderForm(props: RenderFormProps) {
   const {
     store,
@@ -17,12 +17,14 @@ export default function RenderForm(props: RenderFormProps) {
     renderList,
     inside,
     onPropertiesChange,
+    expressionImports,
     ...formOptions
   } = props;
 
   return (
     <Form store={form} {...formOptions}>
       <RenderFormChildren
+        expressionImports={expressionImports}
         uneval={uneval}
         store={store}
         properties={properties}

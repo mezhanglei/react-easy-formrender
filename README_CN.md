@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.2.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.5-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -11,12 +11,14 @@
 - 组件结构：`Form`组件和`RenderFormChildren`(`Form`组件负责表单的值，`RenderFormChildren`组件负责表单的渲染).
 - 组件描述：`properties`作为渲染表单的属性，支持数组，支持对象，支持嵌套, `properties`中的每个节点包含表单域属性的配置以及表单控件的配置(`type`, `props`和`typeRender`).
 - 组件渲染：一个`Form`组件可以支持多个`RenderFormChildren`组件在内部渲染.
+- 组件联动：组件中的属性除个别属性外(`properties`等), 均可以支持字符串表达式描述联动条件.
 
 # version log
 - v6.x
   6.x在v5.x版本基础上有两大更新(文档已更新)：
-  - 6.2 版本，适配底层`react-easy-formcore`库的`4.x`版本以上路径系统，修复`useFormValues`的错误.
-  - 6.0.1版本: 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
+  - 6.2.5 增强并调整字符串表达式的用法，并在此文档中新增字符串表达式使用方法说明请详细阅读.
+  - 6.2.1 适配底层`react-easy-formcore`库的`4.x`版本以上路径系统，修复`useFormValues`的错误.
+  - 6.0.1 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
   - ~~`schema`~~ 属性被展平，所以需要用`properties`来代替渲染表单，并且 ~~`onSchemaChange`~~ 也需要换成`onPropertiesChange`
 - v5.x:
   本次更新完成了表单的显示组件与表单值相关逻辑的解耦，后续的基础版本。
@@ -35,8 +37,8 @@
   - ~~调整默认导出组件的`onPropertiesChange`改为`onSchemaChange`~~
   - ~~调整`customChild`改为`customInner`~~
 - v3.0.x:
-  - 字符串表达式中表示表单值的字符由 ~~`$form`~~ 改为`$formvalues`.
-  - 字符串表达式中增加`$store`表示`FormRenderStore`的实例，可以获取表单的相关方法和数据.
+  - ~~字符串表达式中表示表单值的字符由 `$form` 改为`$formvalues`~~
+  - ~~字符串表达式中增加`$store`表示`FormRenderStore`的实例，可以获取表单的相关方法和数据~~
   - 如果需要引入内置组件(列表的增删按钮), 则需要`import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
   - 移除 ~~`dependencies`~~ 属性，改为给widget组件自动注入表单值`formvalues`.
@@ -127,25 +129,22 @@ export default function Demo5(props) {
         readOnly: true,
         readOnlyRender: "readonly component",
         initialValue: 1111,
-        // outside: { type: 'col', props: { span: 6 } },
-        hidden: '{{$formvalues.name6 == true}}',
+        hidden: '{{formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
       name2: {
         label: "input",
-        // outside: { type: 'col', props: { span: 6 } },
         rules: [{ required: true, message: 'input empty' }],
         initialValue: 1,
-        hidden: '{{$formvalues.name6 == true}}',
+        hidden: '{{formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
       name3: {
         label: "list",
-        // outside: { type: 'col', props: { span: 6 } },
         properties: [{
-          rules: [{ required: true, message: 'list[0]空了' }],
+          rules: [{ required: true, message: 'list[0] empty' }],
           initialValue: { label: 'option1', value: '1', key: '1' },
           type: 'Select',
           props: {
@@ -171,10 +170,9 @@ export default function Demo5(props) {
       },
       name4: {
         label: 'object',
-        // outside: { type: 'col', props: { span: 6 } },
         properties: {
           first: {
-            rules: [{ required: true, message: 'object empty' }],
+            rules: [{ required: true, message: 'first empty' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
@@ -182,7 +180,7 @@ export default function Demo5(props) {
             }
           },
           second: {
-            rules: [{ required: true, message: 'name2空了' }],
+            rules: [{ required: true, message: 'second empty' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
@@ -209,7 +207,6 @@ export default function Demo5(props) {
       name6: {
         label: 'checkbox',
         valueProp: 'checked',
-        // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
         rules: [{ required: true, message: 'checkbox empty' }],
         type: 'Checkbox',
@@ -257,8 +254,7 @@ export default function Demo(props) {
   const [properties1, setProperties1] = useState({
     part1: {
       label: "part1input",
-      outside: { type: 'col', props: { span: 6 } },
-      rules: [{ required: true, message: 'name1空了' }],
+      rules: [{ required: true, message: 'name1 empty' }],
       initialValue: 1,
       type: 'Input',
       props: {}
@@ -268,8 +264,7 @@ export default function Demo(props) {
   const [properties2, setProperties2] = useState({
     part2: {
       label: "part2input",
-      outside: { type: 'col', props: { span: 6 } },
-      rules: [{ required: true, message: 'name1空了' }],
+      rules: [{ required: true, message: 'name1 empty' }],
       initialValue: 1,
       type: 'Input',
       props: {}
@@ -320,7 +315,80 @@ export default function Demo(props) {
 举例：
 - `a[0]`表示数组a下面的第一个选项
 - `a.b` 表示a对象的b属性
-- `a[0]b`或`a[0].b`表示数组a下面的第一个选项的b属性
+- `a[0].b`表示数组a下面的第一个选项的b属性
+
+### 字符串表达式用法
+ 字符串表达式用作描述表单属性联动，通过`eval`执行，字符串表达式用来与前后端通信过程中描述表单中的属性联动，我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失不能进行`JSON`的信息。
+ 1. 使用字符串表达式，规则是将需要执行的`javascript`代码用`{{`和`}}`包裹起来, 例如：
+```javascript
+  const [properties, setProperties] = useState({
+    name1: {
+      label: 'name1',
+      valueProp: 'checked',
+      initialValue: true,
+      type: 'Checkbox',
+      props: {
+        style: { width: '100%' },
+        children: 'option'
+      }
+    },
+    name2: {
+      label: "name2",
+      rules: '{{[{ required: formvalues.name1 === true, message: "name1空了" }]}}',
+      initialValue: 1,
+      type: 'Input',
+      props: {}
+    },
+  })
+
+  ...
+
+  OR
+
+  const [properties, setProperties] = useState({
+    name1: {
+      label: 'name1',
+      valueProp: 'checked',
+      initialValue: true,
+      type: 'Checkbox',
+      props: {
+        style: { width: '100%' },
+        children: 'option'
+      }
+    },
+    name2: {
+      label: "name2",
+      rules: [{ required: '{{formvalues.name1 === true}}', message: "name1空了" }],
+      initialValue: 1,
+      type: 'Input',
+      props: {}
+    },
+  })
+```
+ 2. 字符串表达式的使用规则
+  - 一个字符串有且只能有一对`{{`和`}}`.
+  - 除了内置的三个变量(`form`: `useFormStore()`实例, `store`: `useFormRenderStore()`实例, `formvalues`: 表单值对象)以外, 还可以通过`expressionImports`引入外部变量, 然后在字符串表达式内直接引用该变量名.
+  - 6.2.5 版本开始, 推荐不写`$`符号. 后续版本可能移除.
+```javascript
+ import moment from 'moment'
+ import RenderForm from "./form-render"
+
+ const [properties, setProperties] = useState({
+    name3: {
+      label: "name3",
+      initialValue: "{{moment().format('YYYY-MM-DD')}}",
+      type: 'Input',
+      props: {}
+    },
+  })
+  ...
+  <RenderForm properties={properties} expressionImports={{ moment }} />
+```
+```javascript
+ import moment from 'moment'
+  ...
+  <RenderForm expressionImports={{ moment }} />
+```
 
 ### Form组件
 来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
@@ -354,11 +422,11 @@ const watch = {
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
 - `store`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
 - `uneval`: 不执行表单中的字符串表达式.
+- `expressionImports`: 在字符串表达式中引入的外部的变量.
 
 ### 表单域属性(FormFieldProps)
 用来描述一个表单节点.
-1. `FormItemProps`中的属性: 继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
-2. 表单域中字段全面支持字符串表达式，例如`hidden:{{$formvalues.字段路径 === 某个值}}`表示表单的某个字段值等于某个值时隐藏，其中`$formvalues`表示表单值对象。同理, `$store`表示`useFormRenderStore()`创建实例, `$form`表示`useFormStore()`创建的实例
+ `FormItemProps`中的属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
 完整属性类型如下：
 ```javascript
 // 表单中的组件描述
@@ -380,7 +448,7 @@ export type UnionComponent<P> =
 export type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function
 
 export interface FormFieldProps extends FormItemProps, FormComponent {
-  ignore?: boolean; // 忽略当前节点不会作为表单值
+  ignore?: boolean; // 标记当前节点为非表单节点
   fieldComponent?: FieldUnionType; // 表单域组件
   inside?: FieldUnionType; // 表单域组件内层嵌套组件
   outside?: FieldUnionType; // 表单域组件外层嵌套组件

@@ -11,10 +11,12 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - Component structure: `Form` component and `RenderFormChildren` (`Form` component is responsible for the value of the form, `RenderFormChildren` component is responsible for the rendering of the form)
 - Component description: `properties` as properties for rendering forms, supporting arrays, objects and nesting, each node in `properties` contains the configuration of the form field properties and the configuration of the form controls (`type`, `props` and `typeRender`)
 - Component rendering: a `Form` component can support multiple `RenderFormChildren` components rendering internally
+- Component linkage: Except for individual properties (`properties`, etc.), all properties in a component can support string expressions to describe linkage conditions.
 
 # version log
 - v6.x
   6.x has two major updates from v5.x.
+  - 6.2.5 Enhancing and adjusting the usage of string expressions, and adding a new description of how to use string expressions in this document.
   - 6.2 adapt the underlying `react-easy-formcore` library to path systems above `4.x`, fix the `useFormValues` bug.
   - The component is split into `Form` and `RenderFormChildren` components, the `Form` component handles the form values, the `RenderFormChildren` renders the form based on the information provided, a `Form` component can wrap multiple `RenderFormChildren` components, if multiple ` RenderFormChildren` components have the same properties as each other, the later will override the previous
   - ~~`schema`~~ properties are flattened, so you need to use `properties` to render the form instead, and ~~`onSchemaChange`~~ needs to be replaced with `onPropertiesChange`
@@ -35,8 +37,8 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
   - ~~Adjust `onPropertiesChange` of default export component to `onSchemaChange`~~
   - ~~Adjust `customChild` to `customInner`~~
 - v3.0.x:
-  - String expressions representing form values changed from ~~`$form`~~ to `$formvalues`.
-  - Add `$store` to the string expression to represent an instance of `FormRenderStore`, which can get the form related methods and data.
+  - ~~String expressions representing form values changed from `$form` to `$formvalues`~~
+  - ~~Add `$store` to the string expression to represent an instance of `FormRenderStore`, which can get the form related methods and data~~
   - If you need to introduce a built-in component (add/remove buttons for lists), you need to `import 'react-easy-formrender/lib/css/main.css'`.
 - v2.x:
   - ~~remove the `dependencies` property~~ and instead inject the form values `formvalues` to the widget component automatically.
@@ -127,25 +129,22 @@ export default function Demo5(props) {
         readOnly: true,
         readOnlyRender: "readonly component",
         initialValue: 1111,
-        // outside: { type: 'col', props: { span: 6 } },
-        hidden: '{{$formvalues.name6 == true}}',
+        hidden: '{{formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
       name2: {
         label: "input",
-        // outside: { type: 'col', props: { span: 6 } },
         rules: [{ required: true, message: 'input empty' }],
         initialValue: 1,
-        hidden: '{{$formvalues.name6 == true}}',
+        hidden: '{{formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
       name3: {
         label: "list",
-        // outside: { type: 'col', props: { span: 6 } },
         properties: [{
-          rules: [{ required: true, message: 'list[0]空了' }],
+          rules: [{ required: true, message: 'list[0] empty' }],
           initialValue: { label: 'option1', value: '1', key: '1' },
           type: 'Select',
           props: {
@@ -171,10 +170,9 @@ export default function Demo5(props) {
       },
       name4: {
         label: 'object',
-        // outside: { type: 'col', props: { span: 6 } },
         properties: {
           first: {
-            rules: [{ required: true, message: 'object empty' }],
+            rules: [{ required: true, message: 'first empty' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
@@ -182,7 +180,7 @@ export default function Demo5(props) {
             }
           },
           second: {
-            rules: [{ required: true, message: 'name2空了' }],
+            rules: [{ required: true, message: 'second empty' }],
             type: 'Select',
             props: {
               style: { width: '100%' },
@@ -209,7 +207,6 @@ export default function Demo5(props) {
       name6: {
         label: 'checkbox',
         valueProp: 'checked',
-        // outside: { type: 'col', props: { span: 6 } },
         initialValue: true,
         rules: [{ required: true, message: 'checkbox empty' }],
         type: 'Checkbox',
@@ -257,7 +254,6 @@ export default function Demo(props) {
   const [properties1, setProperties1] = useState({
     part1: {
       label: "part1input",
-      outside: { type: 'col', props: { span: 6 } },
       rules: [{ required: true, message: 'empty' }],
       initialValue: 1,
       type: 'Input',
@@ -268,7 +264,6 @@ export default function Demo(props) {
   const [properties2, setProperties2] = useState({
     part2: {
       label: "part2input",
-      outside: { type: 'col', props: { span: 6 } },
       rules: [{ required: true, message: 'empty' }],
       initialValue: 1,
       type: 'Input',
@@ -320,7 +315,74 @@ Forms are allowed to be nested, so they will involve finding a certain property.
 for Example:
 - `a[0]` means the first option under the array `a`
 - `a.b` denotes the `b` attribute of the `a` object
-- `a[0]b` or `a[0].b` means the `b` attribute of the first option under the array `a`
+- `a[0].b` means the `b` attribute of the first option under the array `a`
+
+### Expression Usage
+String expressions are used to describe the linkage of form properties, which are executed by `eval`. String expressions are used to describe the linkage of form properties in the communication process with the front and back ends.
+ 1. Using string expressions, the rule is to wrap the `javascript` code to be executed with `{{` and `}}`, for example.
+```javascript
+  const [properties, setProperties] = useState({
+    name1: {
+      label: '联动关联项',
+      valueProp: 'checked',
+      initialValue: true,
+      type: 'Checkbox',
+      props: {
+        style: { width: '100%' },
+        children: 'option'
+      }
+    },
+    name2: {
+      label: "联动项",
+      rules: '{{[{ required: formvalues.name1 === true, message: "name2 is empty" }]}}',
+      initialValue: 1,
+      type: 'Input',
+      props: {}
+    },
+  })
+
+  ...
+
+  OR
+
+  const [properties, setProperties] = useState({
+    name1: {
+      label: 'name1',
+      valueProp: 'checked',
+      initialValue: true,
+      type: 'Checkbox',
+      props: {
+        style: { width: '100%' },
+        children: 'option'
+      }
+    },
+    name2: {
+      label: "name2",
+      rules: [{ required: '{{formvalues.name1 === true}}', message: "name2 is empty" }],
+      initialValue: 1,
+      type: 'Input',
+      props: {}
+    },
+  })
+```
+ 2. Rules for using string expressions
+  - A string has and can have only one pair of `{{` and `}}`.
+  - In addition to the three built-in variables (`form`: `useFormStore()` instance, `store`: `useFormRenderStore()` instance, `formvalues`: form value object), external variables can be introduced via `expressionImports`, and then referenced directly within the string expression and then refer to the variable name directly within the string expression.
+  - Starting from 6.2.5, it is recommended to leave out the `$` symbol. It may be removed in later versions.
+```javascript
+ import moment from 'moment'
+
+ const [properties, setProperties] = useState({
+    name3: {
+      label: "name3",
+      initialValue: "{{moment().format('YYYY-MM-DD')}}",
+      type: 'Input',
+      props: {}
+    },
+  })
+  ...
+  <RenderForm expressionImports={{ moment }} />
+```
 
 ### Form Component
 from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
@@ -354,11 +416,11 @@ const watch = {
 - `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
 - `store`: The form class responsible for rendering. Created with `useFormRenderStore()`.
 - `uneval`: Do not execute string expressions in the form.
+- `expressionImports`: External variables to be introduced in the string expression.
 
 ### FormFieldProps
 Used to describe a form field
-1. Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
-2. The simple type attribute of the form field fully supports string expressions. for example `hidden: {{$formvalues.xxx === xxx}}` means that a field value of the form is equal to a value, where `$formvalues` represents the form value object, Similarly, `$store` means that `useFormRenderStore()` creates an instance, and `$form` means that `useFormStore()` creates an instance.
+ Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 The full props are as follows：
 ```javascript
 
@@ -381,7 +443,7 @@ export type UnionComponent<P> =
 export type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function
 
 export interface FormFieldProps extends FormItemProps, FormComponent {
-  ignore?: boolean; // ignore current form field
+  ignore?: boolean; // Mark the current field as a non-form field
   fieldComponent?: FieldUnionType; // field display component
   inside?: FieldUnionType; // Form field component inner nested components
   outside?: FieldUnionType; // Form field component outside nested components

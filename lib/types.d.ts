@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import { FormItemProps, FormProps, FormRule, FormStore } from "react-easy-formcore";
 import { FormRenderStore } from "./formrender-store";
-declare type Overwrite<T, U> = Omit<T, keyof U> & U;
 export interface FormComponent {
     type?: string;
     props?: any;
@@ -23,13 +22,14 @@ export interface GenerateFieldProps extends FormComponent, FormItemProps {
 export declare type PropertiesData = {
     [name: string]: FormFieldProps;
 } | FormFieldProps[];
-export declare type FormFieldProps = GenerateFieldProps & {
-    [key in keyof Omit<GenerateFieldProps, 'properties'>]: key extends 'rules' ? (string | Array<{
+export declare type FormFieldProps = {
+    [key in keyof GenerateFieldProps]: key extends 'rules' ? (string | Array<{
         [key in keyof FormRule]: FormRule[key] | string;
-    }> | GenerateFieldProps[key]) : (string | GenerateFieldProps[key]);
+    }> | GenerateFieldProps[key]) : (key extends 'properties' ? GenerateFieldProps[key] : (string | GenerateFieldProps[key]));
 };
 export declare type WatchHandler = (newValue: any, oldValue: any) => void;
-export interface BaseRenderProps {
+export interface RenderFormChildrenProps {
+    expressionImports?: object;
     uneval?: boolean;
     watch?: {
         [key: string]: {
@@ -40,22 +40,15 @@ export interface BaseRenderProps {
     controls?: any;
     components?: any;
     inside?: FieldUnionType;
+    properties?: PropertiesData;
     renderList?: (params: GeneratePrams<any>) => any;
     renderItem?: (params: GeneratePrams<any>) => any;
-}
-export interface RenderFormProps extends Overwrite<FormProps, {
-    store?: FormRenderStore;
-}>, BaseRenderProps {
     onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
-    properties?: PropertiesData;
+    store?: FormRenderStore;
+}
+export interface RenderFormProps extends Omit<FormProps, 'store'>, RenderFormChildrenProps {
     form?: FormStore;
 }
-export interface RenderFormChildrenProps extends BaseRenderProps {
-    onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
-    properties?: PropertiesData;
-    store?: FormRenderStore;
-}
-export declare type ValueOf<T> = T[keyof T];
 export interface GeneratePrams<T = GenerateFieldProps> {
     name?: string | number;
     field?: T;
@@ -65,4 +58,3 @@ export interface GeneratePrams<T = GenerateFieldProps> {
     form: FormStore;
     children?: any;
 }
-export {};

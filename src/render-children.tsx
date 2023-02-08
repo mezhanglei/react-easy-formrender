@@ -4,7 +4,7 @@ import { defaultComponents } from './components';
 import { Form, formatName, FormOptionsContext, FormStore, FormStoreContext, joinPath, ItemCoreProps, FormRule } from 'react-easy-formcore';
 import { useFormRenderStore } from './formrender-store';
 import { isEqual } from './utils/object';
-import { isReactComponent, isValidElement } from './utils/ReactIs';
+import { isReactComponent, isValidChildren } from './utils/ReactIs';
 import 'react-easy-formcore/lib/css/main.css';
 import "./icons/index.js";
 import { matchExpression } from './utils/utils';
@@ -26,11 +26,12 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     renderList,
     inside,
     properties: propertiesProps,
-    store
+    store,
+    expressionImports = {}
   } = props;
 
   const form = useContext<FormStore>(FormStoreContext);
-  const formRenderStore = store || useFormRenderStore()
+  const formRenderStore = store || useFormRenderStore();
 
   const mergeComponents = { ...defaultComponents, ...components };
 
@@ -131,8 +132,8 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
             const propsValue = formField[propsKey];
             const propsPath = joinPath(path, propsKey) as string;
             let result = propsValue;
-            const evalStr = matchExpression(propsValue);
-            if (evalStr) {
+            const matchStr = matchExpression(propsValue);
+            if (matchStr) {
               result = evalExpression(propsValue, uneval);
             } else if (propsKey === 'props') {
               result = evalProps(propsValue);
@@ -183,17 +184,17 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   const evalExpression = (value?: string | boolean, uneval?: boolean) => {
     if (uneval) return value;
     if (typeof value === 'string') {
-      const evalStr = matchExpression(value)
-      if (evalStr) {
-        let target = evalStr?.replace(/\{\{|\}\}|\s*/g, '');
-        target = target?.replace(/\$formvalues/g, 'form && form.getFieldValue()');
-        target = target?.replace(/\$form/g, 'form');
-        target = target?.replace(/\$store/g, 'store');
+      const matchStr = matchExpression(value)
+      if (matchStr) {
+        const importsKeys = ['form', 'store', 'formvalues'].concat(Object.keys(expressionImports))
+        const importsValues = Object.values(expressionImports);
+        const target = matchStr?.replace(/\{\{|\}\}/g, '');
+        target?.replace('$', 'g'); // 去掉$开头的，兼容前版本
         const actionStr = "return " + target;
         // 函数最后一个参数为函数体，前面均为传入的变量名
-        const action = new Function('form', 'store', actionStr);
-        const value = action(form, formRenderStore);
-        return value;
+        const action = new Function(...importsKeys, actionStr);
+        const result = action(form, formRenderStore, form && form.getFieldValue(), ...importsValues);
+        return result;
       } else {
         return value;
       }
@@ -219,7 +220,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
           </Child>
         );
       } else {
-        return isValidElement(target) ? target : null
+        return isValidChildren(target) ? target : null
       }
     }
   }
