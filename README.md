@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.2.4-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.6-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -11,7 +11,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - Component structure: `Form` component and `RenderFormChildren` (`Form` component is responsible for the value of the form, `RenderFormChildren` component is responsible for the rendering of the form)
 - Component description: `properties` as properties for rendering forms, supporting arrays, objects and nesting, each node in `properties` contains the configuration of the form field properties and the configuration of the form controls (`type`, `props` and `typeRender`)
 - Component rendering: a `Form` component can support multiple `RenderFormChildren` components rendering internally
-- Component linkage: Except for individual properties (`properties`, etc.), all properties in a component can support string expressions to describe linkage conditions.
+- Component linkage: The properties in the component, except for the reference properties (`properties`, etc.), can support string expressions to describe the linkage conditions.
 
 # version log
 - v6.x

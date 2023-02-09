@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.2.5-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.6-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -11,7 +11,7 @@
 - 组件结构：`Form`组件和`RenderFormChildren`(`Form`组件负责表单的值，`RenderFormChildren`组件负责表单的渲染).
 - 组件描述：`properties`作为渲染表单的属性，支持数组，支持对象，支持嵌套, `properties`中的每个节点包含表单域属性的配置以及表单控件的配置(`type`, `props`和`typeRender`).
 - 组件渲染：一个`Form`组件可以支持多个`RenderFormChildren`组件在内部渲染.
-- 组件联动：组件中的属性除个别属性外(`properties`等), 均可以支持字符串表达式描述联动条件.
+- 组件联动：组件中的属性除引用属性外(`properties`等), 均可以支持字符串表达式描述联动条件.
 
 # version log
 - v6.x
@@ -334,7 +334,7 @@ export default function Demo(props) {
     },
     name2: {
       label: "name2",
-      rules: '{{[{ required: formvalues.name1 === true, message: "name1空了" }]}}',
+      rules: '{{[{ required: formvalues.name1 === true, message: "name2 empty" }]}}',
       initialValue: 1,
       type: 'Input',
       props: {}
@@ -358,7 +358,7 @@ export default function Demo(props) {
     },
     name2: {
       label: "name2",
-      rules: [{ required: '{{formvalues.name1 === true}}', message: "name1空了" }],
+      rules: [{ required: '{{formvalues.name1 === true}}', message: "name2 empty" }],
       initialValue: 1,
       type: 'Input',
       props: {}
