@@ -243,8 +243,8 @@ export default function Demo5(props) {
 
 ### multiple RenderFormChildren demo
   The form engine also supports multiple `RenderFormChildren` components to render and then the `Form` component to handle the form values in a unified manner.
- - `useFormStore` hook: hook to provide a class for form value processing.
- - `useFormRenderStore` hook: hook to provide a class for form rendering, provided by the default component itself, or passed in by external props.
+ - `useFormStore`: hook to provide a class for form value processing.
+ - `useFormRenderStore`: hook to provide a class for form rendering, provided by the default component itself, or passed in by external props.
 ```javascript
 import React, { useState } from 'react';
 import RenderForm, { RenderFormChildren, Form, useFormStore, useFormRenderStore } from './form-render';
@@ -319,7 +319,7 @@ for Example:
 
 ### Expression Usage
 String expressions are used to describe the linkage of form properties, which are executed by `eval`. String expressions are used to describe the linkage of form properties in the communication process with the front and back ends.
- 1. Using string expressions, the rule is to wrap the `javascript` code to be executed with `{{` and `}}`, for example.
+ 1. Quick use: Computational expressions wrapping target property values with `{{` and `}}`
 ```javascript
   const [properties, setProperties] = useState({
     name1: {
@@ -328,7 +328,6 @@ String expressions are used to describe the linkage of form properties, which ar
       initialValue: true,
       type: 'Checkbox',
       props: {
-        style: { width: '100%' },
         children: 'option'
       }
     },
@@ -341,9 +340,7 @@ String expressions are used to describe the linkage of form properties, which ar
     },
   })
 
-  ...
-
-  OR
+  // OR
 
   const [properties, setProperties] = useState({
     name1: {
@@ -352,7 +349,6 @@ String expressions are used to describe the linkage of form properties, which ar
       initialValue: true,
       type: 'Checkbox',
       props: {
-        style: { width: '100%' },
         children: 'option'
       }
     },
@@ -381,7 +377,7 @@ String expressions are used to describe the linkage of form properties, which ar
       props: {}
     },
   })
-  ...
+  
   <RenderForm properties={properties} expressionImports={{ moment }} />
 ```
 
@@ -389,6 +385,7 @@ String expressions are used to describe the linkage of form properties, which ar
 from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
 ### RenderFormChildren's props
+Properties of the form rendering component:
 - `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` Rendering json data in the form of a DSL for a form.
 - `watch`：can listen to changes in the value of any field, for example:
 ```javascript
@@ -420,12 +417,9 @@ const watch = {
 - `expressionImports`: External variables to be introduced in the string expression.
 
 ### FormFieldProps
-Used to describe a form field
- Properties of form field controls, allowing nesting and array management, where `FormItemProps` are derived from the `props` of the `Form.Item` or `Form.List` components in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
-The full props are as follows：
+- The controls, layout components, custom components and other components of the form are described in a uniform structure: 
 ```javascript
-
-// Description of the component in the form
+// Description of all component in the form
 export interface FormComponent {
   type?: string; // String designator for the registered component
   props?: { // The props passed to the component
@@ -434,7 +428,9 @@ export interface FormComponent {
   };
   hidden?: string | boolean; // Support string expressions or boolean values
 }
-
+```
+- The default form field properties are inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
+```javascript
 // Component union type
 export type UnionComponent<P> =
   | React.ComponentType<P>

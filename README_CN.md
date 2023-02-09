@@ -243,8 +243,8 @@ export default function Demo5(props) {
 
 ### 3. 多模块渲染
   表单引擎还支持多个`RenderFormChildren`组件渲染，然后由`Form`组件统一处理表单值.
- - `useFormStore` hook: 给表单值的处理提供类的hook.
- - `useFormRenderStore` hook: 给表单的渲染提供类的hook，默认组件内自己提供，也可以外面props传递进去.
+ - `useFormStore`: 给表单值的处理提供类的hook.
+ - `useFormRenderStore`: 给表单的渲染提供类的hook，默认组件内自己提供，也可以外面props传递进去.
 ```javascript
 import React, { useState } from 'react';
 import RenderForm, { RenderFormChildren, Form, useFormStore } from './form-render';
@@ -319,7 +319,7 @@ export default function Demo(props) {
 
 ### 字符串表达式用法
  字符串表达式用作描述表单属性联动，通过`eval`执行，字符串表达式用来与前后端通信过程中描述表单中的属性联动，我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。
- 1. 使用字符串表达式，规则是将需要执行的`javascript`代码用`{{`和`}}`包裹起来, 例如：
+ 1. 快速使用：用`{{`和`}}`包裹目标属性值的计算表达式
 ```javascript
   const [properties, setProperties] = useState({
     name1: {
@@ -328,7 +328,6 @@ export default function Demo(props) {
       initialValue: true,
       type: 'Checkbox',
       props: {
-        style: { width: '100%' },
         children: 'option'
       }
     },
@@ -341,9 +340,7 @@ export default function Demo(props) {
     },
   })
 
-  ...
-
-  OR
+  // OR
 
   const [properties, setProperties] = useState({
     name1: {
@@ -352,13 +349,12 @@ export default function Demo(props) {
       initialValue: true,
       type: 'Checkbox',
       props: {
-        style: { width: '100%' },
         children: 'option'
       }
     },
     name2: {
       label: "name2",
-      rules: [{ required: '{{formvalues.name1 === true}}', message: "name2 empty" }],
+      hidden: '{{formvalues.name1 === true}}',
       initialValue: 1,
       type: 'Input',
       props: {}
@@ -381,7 +377,7 @@ export default function Demo(props) {
       props: {}
     },
   })
-  ...
+  
   <RenderForm properties={properties} expressionImports={{ moment }} />
 ```
 
@@ -389,6 +385,7 @@ export default function Demo(props) {
 来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
 ### RenderFormChildren's props
+表单渲染组件的属性:
 - `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` 渲染表单的DSL形式的json数据
 - `watch`属性：可以监听任意字段的值的变化，例如：
 ```javascript
@@ -420,11 +417,9 @@ const watch = {
 - `expressionImports`: 在字符串表达式中引入的外部的变量.
 
 ### 表单域属性(FormFieldProps)
-用来描述一个表单节点.
- `FormItemProps`中的属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
-完整属性类型如下：
+- 表单中的控件，布局组件，自定义组件等组件采用统一的结构描述: 
 ```javascript
-// 表单中的组件描述
+// 表单中的任意的组件描述
 export interface FormComponent {
   type?: string; // 注册组件的字符串代号
   props?: { // 传递给组件的props
@@ -433,7 +428,9 @@ export interface FormComponent {
   };
   hidden?: string | boolean; // 支持字符串表达式或者布尔值
 }
-
+```
+- 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
+```javascript
 // 表单上的组件联合类型
 export type UnionComponent<P> =
   | React.ComponentType<P>
