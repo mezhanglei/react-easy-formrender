@@ -371,6 +371,7 @@ String expressions are used to describe the linkage of form properties, which ar
   - Starting from 6.2.5, it is recommended to leave out the `$` symbol. It may be removed in later versions.
 ```javascript
  import moment from 'moment'
+ import RenderForm from "./form-render"
 
  const [properties, setProperties] = useState({
     name3: {
@@ -381,7 +382,7 @@ String expressions are used to describe the linkage of form properties, which ar
     },
   })
   ...
-  <RenderForm expressionImports={{ moment }} />
+  <RenderForm properties={properties} expressionImports={{ moment }} />
 ```
 
 ### Form Component

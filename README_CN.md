@@ -384,11 +384,6 @@ export default function Demo(props) {
   ...
   <RenderForm properties={properties} expressionImports={{ moment }} />
 ```
-```javascript
- import moment from 'moment'
-  ...
-  <RenderForm expressionImports={{ moment }} />
-```
 
 ### Form组件
 来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
