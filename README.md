@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.2.6-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.7-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -16,6 +16,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # version log
 - v6.x
   6.x has two major updates from v5.x.
+  - 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
   - 6.2.5 Enhancing and adjusting the usage of string expressions, and adding a new description of how to use string expressions in this document.
   - 6.2 adapt the underlying `react-easy-formcore` library to path systems above `4.x`, fix the `useFormValues` bug.
   - The component is split into `Form` and `RenderFormChildren` components, the `Form` component handles the form values, the `RenderFormChildren` renders the form based on the information provided, a `Form` component can wrap multiple `RenderFormChildren` components, if multiple ` RenderFormChildren` components have the same properties as each other, the later will override the previous
@@ -129,7 +130,7 @@ export default function Demo5(props) {
         readOnly: true,
         readOnlyRender: "readonly component",
         initialValue: 1111,
-        hidden: '{{formvalues.name6 == true}}',
+        hidden: '{{formvalues && formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
@@ -137,7 +138,7 @@ export default function Demo5(props) {
         label: "input",
         rules: [{ required: true, message: 'input empty' }],
         initialValue: 1,
-        hidden: '{{formvalues.name6 == true}}',
+        hidden: '{{formvalues && formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
@@ -333,7 +334,7 @@ String expressions are used to describe the linkage of form properties, which ar
     },
     name2: {
       label: "name2",
-      rules: '{{[{ required: formvalues.name1 === true, message: "name2 is empty" }]}}',
+      rules: '{{[{ required: formvalues && formvalues.name1 === true, message: "name2 is empty" }]}}',
       initialValue: 1,
       type: 'Input',
       props: {}
@@ -354,7 +355,7 @@ String expressions are used to describe the linkage of form properties, which ar
     },
     name2: {
       label: "name2",
-      rules: [{ required: '{{formvalues.name1 === true}}', message: "name2 is empty" }],
+      rules: [{ required: '{{formvalues && formvalues.name1 === true}}', message: "name2 is empty" }],
       initialValue: 1,
       type: 'Input',
       props: {}
@@ -383,6 +384,7 @@ String expressions are used to describe the linkage of form properties, which ar
 
 ### Form Component
 from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+- 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
 
 ### RenderFormChildren's props
 Properties of the form rendering component:

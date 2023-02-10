@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.2.6-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.7-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -16,6 +16,7 @@
 # version log
 - v6.x
   6.x在v5.x版本基础上有两大更新(文档已更新)：
+  - 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签`warning`时, 可以设置`tagName`更换成其他标签.
   - 6.2.5 增强并调整字符串表达式的用法，并在此文档中新增字符串表达式使用方法说明请详细阅读.
   - 6.2.1 适配底层`react-easy-formcore`库的`4.x`版本以上路径系统，修复`useFormValues`的错误.
   - 6.0.1 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
@@ -129,7 +130,7 @@ export default function Demo5(props) {
         readOnly: true,
         readOnlyRender: "readonly component",
         initialValue: 1111,
-        hidden: '{{formvalues.name6 == true}}',
+        hidden: '{{formvalues && formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
@@ -137,7 +138,7 @@ export default function Demo5(props) {
         label: "input",
         rules: [{ required: true, message: 'input empty' }],
         initialValue: 1,
-        hidden: '{{formvalues.name6 == true}}',
+        hidden: '{{formvalues && formvalues.name6 == true}}',
         type: 'Input',
         props: {}
       },
@@ -333,7 +334,7 @@ export default function Demo(props) {
     },
     name2: {
       label: "name2",
-      rules: '{{[{ required: formvalues.name1 === true, message: "name2 empty" }]}}',
+      rules: '{{[{ required: formvalues && formvalues.name1 === true, message: "name2 empty" }]}}',
       initialValue: 1,
       type: 'Input',
       props: {}
@@ -354,7 +355,7 @@ export default function Demo(props) {
     },
     name2: {
       label: "name2",
-      hidden: '{{formvalues.name1 === true}}',
+      hidden: '{{formvalues && formvalues.name1 === true}}',
       initialValue: 1,
       type: 'Input',
       props: {}
@@ -383,6 +384,7 @@ export default function Demo(props) {
 
 ### Form组件
 来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+- 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签报错时, 可以设置`tagName`更换成其他标签.
 
 ### RenderFormChildren's props
 表单渲染组件的属性:
