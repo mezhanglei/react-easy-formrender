@@ -1,6 +1,5 @@
 import { FormFieldProps, PropertiesData } from "./types";
 export declare type FormRenderListener = (newValue?: any, oldValue?: any) => void;
-export declare function useFormRenderStore(): FormRenderStore;
 export declare class FormRenderStore {
     private properties;
     private lastProperties;

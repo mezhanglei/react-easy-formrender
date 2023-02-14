@@ -2,16 +2,16 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.2.8-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.9-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
-- Component structure: `Form` component and `RenderFormChildren` (`Form` component is responsible for the value of the form, `RenderFormChildren` component is responsible for the rendering of the form)
-- Component description: `properties` as properties for rendering forms, supporting arrays, objects and nesting, each node in `properties` contains the configuration of the form field properties and the configuration of the form controls (`type`, `props` and `typeRender`)
-- Component rendering: a `Form` component can support multiple `RenderFormChildren` components rendering internally
-- Component linkage: The properties in the component, except for the reference properties (`properties`, etc.), can support string expressions to describe the linkage conditions.
+- Component registration: Registered control components need to match the `value`/`onChange` (or other field) pass-through in order to work properly.
+- Component Description: `properties` is used as properties for rendering forms, supporting arrays, objects and nesting, where each node contains the configuration of the form field properties and the configuration of the form controls (`type`, `props` and `typeRender`).
+- Component Rendering: The `Form` component is responsible for the form values, the `RenderFormChildren` component is responsible for the form rendering, one `Form` component can support multiple `RenderFormChildren` components to render internally.
+- Component linkage: In addition to reference properties (`properties`, etc.), all form properties can support string expressions to describe linkage conditions.
 
 # version log
 - v6.x
@@ -300,6 +300,69 @@ export default function Demo(props) {
           />
         </div>
       </Form>
+      <div style={{ marginLeft: '120px' }}>
+        <Button onClick={onSubmit}>submit</Button>
+      </div>
+    </div>
+  );
+}
+```
+### 4. Array data
+support render `array`
+```javascript
+import React, { useState } from 'react';
+import RenderForm, { useFormStore } from './form-render';
+import { Button } from 'antd';
+export default function Demo(props) {
+  
+  const [properties, setProperties1] = useState(
+    [
+      {
+        label: "list-0",
+        rules: [{ required: true, message: 'name1 empty' }],
+        initialValue: 1,
+        type: 'Input',
+        props: {}
+      },
+      {
+        label: "list-1",
+        rules: [{ required: true, message: 'name1 empty' }],
+        initialValue: 2,
+        type: 'Input',
+        props: {}
+      },
+      {
+        label: "list-2",
+        rules: [{ required: true, message: 'name1 empty' }],
+        initialValue: 3,
+        type: 'Input',
+        props: {}
+      },
+      {
+        label: "list-3",
+        rules: [{ required: true, message: 'name1 empty' }],
+        initialValue: 4,
+        type: 'Input',
+        props: {}
+      },
+    ]
+  );
+
+  const form = useFormStore();
+
+  const onSubmit = async (e) => {
+    e?.preventDefault?.();
+    const result = await form.validate();
+    console.log(result, 'result');
+  };
+
+  return (
+    <div style={{ padding: '0 8px' }}>
+      <RenderForm
+        form={form}
+        // store={formRenderStore}
+        properties={properties}
+        watch={watch} />
       <div style={{ marginLeft: '120px' }}>
         <Button onClick={onSubmit}>submit</Button>
       </div>

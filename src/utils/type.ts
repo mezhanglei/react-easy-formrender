@@ -78,6 +78,10 @@ export function isEmpty(value: unknown) {
     return Object.keys(<object>value).length === 0;
   }
 
+  if (typeof value === 'number') {
+    return isNaN(value)
+  }
+
   return value === undefined || value === null;
 }
 
@@ -114,6 +118,8 @@ export function isStream(val: any) {
 // 是否为数字字符串或者数字
 export const isNumberStr = (str?: string | Number) => {
   if (typeof str === 'number' && !isNaN(str)) return true
-  const target = Number(str)
-  if (!isNaN(target) && str) return true
+  if (typeof str === 'string') {
+    const target = Number(str)
+    if (!isNaN(target) && str) return true
+  }
 }
