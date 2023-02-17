@@ -44,8 +44,8 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     handleFieldProps();
   }
 
-  // 订阅更新properties的函数,将传值更新到state里面
-  const uninstallMemo = useMemo(() => {
+  // 订阅更新properties的函数,将传值更新到state里面(有onPropertiesChange，所以必须要useEffect而不能使用useMemo).
+  useEffect(() => {
     if (!formRenderStore) return
     const uninstall = formRenderStore.subscribeProperties((newValue, oldValue) => {
       setProperties(newValue);
@@ -59,10 +59,9 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   useEffect(() => {
     return () => {
       // 卸载监听函数
-      uninstallMemo?.();
       form?.unsubscribeFormGlobal();
     }
-  }, [uninstallMemo]);
+  }, []);
 
   // 收集properties到store中
   useEffect(() => {

@@ -23,7 +23,7 @@ export function useProperties(store: FormRenderStore) {
     return () => {
       uninstallMemo?.();
     };
-  }, [uninstallMemo]);
+  }, []);
 
   return [properties, setProperties];
 }
@@ -46,7 +46,7 @@ export function useExpandControl(store: FormRenderStore) {
     return () => {
       uninstallMemo?.();
     };
-  }, [uninstallMemo]);
+  }, []);
 
   return [controls, setControls];
 }
