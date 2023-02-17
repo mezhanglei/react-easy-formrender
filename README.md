@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.2.9-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.10-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -11,7 +11,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - Component registration: Registered control components need to match the `value`/`onChange` (or other field) pass-through in order to work properly.
 - Component Description: `properties` is used as properties for rendering forms, supporting arrays, objects and nesting, where each node contains the configuration of the form field properties and the configuration of the form controls (`type`, `props` and `typeRender`).
 - Component Rendering: The `Form` component is responsible for the form values, the `RenderFormChildren` component is responsible for the form rendering, one `Form` component can support multiple `RenderFormChildren` components to render internally.
-- Component linkage: In addition to reference properties (`properties`, etc.), all form properties can support string expressions to describe linkage conditions.
+- Component linkage: all form properties can support string expressions to describe linkage conditions (except `propties`).
 
 # version log
 - v6.x
