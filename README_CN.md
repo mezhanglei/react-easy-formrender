@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.2.13-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.14-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -16,6 +16,7 @@
 # version log
 - v6.x
   6.x在v5.x版本基础上有两大更新(文档已更新)：
+  - 6.2.14 `fieldComponent`属性可以设置为`null`.
   - 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签`warning`时, 可以设置`tagName`更换成其他标签.
   - 6.2.5 增强并调整字符串表达式的用法，并在此文档中新增字符串表达式使用方法说明请详细阅读.
   - 6.2.1 适配底层`react-easy-formcore`库的`4.x`版本以上路径系统，修复`useFormValues`的错误.
@@ -244,8 +245,8 @@ export default function Demo5(props) {
 
 ### 3. 多模块渲染
   表单引擎还支持多个`RenderFormChildren`组件渲染，然后由`Form`组件统一处理表单值.
- - `useFormStore`: 给表单值的处理提供类的hook.
- - `useFormRenderStore`: 给表单的渲染提供类的hook，默认组件内自己提供，也可以外面props传递进去.
+ - `useFormStore`: 给表单值的处理提供类的hook. 默认组件内自己提供，也可以外面props传递进去.
+ - `useFormRenderStore`: 给表单的渲染提供类的hook, 默认组件内自己提供，也可以外面props传递进去.
 ```javascript
 import React, { useState } from 'react';
 import RenderForm, { RenderFormChildren, Form, useFormStore } from './form-render';
@@ -383,7 +384,7 @@ export default function Demo(props) {
 - `a[0].b`表示数组a下面的第一个选项的b属性
 
 ### 字符串表达式用法
- 字符串表达式用作描述表单属性联动，通过`eval`执行，字符串表达式用来与前后端通信过程中描述表单中的属性联动，我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。
+ 我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。所以我们采用字符串表达式用作描述表单属性联动，通过`eval`执行，字符串表达式用来与前后端通信过程中描述表单中的属性联动，
  1. 快速使用：用`{{`和`}}`包裹目标属性值的计算表达式
 ```javascript
   const [properties, setProperties] = useState({
@@ -507,7 +508,7 @@ export type FieldUnionType = FormComponent | Array<FormComponent> | UnionCompone
 
 export interface FormFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 标记当前节点为非表单节点
-  fieldComponent?: FieldUnionType; // 表单域组件
+  fieldComponent?: FieldUnionType; // 表单域组件, 6.2.14允许设置为null
   inside?: FieldUnionType; // 表单域组件内层嵌套组件
   outside?: FieldUnionType; // 表单域组件外层嵌套组件
   readOnly?: boolean; // 只读模式

@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.2.13-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.14-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -16,6 +16,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # version log
 - v6.x
   6.x has two major updates from v5.x.
+  - 6.2.14 The `fieldComponent` property can be set to `null`.
   - 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
   - 6.2.5 Enhancing and adjusting the usage of string expressions, and adding a new description of how to use string expressions in this document.
   - 6.2 adapt the underlying `react-easy-formcore` library to path systems above `4.x`, fix the `useFormValues` bug.
@@ -244,7 +245,7 @@ export default function Demo5(props) {
 
 ### multiple RenderFormChildren demo
   The form engine also supports multiple `RenderFormChildren` components to render and then the `Form` component to handle the form values in a unified manner.
- - `useFormStore`: hook to provide a class for form value processing.
+ - `useFormStore`: hook to provide a class for form value processing. provided by the default component itself, or passed in by external props.
  - `useFormRenderStore`: hook to provide a class for form rendering, provided by the default component itself, or passed in by external props.
 ```javascript
 import React, { useState } from 'react';
@@ -382,7 +383,7 @@ for Example:
 - `a[0].b` means the `b` attribute of the first option under the array `a`
 
 ### Expression Usage
-String expressions are used to describe the linkage of form properties, which are executed by `eval`. String expressions are used to describe the linkage of form properties in the communication process with the front and back ends.
+As we all know, if we use `JSON` during the transmission, the form will lose some information that cannot be converted. So we use a string expression to describe the form properties linkage, which is executed by `eval`, the string expression is used to describe the form properties linkage in the communication process with the front and back end.
  1. Quick use: Computational expressions wrapping target property values with `{{` and `}}`
 ```javascript
   const [properties, setProperties] = useState({
@@ -506,7 +507,7 @@ export type FieldUnionType = FormComponent | Array<FormComponent> | UnionCompone
 
 export interface FormFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // Mark the current field as a non-form field
-  fieldComponent?: FieldUnionType; // field display component
+  fieldComponent?: FieldUnionType; // field display component, 6.2.14 can set null
   inside?: FieldUnionType; // Form field component inner nested components
   outside?: FieldUnionType; // Form field component outside nested components
   readOnly?: boolean; // readonly？
