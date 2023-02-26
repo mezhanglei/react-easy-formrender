@@ -176,14 +176,15 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       Object.entries(val || {})?.map(
         ([propsKey]) => {
           const propsItem = val?.[propsKey];
-          const matchStr = matchExpression(propsItem)
+          const matchStr = matchExpression(propsItem);
           const generateItem = generateVal?.[propsKey];
           if (generateItem !== undefined) {
             return [propsKey, generateItem]
-          } else if (!matchStr) {
-            return [propsKey, propsItem]
           }
-          return [propsKey]
+          if (matchStr) {
+            return [propsKey]
+          };
+          return [propsKey, propsItem]
         }
       )
     );
@@ -197,11 +198,21 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
         ([propsKey]) => {
           const formPath = joinFormPath(path, propsKey);
           const propsValue = field[propsKey];
-          const generateValue = formPath && fieldPropsMap[formPath]
+          const generateValue = formPath && fieldPropsMap[formPath];
+          const matchStr = matchExpression(propsValue);
+          if (generateValue !== undefined) {
+            return [propsKey, generateValue]
+          }
+          if (matchStr) {
+            if (propsKey === 'valueSetter') {
+              return [propsKey, () => undefined]
+            }
+            return [propsKey]
+          };
           if (propsKey === 'props') {
             return [propsKey, getValueFromObject(propsValue, generateValue)]
           }
-          return [propsKey, generateValue ?? propsValue];
+          return [propsKey, propsValue];
         }
       )
     );

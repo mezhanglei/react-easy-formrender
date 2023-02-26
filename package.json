@@ -1,6 +1,6 @@
 {
   "name": "react-easy-formrender",
-  "version": "6.2.15",
+  "version": "6.2.16",
   "description": "优秀的动态表单解决方案",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
