@@ -16,7 +16,8 @@
 # version log
 - v6.x
   6.x在v5.x版本基础上有两大更新(文档已更新)：
-  - 6.2.14 `fieldComponent`属性可以设置为`null`.
+  - 6.2.15 ~~`fieldComponent`~~ 改为`component`.
+  - 6.2.14 `component`属性可以设置为`null`.
   - 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签`warning`时, 可以设置`tagName`更换成其他标签.
   - 6.2.5 增强并调整字符串表达式的用法，并在此文档中新增字符串表达式使用方法说明请详细阅读.
   - 6.2.1 适配底层`react-easy-formcore`库的`4.x`版本以上路径系统，修复`useFormValues`的错误.
@@ -508,7 +509,6 @@ export type FieldUnionType = FormComponent | Array<FormComponent> | UnionCompone
 
 export interface FormFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 标记当前节点为非表单节点
-  fieldComponent?: FieldUnionType; // 表单域组件, 6.2.14允许设置为null
   inside?: FieldUnionType; // 表单域组件内层嵌套组件
   outside?: FieldUnionType; // 表单域组件外层嵌套组件
   readOnly?: boolean; // 只读模式

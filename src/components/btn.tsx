@@ -7,7 +7,7 @@ import { joinFormPath } from 'react-easy-formcore';
 import Icon from "./icon";
 import { isEmpty } from 'src/utils/type';
 
-export interface DeleteBtnProps extends GeneratePrams {
+export interface DeleteBtnProps extends GeneratePrams<any> {
   onClick?: () => void;
   className?: string;
   style?: CSSProperties;
@@ -34,7 +34,7 @@ export const DeleteBtn: React.FC<DeleteBtnProps> = (props) => {
   return <Icon name="delete" onClick={deleteItem} className={cls} {...restProps} />
 }
 
-export interface AddBtnProps extends GeneratePrams {
+export interface AddBtnProps extends GeneratePrams<any> {
   onClick?: () => void;
   className?: string;
   style?: CSSProperties;

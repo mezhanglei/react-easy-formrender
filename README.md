@@ -16,7 +16,8 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # version log
 - v6.x
   6.x has two major updates from v5.x.
-  - 6.2.14 The `fieldComponent` property can be set to `null`.
+  - 6.2.15 ~~`fieldComponent`~~ change to `component`.
+  - 6.2.14 The `component` property can be set to `null`.
   - 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
   - 6.2.5 Enhancing and adjusting the usage of string expressions, and adding a new description of how to use string expressions in this document.
   - 6.2 adapt the underlying `react-easy-formcore` library to path systems above `4.x`, fix the `useFormValues` bug.
@@ -507,7 +508,6 @@ export type FieldUnionType = FormComponent | Array<FormComponent> | UnionCompone
 
 export interface FormFieldProps extends FormItemProps, FormComponent {
   ignore?: boolean; // Mark the current field as a non-form field
-  fieldComponent?: FieldUnionType; // field display component, 6.2.14 can set null
   inside?: FieldUnionType; // Form field component inner nested components
   outside?: FieldUnionType; // Form field component outside nested components
   readOnly?: boolean; // readonly？
