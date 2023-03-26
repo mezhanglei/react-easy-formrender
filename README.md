@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.2.16-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.17-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -16,7 +16,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 # version log
 - v6.x
   6.x has two major updates from v5.x.
-  - 6.2.15 ~~`fieldComponent`~~ change to `component`.
+  - 6.2.17 ~~`fieldComponent`~~ change to `component`.
   - 6.2.14 The `component` property can be set to `null`.
   - 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
   - 6.2.5 Enhancing and adjusting the usage of string expressions, and adding a new description of how to use string expressions in this document.
@@ -384,7 +384,7 @@ for Example:
 - `a[0].b` means the `b` attribute of the first option under the array `a`
 
 ### Expression Usage
-As we all know, if we use `JSON` during the transmission, the form will lose some information that cannot be converted. So we use a string expression to describe the form properties linkage, which is executed by `eval`, the string expression is used to describe the form properties linkage in the communication process with the front and back end.
+As we all know, if we use `JSON` during the transfer, the form will lose some information that cannot be converted. So we use a string expression to describe the form property linkage, and `eval` is executed to get the result of the linkage.
  1. Quick use: Computational expressions wrapping target property values with `{{` and `}}`
 ```javascript
   const [properties, setProperties] = useState({

@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.2.16-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.17-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -16,7 +16,7 @@
 # version log
 - v6.x
   6.x在v5.x版本基础上有两大更新(文档已更新)：
-  - 6.2.15 ~~`fieldComponent`~~ 改为`component`.
+  - 6.2.17 ~~`fieldComponent`~~ 改为`component`.
   - 6.2.14 `component`属性可以设置为`null`.
   - 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签`warning`时, 可以设置`tagName`更换成其他标签.
   - 6.2.5 增强并调整字符串表达式的用法，并在此文档中新增字符串表达式使用方法说明请详细阅读.
@@ -385,7 +385,7 @@ export default function Demo(props) {
 - `a[0].b`表示数组a下面的第一个选项的b属性
 
 ### 字符串表达式用法
- 我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。所以我们采用字符串表达式用作描述表单属性联动，通过`eval`执行，字符串表达式用来与前后端通信过程中描述表单中的属性联动，
+ 我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。所以我们采用字符串表达式用作描述表单属性联动，`eval`执行得到联动的结果.
  1. 快速使用：用`{{`和`}}`包裹目标属性值的计算表达式
 ```javascript
   const [properties, setProperties] = useState({
