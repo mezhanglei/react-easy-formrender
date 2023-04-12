@@ -136,7 +136,7 @@ export default function Demo(props) {
     <div>
       <RenderForm
         form={form}
-        values={{name2: 22}}
+        values={{ name2: 22 }}
         // store={formRenderStore}
         properties={properties}
         controls={defaultControls}

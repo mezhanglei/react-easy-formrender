@@ -1,6 +1,6 @@
 import { deepClone } from "./utils/object";
-import { FieldUnionType, FormFieldProps, GeneratePrams, PropertiesData } from "./types";
-import { getItemByPath, setItemByPath, updateItemByPath, moveSameLevel, moveDiffLevel, addItemByIndex, updateName, getPathEndIndex, getParent, parseFromField } from "./utils/utils";
+import { FieldUnionType, GeneratePrams, PropertiesData } from "./types";
+import { getItemByPath, setItemByPath, updateItemByPath, moveSameLevel, moveDiffLevel, addItemByIndex, updateName, getPathEndIndex, getParent, parseFromField, InsertDataType } from "./utils/utils";
 import createInstance from "./utils/createInstance";
 
 export type FormRenderListener = (newValue?: any, oldValue?: any) => void;
@@ -68,24 +68,24 @@ export class FormRenderStore {
   }
 
   // 更新指定路径的值
-  updateItemByPath = (path?: string, data?: Partial<FormFieldProps>) => {
+  updateItemByPath = (data?: any, path?: string, attributeName?: string) => {
     const cloneProperties = this.getProperties();
     if (cloneProperties) {
-      let newProperties = updateItemByPath(cloneProperties, path, data);
+      let newProperties = updateItemByPath(cloneProperties, data, path, attributeName);
       this.setProperties(newProperties);
     }
   }
 
   // 设置指定路径的值
-  setItemByPath = (path?: string, data?: Partial<FormFieldProps>) => {
+  setItemByPath = (data?: any, path?: string, attributeName?: string) => {
     const cloneProperties = this.getProperties();
     if (cloneProperties) {
-      let newProperties = setItemByPath(cloneProperties, path, data);
+      let newProperties = setItemByPath(cloneProperties, data, path, attributeName);
       this.setProperties(newProperties);
     }
   }
 
-  // 更新键
+  // 更新节点的键
   updateNameByPath = (path?: string, newName?: string) => {
     const cloneProperties = this.getProperties();
     if (cloneProperties) {
@@ -95,7 +95,7 @@ export class FormRenderStore {
   }
 
   // 插入值，默认末尾
-  addItemByIndex = (data: FormFieldProps | FormFieldProps[], index?: number, parent?: string) => {
+  addItemByIndex = (data: InsertDataType, index?: number, parent?: string) => {
     const cloneProperties = this.getProperties();
     if (cloneProperties) {
       let newProperties = addItemByIndex(cloneProperties, data, index, parent);
@@ -104,19 +104,19 @@ export class FormRenderStore {
   }
 
   // 根据path删除一条
-  delItemByPath = (path?: string) => {
+  delItemByPath = (path?: string, attributeName?: string) => {
     const cloneProperties = this.getProperties();
     if (cloneProperties) {
-      let newProperties = setItemByPath(cloneProperties, path, undefined);
+      let newProperties = setItemByPath(cloneProperties, undefined, path, attributeName);
       this.setProperties(newProperties);
     }
   }
 
   // 获取指定路径的项
-  getItemByPath = (path?: string) => {
+  getItemByPath = (path?: string, attributeName?: string) => {
     const cloneProperties = this.getProperties();
     if (cloneProperties) {
-      return getItemByPath(cloneProperties, path);
+      return getItemByPath(cloneProperties, path, attributeName);
     }
   }
 
@@ -151,7 +151,7 @@ export class FormRenderStore {
   }
 
   // 在目标路径后面插入数据
-  addAfterByPath = (data: FormFieldProps | FormFieldProps[], path?: string) => {
+  addAfterByPath = (data: InsertDataType, path?: string) => {
     const cloneProperties = this.getProperties();
     if (cloneProperties) {
       const nextIndex = getPathEndIndex(path, cloneProperties) + 1;
@@ -162,7 +162,7 @@ export class FormRenderStore {
   }
 
   // 在目标路径前面插入数据
-  addBeforeByPath = (data: FormFieldProps | FormFieldProps[], path?: string) => {
+  addBeforeByPath = (data: InsertDataType, path?: string) => {
     const cloneProperties = this.getProperties();
     if (cloneProperties) {
       const endIndex = getPathEndIndex(path, cloneProperties);

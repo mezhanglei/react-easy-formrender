@@ -9,14 +9,14 @@
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成).
 
 - 组件注册: 注册的表单控件需要符合`value`/`onChange`(或其他字段)传参才能正常使用.
-- 组件描述：`properties`作为渲染表单的属性，支持数组，支持对象，支持嵌套, 其中每个节点包含表单域属性的配置以及表单控件的配置(`type`, `props`和`typeRender`).
-- 组件渲染：`Form`组件负责表单的值, `RenderFormChildren`组件负责表单的渲染, 一个`Form`组件可以支持多个`RenderFormChildren`组件在内部渲染.
-- 组件联动：表单属性均可以支持字符串表达式描述联动条件(`propties`除外).
+- 组件描述：`properties`支持对象或者数组类型的渲染，支持嵌套。
+- 组件渲染：`Form`组件处理表单的值, `RenderFormChildren`组件处理表单的渲染, 一个`Form`组件可以支持多个`RenderFormChildren`组件在内部渲染.
+- 组件联动：表单属性均可以支持字符串表达式描述联动条件(`properties`除外).
 
 # version log
 - v6.x
   6.x在v5.x版本基础上有两大更新(文档已更新)：
-  - 6.2.17 ~~`fieldComponent`~~ 改为`component`.
+  - 6.2.17 ~~`fieldComponent`~~ 改为`component`，`FormRenderStore`的方法也进行更新
   - 6.2.14 `component`属性可以设置为`null`.
   - 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签`warning`时, 可以设置`tagName`更换成其他标签.
   - 6.2.5 增强并调整字符串表达式的用法，并在此文档中新增字符串表达式使用方法说明请详细阅读.
@@ -525,14 +525,12 @@ export interface FormFieldProps extends FormItemProps, FormComponent {
 
 ### FormRenderStore Methods
   仅仅负责表单的渲染
- - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 更新properties中`path`对应的信息
- - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` 设置properties中`path`对应的信息
+ - `updateItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 更新路径`path`对应的节点，如果更新节点中的具体属性则需要`attributeName`参数
+ - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 设置路径`path`对应的节点，如果设置节点中的具体属性则需要`attributeName`参数
  - `updateNameByPath`: `(path: string, newName?: string) => void` 更新指定路径的name键
- - `delItemByPath`: `(path: string) => void` 删除properties中`path`对应的信息
- - `addItemByIndex`: `(data: FormFieldProps | FormFieldProps[], index?: number, parent?: string) => void` 根据序号和父节点路径添加选项
- - `addAfterByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` 在目标路径后面添加选项
- - `addBeforeByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` 在目标节点前面添加选项
- - `getItemByPath`: `(path: string) => void` 获取properties中`path`对应的信息
+ - `delItemByPath`: `(path?: string, attributeName?: string) => void` 删除路径`path`对应的节点，如果删除节点中的具体属性则需要`attributeName`参数
+ - `addItemByIndex`: `(data: any, index?: number, parent?: string) => void` 根据序号和父节点路径添加选项
+ - `getItemByPath`: `(path?: string, attributeName?: string) => void` 获取路径`path`对应的节点，如果是节点中的具体属性则需要`attributeName`参数
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` 设置`properties`;
 

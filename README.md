@@ -8,15 +8,15 @@ English | [中文说明](./README_CN.md)
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
-- Component registration: Registered control components need to match the `value`/`onChange` (or other field) pass-through in order to work properly.
-- Component Description: `properties` is used as properties for rendering forms, supporting arrays, objects and nesting, where each node contains the configuration of the form field properties and the configuration of the form controls (`type`, `props` and `typeRender`).
-- Component Rendering: The `Form` component is responsible for the form values, the `RenderFormChildren` component is responsible for the form rendering, one `Form` component can support multiple `RenderFormChildren` components to render internally.
-- Component linkage: all form properties can support string expressions to describe linkage conditions (except `propties`).
+- Component Registration: Registered form controls need to match the `value`/`onChange` (or other field) pass-through in order to work properly.
+- Component description: `properties` supports object or array type rendering, nesting is supported.
+- Component rendering: `Form` component handles form values, `RenderFormChildren` component handles form rendering, one `Form` component can support multiple `RenderFormChildren` components rendering internally.
+- Component linkage: All form properties can support string expressions to describe linkage conditions (except `properties`).
 
 # version log
 - v6.x
   6.x has two major updates from v5.x.
-  - 6.2.17 ~~`fieldComponent`~~ change to `component`.
+  - 6.2.17 ~~`fieldComponent`~~ change to `component`，and update `FormRenderStore` methods.
   - 6.2.14 The `component` property can be set to `null`.
   - 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
   - 6.2.5 Enhancing and adjusting the usage of string expressions, and adding a new description of how to use string expressions in this document.
@@ -524,16 +524,14 @@ The `rules` rules in the form control are derived from the `rules` property in [
 
 ### FormRenderStore Methods
   Only responsible for the rendering of the form
- - `updateItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Update the information corresponding to `path` in properties.
- - `setItemByPath`: `(path: string, data?: Partial<FormFieldProps>) => void` Override set the information corresponding to `path` in properties.
- - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the path.
- - `delItemByPath`: `(path: string) => void` delete the information corresponding to `path` in properties.
- - `addItemByIndex`: `(data: FormFieldProps | FormFieldProps[], index?: number, parent?: string) => void` Add item based on `index` and `parent`.
- - `addAfterByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` Add item after `path`
- - `addBeforeByPath`: `(data: FormFieldProps | FormFieldProps[], path: string) => void` add item before `path`
- - `getItemByPath`: `(path: string) => void` get the information corresponding to `path` in properties.
- - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` move option in the tree from one position to another
- - `setProperties`: `(data?: Partial<FormFieldProps>) => void` set the `properties`.
+ - `updateItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Update the node corresponding to path `path`, if updating specific attributes in the node then `attributeName` parameter is required
+ - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Set the node corresponding to path `path`, or `attributeName` if setting specific attributes in the node
+ - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the specified path
+ - `delItemByPath`: `(path?: string, attributeName?: string) => void` Deletes the node corresponding to path `path`, or the `attributeName` parameter if the specific attribute in the node is deleted
+ - `addItemByIndex`: `(data: any, index?: number, parent?: string) => void` Add options based on the serial number and parent node path
+ - `getItemByPath`: `(path?: string, attributeName?: string) => void` Get the node corresponding to path `path`, or `attributeName` if it is a specific attribute in the node
+ - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` Swap options in the tree from one location to another
+ - `setProperties`: `(data?: Partial<FormFieldProps>) => void` Set `properties`.
 
 ### Hooks
 
