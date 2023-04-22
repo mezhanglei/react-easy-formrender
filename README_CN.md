@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.2.18-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.19-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -15,10 +15,8 @@
 
 # version log
 - v6.x
-  6.x在v5.x版本基础上有两大更新(文档已更新)：
-  - 6.2.17 ~~`fieldComponent`~~ 改为`component`，`FormRenderStore`的方法也进行更新
-  - 6.2.14 `component`属性可以设置为`null`.
-  - 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签`warning`时, 可以设置`tagName`更换成其他标签.
+  - 6.2.17 ~~`fieldComponent`~~ 改为`component`，`component`属性可以设置为`null`. `FormRenderStore`的方法也进行更新
+  - 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签`warning`时, 可以设置`tagName`更换成其他标签. 移除 ~~`addItemByIndex`, `addAfterByPath`, `addBeforeByPath`~~
   - 6.2.5 增强并调整字符串表达式的用法，并在此文档中新增字符串表达式使用方法说明请详细阅读.
   - 6.2.1 适配底层`react-easy-formcore`库的`4.x`版本以上路径系统，修复`useFormValues`的错误.
   - 6.0.1 组件可以拆分为`Form`和`RenderFormChildren`两部分，`Form`组件处理表单值，`RenderFormChildren`根据提供的信息渲染表单，一个`Form`组件可以包裹多个`RenderFormChildren`组件，如果多个`RenderFormChildren`组件之间存在同属性的，后面会覆盖前面
@@ -27,8 +25,6 @@
   本次更新完成了表单的显示组件与表单值相关逻辑的解耦，后续的基础版本。
   - 底层库`react-easy-formcore`更新，需要删除旧包，再安装新版本的包
   - ~~`readOnlyItem`废弃~~，只保留`readOnlyRender`
-  - 5.1.0 ~~`store.swapItemByPath`~~ => `store.moveItemByPath`
-  - 5.2.x 删除旧包，再安装新版本的包，更改了`store.addItemByIndex`、`store.addAfterByPath`和`store.addBeforeByPath`的第二个参数。
 - v4.x:
   v4.x及之前的版本多数是调整一些方法命名和传参更改
   - 废除固定容器属性 ~~`col`~~ 和 ~~`customInner`~~，增加自定义容器`inside`和`outside`;
@@ -529,7 +525,7 @@ export interface FormFieldProps extends FormItemProps, FormComponent {
  - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 设置路径`path`对应的节点，如果设置节点中的具体属性则需要`attributeName`参数
  - `updateNameByPath`: `(path: string, newName?: string) => void` 更新指定路径的name键
  - `delItemByPath`: `(path?: string, attributeName?: string) => void` 删除路径`path`对应的节点，如果删除节点中的具体属性则需要`attributeName`参数
- - `addItemByIndex`: `(data: any, index?: number, parent?: string) => void` 根据序号和父节点路径添加选项
+ - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` 根据序号和父节点路径添加选项
  - `getItemByPath`: `(path?: string, attributeName?: string) => void` 获取路径`path`对应的节点，如果是节点中的具体属性则需要`attributeName`参数
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` 设置`properties`;

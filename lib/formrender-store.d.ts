@@ -1,5 +1,5 @@
 import { FieldUnionType, GeneratePrams, PropertiesData } from "./types";
-import { InsertDataType } from "./utils/utils";
+import { InsertItemType } from "./utils/utils";
 export declare type FormRenderListener = (newValue?: any, oldValue?: any) => void;
 export declare class FormRenderStore {
     private controls;
@@ -17,10 +17,21 @@ export declare class FormRenderStore {
     setProperties(data?: PropertiesData): void;
     updateItemByPath: (data?: any, path?: string, attributeName?: string) => void;
     setItemByPath: (data?: any, path?: string, attributeName?: string) => void;
+    setItemByIndex: (data?: any, index?: number, parent?: {
+        path?: string;
+        attributeName?: string;
+    }) => void;
     updateNameByPath: (path?: string, newName?: string) => void;
-    addItemByIndex: (data: InsertDataType, index?: number, parent?: string) => void;
+    insertItemByIndex: (data: InsertItemType, index?: number, parent?: {
+        path?: string;
+        attributeName?: string;
+    }) => void;
     delItemByPath: (path?: string, attributeName?: string) => void;
     getItemByPath: (path?: string, attributeName?: string) => any;
+    getItemByIndex: (index: number, parent: {
+        path?: string;
+        attributeName?: string;
+    }) => any;
     moveItemByPath: (from: {
         parent?: string;
         index: number;
@@ -30,6 +41,4 @@ export declare class FormRenderStore {
     }) => void;
     subscribeProperties(listener: FormRenderListener): () => void;
     private notifyProperties;
-    addAfterByPath: (data: InsertDataType, path?: string) => void;
-    addBeforeByPath: (data: InsertDataType, path?: string) => void;
 }

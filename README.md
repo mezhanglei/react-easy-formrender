@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.2.18-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-6.2.19-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -15,9 +15,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 
 # version log
 - v6.x
-  6.x has two major updates from v5.x.
-  - 6.2.17 ~~`fieldComponent`~~ change to `component`，and update `FormRenderStore` methods.
-  - 6.2.14 The `component` property can be set to `null`.
+  - 6.2.17 ~~`fieldComponent`~~ change to `component`，The `component` property can be set to `null`. and update `FormRenderStore` methods. ~~`addItemByIndex`, `addAfterByPath`, `addBeforeByPath`~~ removed;
   - 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
   - 6.2.5 Enhancing and adjusting the usage of string expressions, and adding a new description of how to use string expressions in this document.
   - 6.2 adapt the underlying `react-easy-formcore` library to path systems above `4.x`, fix the `useFormValues` bug.
@@ -27,8 +25,6 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
   This update completes the decoupling of the form display component from the form value related logic. basic version.
   - The underlying library `react-easy-formcore` is updated, you need to remove the old package and install the new version
   - ~~`readOnlyItem` is deprecated~~, only `readOnlyRender` is kept
-  - 5.1.0 `store.swapItemByPath` => `store.moveItemByPath`
-  - 5.2.x Remove the old package and install the new version again, changed the second parameter of `store.addItemByIndex`, `store.addAfterByPath` and `store.addBeforeByPath`.
 - v4.x:
   v4.x and previous versions mostly adjust some method naming and parameter passing changes.
   - Deprecate fixed container properties ~~`col`~~ and ~~`customInner`~~, add custom containers `inside` and `outside`;
@@ -528,7 +524,7 @@ The `rules` rules in the form control are derived from the `rules` property in [
  - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Set the node corresponding to path `path`, or `attributeName` if setting specific attributes in the node
  - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the specified path
  - `delItemByPath`: `(path?: string, attributeName?: string) => void` Deletes the node corresponding to path `path`, or the `attributeName` parameter if the specific attribute in the node is deleted
- - `addItemByIndex`: `(data: any, index?: number, parent?: string) => void` Add options based on the serial number and parent node path
+ - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` Add options based on the serial number and parent node path
  - `getItemByPath`: `(path?: string, attributeName?: string) => void` Get the node corresponding to path `path`, or `attributeName` if it is a specific attribute in the node
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` Swap options in the tree from one location to another
  - `setProperties`: `(data?: Partial<FormFieldProps>) => void` Set `properties`.
