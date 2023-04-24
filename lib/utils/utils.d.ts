@@ -37,7 +37,7 @@ export declare const moveDiffLevel: (properties: PropertiesData, from: {
     index?: number;
 }) => PropertiesData | undefined;
 export declare const getInitialValues: (properties?: PropertiesData) => {} | undefined;
-export declare const setExpandControl: (properties?: PropertiesData) => {
+export declare const setExpandComponents: (properties?: PropertiesData) => {
     [key: string]: FormFieldProps;
 } | undefined;
 export declare const parseFromField: (target: FieldUnionType | undefined, typeMap?: {

@@ -36,7 +36,6 @@ export interface RenderFormChildrenProps {
             handler: WatchHandler;
         } | WatchHandler;
     };
-    controls?: any;
     components?: any;
     inside?: FieldUnionType;
     properties?: PropertiesData;

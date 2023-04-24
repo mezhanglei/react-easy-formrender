@@ -185,7 +185,9 @@ const parseEntries = (entriesData?: { entries: Array<[string, any]>, isList?: bo
       const itemKey = item?.[0];
       const itemData = item?.[1];
       // 还原数据
-      if (typeof itemKey === 'string' || isList) {
+      if (isList) {
+        temp[key] = itemData;
+      } else if (typeof itemKey === 'string') {
         temp[itemKey] = itemData;
       }
     }
@@ -231,7 +233,7 @@ export const insertItemByIndex = (properties: PropertiesData, data: InsertItemTy
   if (isList) {
     // 数组添加选项
     const dataList = data instanceof Array ? data : [data];
-    addItems = dataList?.map((item, i) => [`${startIndex + i}`, item])
+    addItems = dataList?.map((item, i) => [`${i}`, item]);
   } else {
     // 对象添加属性
     addItems = Object.entries(data || {});
@@ -348,14 +350,14 @@ export const getInitialValues = (properties?: PropertiesData) => {
 }
 
 // 展平properties中的控件，键为表单路径
-export const setExpandControl = (properties?: PropertiesData): { [key: string]: FormFieldProps } | undefined => {
+export const setExpandComponents = (properties?: PropertiesData): { [key: string]: FormFieldProps } | undefined => {
   if (typeof properties !== 'object') return
-  let controlMap = {};
+  let componentsMap = {};
   // 遍历处理对象树中的非properties字段
   const deepHandle = (formField: FormFieldProps, path: string) => {
     if (isEmpty(formField['properties'])) {
       if (path) {
-        controlMap[path] = formField;
+        componentsMap[path] = formField;
       }
     } else {
       const parent = path;
@@ -381,7 +383,7 @@ export const setExpandControl = (properties?: PropertiesData): { [key: string]: 
       deepHandle(childField, childPath);
     }
   }
-  return controlMap;
+  return componentsMap;
 }
 
 // 解析组件

@@ -2,18 +2,20 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-6.2.19-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-7.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
-- Component Registration: Registered form controls need to match the `value`/`onChange` (or other field) pass-through in order to work properly.
+- Component Registration: Registered form components need to match the `value`/`onChange` (or other field) pass-through in order to work properly.
 - Component description: `properties` supports object or array type rendering, nesting is supported.
 - Component rendering: `Form` component handles form values, `RenderFormChildren` component handles form rendering, one `Form` component can support multiple `RenderFormChildren` components rendering internally.
 - Component linkage: All form properties can support string expressions to describe linkage conditions (except `properties`).
 
 # version log
+- v7.x
+  - 7.0.0 Remove ~~`controls`~~ property, keep `components` property to register all global components.
 - v6.x
   - 6.2.17 ~~`fieldComponent`~~ change to `component`，The `component` property can be set to `null`. and update `FormRenderStore` methods. ~~`addItemByIndex`, `addAfterByPath`, `addBeforeByPath`~~ removed;
   - 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
@@ -28,9 +30,8 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - v4.x:
   v4.x and previous versions mostly adjust some method naming and parameter passing changes.
   - Deprecate fixed container properties ~~`col`~~ and ~~`customInner`~~, add custom containers `inside` and `outside`;
-  - ~~`widgets`~~ to `controls`, ~~`widget`~~ and ~~`widgetProps`~~ to `type` and `props`;
+  - ~~`widgets`~~ to ~~`controls`~~ , ~~`widget`~~ and ~~`widgetProps`~~ to `type` and `props`;
   - ~~`readOnlyWidget` to `readOnlyItem`;~~
-  - Add registration for non-form controls: `components`;
 - v3.1.x:
   - Adjust the `layout` property of form fields, add `inline`, `labelWidth` properties
   - ~~Adjust `onPropertiesChange` of default export component to `onSchemaChange`~~
@@ -43,7 +44,7 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
   - ~~remove the `dependencies` property~~ and instead inject the form values `formvalues` to the widget component automatically.
   - ~~change api of `RenderFormChildren` component~~
 - v1.x:
-  - Change the method of the form control
+  - Change the method of the form component
   - ~~Change `component` and `props` in schema to `widget` and `widgetProps`~~
   - ~~change `render` in schema to `readOnlyWidget` and `readOnlyRender`~~
   - Version matching react-easy-formcore version 1.1.x or higher
@@ -93,13 +94,13 @@ export const AntdBaseControls = {
 
 export function RenderFormChildren(props: RenderFormChildrenProps) {
   return (
-    <RenderFormChilds {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
+    <RenderFormChilds {...props} components={{ ...AntdBaseComponents, ...props?.components }} />
   );
 }
 
 export default function FormRender(props: RenderFormProps) {
   return (
-    <RenderFormDefault {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
+    <RenderFormDefault {...props} components={{ ...AntdBaseComponents, ...props?.components }} />
   );
 }
 ```
@@ -470,7 +471,6 @@ const watch = {
   <RenderForm watch={watch} />
 }
 ```
-- `controls`：register form field's control to use.
 - `components`：register other component for form to use.
 - `renderList`: function that provides custom rendering List.
 - `renderItem`: function that provides custom render field item.
@@ -480,7 +480,7 @@ const watch = {
 - `expressionImports`: External variables to be introduced in the string expression.
 
 ### FormFieldProps
-- The controls, layout components, custom components and other components of the form are described in a uniform structure: 
+- the components of the form are described in a uniform structure: 
 ```javascript
 // Description of all component in the form
 export interface FormComponent {
@@ -508,15 +508,15 @@ export interface FormFieldProps extends FormItemProps, FormComponent {
   outside?: FieldUnionType; // Form field component outside nested components
   readOnly?: boolean; // readonly？
   readOnlyRender?: FieldUnionType | ReactNode; // readonly display component
-  typeRender?: any; // form field's control render
+  typeRender?: any; // form field's component render
   valueGetter?: string | ((...args: any[]) => any); // output getter
   valueSetter?: string | ((value: any) => any); // input setter
-  properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // Nested form controls Nested objects when they are objects, or collections of arrays when they are array types
+  properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // Nested form components Nested objects when they are objects, or collections of arrays when they are array types
 }
 ```
 
 ### rules
-The `rules` rules in the form control are derived from the `rules` property in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)。
+The `rules` rules in the form component are derived from the `rules` property in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)。
 
 ### FormRenderStore Methods
   Only responsible for the rendering of the form

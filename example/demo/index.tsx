@@ -5,7 +5,7 @@ import RenderForm, { useFormStore } from '../../src/index';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
 // 原子组件
-export const defaultControls: { [key: string]: any } = {
+export const defaultComponents: { [key: string]: any } = {
   "Input": Input,
   "Radio.Group": Radio.Group,
   "Radio": Radio,
@@ -139,7 +139,7 @@ export default function Demo(props) {
         values={{ name2: 22 }}
         // store={formRenderStore}
         properties={properties}
-        controls={defaultControls}
+        components={defaultComponents}
         watch={watch} />
       <div style={{ marginLeft: '120px' }}>
         <Button onClick={onSubmit}>submit</Button>

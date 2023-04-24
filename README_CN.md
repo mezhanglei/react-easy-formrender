@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-6.2.19-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-7.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -14,6 +14,8 @@
 - 组件联动：表单属性均可以支持字符串表达式描述联动条件(`properties`除外).
 
 # version log
+- v7.x
+  - 7.0.0 移除 ~~`controls`~~ 属性, 保留`components`属性注册全局所有组件.
 - v6.x
   - 6.2.17 ~~`fieldComponent`~~ 改为`component`，`component`属性可以设置为`null`. `FormRenderStore`的方法也进行更新
   - 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签`warning`时, 可以设置`tagName`更换成其他标签. 移除 ~~`addItemByIndex`, `addAfterByPath`, `addBeforeByPath`~~
@@ -28,9 +30,8 @@
 - v4.x:
   v4.x及之前的版本多数是调整一些方法命名和传参更改
   - 废除固定容器属性 ~~`col`~~ 和 ~~`customInner`~~，增加自定义容器`inside`和`outside`;
-  - ~~`widgets`~~ 改为 `controls`, ~~`widget`~~ 和 ~~`widgetProps`~~ 改为`type`和`props`;
+  - ~~`widgets`~~ 改为 ~~`controls`~~ , ~~`widget`~~ 和 ~~`widgetProps`~~ 改为`type`和`props`;
   - ~~`readOnlyWidget` 改为 `readOnlyItem`;~~
-  - 增加非表单控件的注册: `components`;
 - v3.1.x:
   - 调整表单域的`layout`属性，增加`inline`, `labelWidth`属性
   - ~~调整默认导出组件的`onPropertiesChange`改为`onSchemaChange`~~
@@ -67,7 +68,7 @@ import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select
 import 'react-easy-formrender/lib/css/main.css'
 export * from 'react-easy-formrender';
 
-export const AntdBaseControls = {
+export const AntdBaseComponents = {
   "Input": Input,
   "Input.TextArea": Input.TextArea,
   "Input.Password": Input.Password,
@@ -93,13 +94,13 @@ export const AntdBaseControls = {
 
 export function RenderFormChildren(props: RenderFormChildrenProps) {
   return (
-    <RenderFormChilds {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
+    <RenderFormChilds {...props} components={{ ...AntdBaseComponents, ...props?.components }} />
   );
 }
 
 export default function FormRender(props: RenderFormProps) {
   return (
-    <RenderFormDefault {...props} controls={{ ...AntdBaseControls, ...props?.controls }} />
+    <RenderFormDefault {...props} components={{ ...AntdBaseComponents, ...props?.components }} />
   );
 }
 ```
@@ -471,8 +472,7 @@ const watch = {
   <RenderForm watch={watch} />
 }
 ```
-- `controls`：注册表单控件.
-- `components`：注册表单中控件以外的其他组件(容器组件，按钮等);
+- `components`：注册表单中的所有组件;
 - `renderList`：提供自定义渲染列表的函数.
 - `renderItem`：提供自定义渲染表单项的函数.
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
@@ -481,7 +481,7 @@ const watch = {
 - `expressionImports`: 在字符串表达式中引入的外部的变量.
 
 ### 表单域属性(FormFieldProps)
-- 表单中的控件，布局组件，自定义组件等组件采用统一的结构描述: 
+- 表单中的组件采用统一的结构描述: 
 ```javascript
 // 表单中的任意的组件描述
 export interface FormComponent {
