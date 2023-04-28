@@ -18,7 +18,7 @@ export declare class FormRenderStore {
         path?: string;
         attributeName?: string;
     }) => void;
-    updateNameByPath: (path?: string, newName?: string) => void;
+    updateNameByPath: (newName?: string, path?: string) => void;
     insertItemByIndex: (data: InsertItemType, index?: number, parent?: {
         path?: string;
         attributeName?: string;

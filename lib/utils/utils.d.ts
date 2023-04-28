@@ -16,7 +16,7 @@ export declare const toEntries: (data: any) => {
     isList: boolean;
     entries: [string, any][];
 };
-export declare const updateName: (properties: PropertiesData, pathStr?: string, newName?: string) => PropertiesData | undefined;
+export declare const updateName: (properties: PropertiesData, newName?: string, pathStr?: string) => PropertiesData | undefined;
 export declare type InsertItemType = Array<any> | Object | any;
 export declare const insertItemByIndex: (properties: PropertiesData, data: InsertItemType, index?: number, parent?: {
     path?: string;
