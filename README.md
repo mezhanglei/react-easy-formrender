@@ -522,7 +522,7 @@ The `rules` rules in the form component are derived from the `rules` property in
   Only responsible for the rendering of the form
  - `updateItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Update the node corresponding to path `path`, if updating specific attributes in the node then `attributeName` parameter is required
  - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Set the node corresponding to path `path`, or `attributeName` if setting specific attributes in the node
- - `updateNameByPath`: `(path: string, newName?: string) => void` Update the name key of the specified path
+ - `updateNameByPath`: `(newName?: string, path: string) => void` Update the name key of the specified path
  - `delItemByPath`: `(path?: string, attributeName?: string) => void` Deletes the node corresponding to path `path`, or the `attributeName` parameter if the specific attribute in the node is deleted
  - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` Add options based on the serial number and parent node path
  - `getItemByPath`: `(path?: string, attributeName?: string) => void` Get the node corresponding to path `path`, or `attributeName` if it is a specific attribute in the node

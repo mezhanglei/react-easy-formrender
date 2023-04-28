@@ -523,7 +523,7 @@ export interface FormFieldProps extends FormItemProps, FormComponent {
   仅仅负责表单的渲染
  - `updateItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 更新路径`path`对应的节点，如果更新节点中的具体属性则需要`attributeName`参数
  - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 设置路径`path`对应的节点，如果设置节点中的具体属性则需要`attributeName`参数
- - `updateNameByPath`: `(path: string, newName?: string) => void` 更新指定路径的name键
+ - `updateNameByPath`: `(newName?: string, path: string) => void` 更新指定路径的name键
  - `delItemByPath`: `(path?: string, attributeName?: string) => void` 删除路径`path`对应的节点，如果删除节点中的具体属性则需要`attributeName`参数
  - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` 根据序号和父节点路径添加选项
  - `getItemByPath`: `(path?: string, attributeName?: string) => void` 获取路径`path`对应的节点，如果是节点中的具体属性则需要`attributeName`参数
