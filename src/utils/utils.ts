@@ -228,7 +228,6 @@ export const insertItemByIndex = (properties: PropertiesData, data: InsertItemTy
   const childs = attributeName ? parentItem : (path ? parentItem?.properties : parentItem);
   const entriesData = toEntries(childs);
   const isList = entriesData?.isList;
-  const startIndex = index === undefined ? childs?.length : index;
   let addItems: Array<[string, any]> = [];
   if (isList) {
     // 数组添加选项
@@ -386,7 +385,7 @@ export const setExpandComponents = (properties?: PropertiesData): { [key: string
   return componentsMap;
 }
 
-// 解析组件
+// 解析组件声明
 export const parseFromField = (target: FieldUnionType | undefined, typeMap?: { [key: string]: React.ElementType }) => {
   if (target === undefined) return;
   if (isValidChildren(target)) return null;

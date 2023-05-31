@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-7.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -14,6 +14,9 @@
 - 组件联动：表单属性均可以支持字符串表达式描述联动条件(`properties`除外).
 
 # version log
+- v8.x
+  - 更新底层组件为`react-easy-formcore`至少5.x版本.
+  - 渲染数据源`properties`渲染方式更改，其中的节点只支持通过`type`和`props`字段渲染，不再默认携带表单域, 详细使用请见demo。
 - v7.x
   - 7.0.0 移除 ~~`controls`~~ 属性, 保留`components`属性注册全局所有组件.
 - v6.x
@@ -142,8 +145,8 @@ export default function Demo5(props) {
         props: {}
       },
       name3: {
-        label: "list",
         properties: [{
+          label: 'list[0]',
           rules: [{ required: true, message: 'list[0] empty' }],
           initialValue: { label: 'option1', value: '1', key: '1' },
           type: 'Select',
@@ -156,6 +159,7 @@ export default function Demo5(props) {
             ]
           }
         }, {
+          label: 'list[1]',
           rules: [{ required: true, message: 'list[1] empty' }],
           type: 'Select',
           props: {
@@ -169,9 +173,9 @@ export default function Demo5(props) {
         }]
       },
       name4: {
-        label: 'object',
         properties: {
           first: {
+            label: 'first',
             rules: [{ required: true, message: 'first empty' }],
             type: 'Select',
             props: {
@@ -180,6 +184,7 @@ export default function Demo5(props) {
             }
           },
           second: {
+            label: 'second',
             rules: [{ required: true, message: 'second empty' }],
             type: 'Select',
             props: {
@@ -428,7 +433,7 @@ export default function Demo(props) {
  2. 字符串表达式的使用规则
   - 一个字符串有且只能有一对`{{`和`}}`.
   - 除了内置的三个变量(`form`: `useFormStore()`实例, `store`: `useFormRenderStore()`实例, `formvalues`: 表单值对象)以外, 还可以通过`expressionImports`引入外部变量, 然后在字符串表达式内直接引用该变量名.
-  - 6.2.5 版本开始, 推荐不写`$`符号. 后续版本可能移除该符号.
+  - 6.2.5 版本开始, 推荐不写`$`符号. 7.x版本已移除该符号.
 ```javascript
  import moment from 'moment'
  import RenderForm from "./form-render"

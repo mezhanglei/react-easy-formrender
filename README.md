@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-7.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -14,6 +14,9 @@ High degree of freedom and Lightweight dynamic form Engine, high-end solutions o
 - Component linkage: All form properties can support string expressions to describe linkage conditions (except `properties`).
 
 # version log
+- v8.x
+  - Update the underlying components to `react-easy-formcore` at least version 5.x.
+  - Rendered the datasource `properties` in a different way, the nodes in it only support rendering by `type` and `props` fields and no longer carry form fields by default, see the demo for details.
 - v7.x
   - 7.0.0 Remove ~~`controls`~~ property, keep `components` property to register all global components.
 - v6.x
@@ -142,8 +145,8 @@ export default function Demo5(props) {
         props: {}
       },
       name3: {
-        label: "list",
         properties: [{
+          label: "list[0]",
           rules: [{ required: true, message: 'list[0] empty' }],
           initialValue: { label: 'option1', value: '1', key: '1' },
           type: 'Select',
@@ -156,6 +159,7 @@ export default function Demo5(props) {
             ]
           }
         }, {
+          label: "list[1]",
           rules: [{ required: true, message: 'list[1] empty' }],
           type: 'Select',
           props: {
@@ -169,9 +173,9 @@ export default function Demo5(props) {
         }]
       },
       name4: {
-        label: 'object',
         properties: {
           first: {
+            label: "first",
             rules: [{ required: true, message: 'first empty' }],
             type: 'Select',
             props: {
@@ -180,6 +184,7 @@ export default function Demo5(props) {
             }
           },
           second: {
+            label: "second",
             rules: [{ required: true, message: 'second empty' }],
             type: 'Select',
             props: {
@@ -427,7 +432,7 @@ As we all know, if we use `JSON` during the transfer, the form will lose some in
  2. Rules for using string expressions
   - A string has and can have only one pair of `{{` and `}}`.
   - In addition to the three built-in variables (`form`: `useFormStore()` instance, `store`: `useFormRenderStore()` instance, `formvalues`: form value object), external variables can be introduced via `expressionImports`, and then referenced directly within the string expression and then refer to the variable name directly within the string expression.
-  - Starting from 6.2.5, it is recommended to leave out the `$` symbol. It may be removed in later versions.
+  - Starting from 6.2.5, it is recommended to leave out the `$` symbol. It removed in 7.x versions.
 ```javascript
  import moment from 'moment'
  import RenderForm from "./form-render"

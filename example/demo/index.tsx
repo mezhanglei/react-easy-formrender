@@ -47,9 +47,13 @@ export default function Demo(props) {
       props: {}
     },
     name3: {
-      label: "list",
-      tooltip: '111',
+      type: 'Form.Item',
+      props: {
+        label: 'name3'
+      },
       properties: [{
+        label: "list[0]",
+        tooltip: '111',
         rules: [{ required: true, message: 'list[0] empty' }],
         initialValue: { label: 'option1', value: '1', key: '1' },
         type: 'Select',
@@ -62,6 +66,8 @@ export default function Demo(props) {
           ]
         }
       }, {
+        label: "list[1]",
+        tooltip: '222',
         rules: [{ required: true, message: 'list[1] empty' }],
         type: 'Select',
         props: {
@@ -75,9 +81,9 @@ export default function Demo(props) {
       }]
     },
     name4: {
-      label: 'object',
       properties: {
         first: {
+          label: "first",
           rules: [{ required: true, message: 'first empty' }],
           type: 'Select',
           props: {
@@ -86,6 +92,7 @@ export default function Demo(props) {
           }
         },
         second: {
+          label: "second",
           rules: [{ required: true, message: 'second empty' }],
           type: 'Select',
           props: {

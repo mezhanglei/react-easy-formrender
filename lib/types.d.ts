@@ -48,10 +48,14 @@ export interface RenderFormProps extends Omit<FormProps, 'store'>, RenderFormChi
     form?: FormStore;
 }
 export interface GeneratePrams<T = {}> {
-    name?: string | number;
+    name?: string;
+    path?: string;
     field?: T & GenerateFieldProps;
-    parent?: string;
-    formparent?: string;
+    parent?: {
+        name?: string;
+        path?: string;
+        field?: T & GenerateFieldProps;
+    };
     store?: FormRenderStore;
     form?: FormStore;
     children?: any;
