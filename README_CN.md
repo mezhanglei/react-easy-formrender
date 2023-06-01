@@ -488,9 +488,9 @@ const watch = {
 
 ### properties结构说明
    `properties`属性中的字段均为构造的表单对象中的一个节点，节点分为嵌套节点和控件节点。
-- 嵌套节点
+- 嵌套节点:
   没有表单域组件，通过`type`和`props`字段描述该节点为哪个组件。
-- 控件节点
+- 控件节点:
   默认由表单域组件嵌套，提供表单域的一些功能，只有嵌套最底层的节点才为控件节点,默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
 ```javascript
 // name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。

@@ -5,8 +5,7 @@ import { FormRenderStore } from "./formrender-store";
 // 组件JSON描述
 export interface FormComponent {
   type?: string;
-  props?: any;
-  children?: any | Array<FormComponent>;
+  props?: any & { children?: any | Array<FormComponent> };
   hidden?: string | boolean;
 }
 
@@ -22,8 +21,8 @@ export type CustomUnionType = FormComponent | Array<FormComponent> | UnionCompon
 // 最终生成的表单域
 export interface GenerateFormNodeProps extends FormComponent, FormItemProps {
   ignore?: boolean; // 标记当前节点为非表单节点
-  inside?: CustomUnionType; // 表单域组件内层嵌套组件
-  outside?: CustomUnionType; // 表单域组件外层嵌套组件
+  inside?: CustomUnionType; // 节点内层嵌套组件
+  outside?: CustomUnionType; // 节点外层嵌套组件
   readOnly?: boolean; // 只读模式
   readOnlyRender?: CustomUnionType; // 只读模式下的组件
   typeRender?: CustomUnionType; // 表单控件自定义渲染
@@ -32,8 +31,10 @@ export interface GenerateFormNodeProps extends FormComponent, FormItemProps {
 
 // 表单属性对象
 export type PropertiesData = { [name: string]: FormNodeProps } | FormNodeProps[]
+// render函数
+export type CustomRenderType = (params: GeneratePrams<any> & { children?: any }) => any;
 
-// 表单节点(支持字符串表达式的表单域)
+// 表单域(支持字符串表达式的表单域)
 export type FormNodeProps = {
   [key in keyof GenerateFormNodeProps]: key extends 'rules' ?
   (string | Array<{ [key in keyof FormRule]: FormRule[key] | string }> | GenerateFormNodeProps[key])
@@ -52,9 +53,9 @@ export interface RenderFormChildrenProps {
   inside?: CustomUnionType;
   properties?: PropertiesData; // 渲染数据
   // 自定义渲染列表组件
-  renderList?: (params: GeneratePrams<any>) => any;
+  renderList?: CustomRenderType;
   // 自定义渲染子表单域
-  renderItem?: (params: GeneratePrams<any>) => any;
+  renderItem?: CustomRenderType;
   // 渲染数据回调函数
   onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
   formrender?: FormRenderStore
@@ -73,5 +74,4 @@ export interface GeneratePrams<T = {}> {
   parent?: { name?: string; path?: string, field?: T & GenerateFormNodeProps; };
   formrender?: FormRenderStore;
   form?: FormStore;
-  children?: any
 };

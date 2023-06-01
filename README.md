@@ -487,9 +487,9 @@ const watch = {
 
 ### properties
 The fields in the `properties` property are all constructed as a node in the form object, and the nodes are divided into nested nodes and control nodes.
-- Nested nodes
+- Nested nodes:
   There is no form field component, and the `type` and `props` fields describe which component the node is.
-- Control nodes
+- Control nodes:
   Nested by default by the form field component, providing some functionality of the form field, only the node at the bottom of the nest is a control node and inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 ```javascript
 // `name3` is Nested nodes，but not set component，`first` and `second` is Control nodes with form fields component。

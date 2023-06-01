@@ -3,8 +3,9 @@ import { FormItemProps, FormProps, FormRule, FormStore } from "react-easy-formco
 import { FormRenderStore } from "./formrender-store";
 export interface FormComponent {
     type?: string;
-    props?: any;
-    children?: any | Array<FormComponent>;
+    props?: any & {
+        children?: any | Array<FormComponent>;
+    };
     hidden?: string | boolean;
 }
 export declare type UnionComponent<P> = React.ComponentType<P> | React.ForwardRefExoticComponent<P> | React.FC<P> | keyof React.ReactHTML;
@@ -21,6 +22,9 @@ export interface GenerateFormNodeProps extends FormComponent, FormItemProps {
 export declare type PropertiesData = {
     [name: string]: FormNodeProps;
 } | FormNodeProps[];
+export declare type CustomRenderType = (params: GeneratePrams<any> & {
+    children?: any;
+}) => any;
 export declare type FormNodeProps = {
     [key in keyof GenerateFormNodeProps]: key extends 'rules' ? (string | Array<{
         [key in keyof FormRule]: FormRule[key] | string;
@@ -39,8 +43,8 @@ export interface RenderFormChildrenProps {
     components?: any;
     inside?: CustomUnionType;
     properties?: PropertiesData;
-    renderList?: (params: GeneratePrams<any>) => any;
-    renderItem?: (params: GeneratePrams<any>) => any;
+    renderList?: CustomRenderType;
+    renderItem?: CustomRenderType;
     onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
     formrender?: FormRenderStore;
 }
@@ -58,5 +62,4 @@ export interface GeneratePrams<T = {}> {
     };
     formrender?: FormRenderStore;
     form?: FormStore;
-    children?: any;
 }
