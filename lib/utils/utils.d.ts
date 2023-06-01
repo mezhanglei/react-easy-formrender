@@ -40,6 +40,6 @@ export declare const getInitialValues: (properties?: PropertiesData) => {} | und
 export declare const setExpandComponents: (properties?: PropertiesData) => {
     [key: string]: FormNodeProps;
 } | undefined;
-export declare const parseFromNode: (target: CustomUnionType | undefined, typeMap?: {
+export declare const parseComponent: (target: CustomUnionType | undefined, typeMap?: {
     [key: string]: import("react").ElementType<any>;
 } | undefined) => any;

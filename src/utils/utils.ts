@@ -328,7 +328,7 @@ export const getInitialValues = (properties?: PropertiesData) => {
             const childField = childProperties[childKey];
             const childName = childKey;
             if (typeof childName === 'number' || typeof childName === 'string') {
-              const childPath = joinFormPath(path, childName) as string;
+              const childPath = childField?.ignore === true ? path : joinFormPath(path, childName) as string;
               deepHandle(childField, childPath);
             }
           }
@@ -341,7 +341,7 @@ export const getInitialValues = (properties?: PropertiesData) => {
     const childField = properties[key];
     const childName = key;
     if (typeof childName === 'number' || typeof childName === 'string') {
-      const childPath = joinFormPath(childName) as string;
+      const childPath = joinFormPath(childField?.ignore ? undefined : childName) as string
       deepHandle(childField, childPath);
     }
   }
@@ -359,14 +359,13 @@ export const setExpandComponents = (properties?: PropertiesData): { [key: string
         componentsMap[path] = formNode;
       }
     } else {
-      const parent = path;
       const childProperties = formNode['properties'];
       if (childProperties) {
         for (const key of Object.keys(childProperties)) {
           const childField = childProperties[key];
           const childName = key;
           if (typeof childName === 'string') {
-            const childPath = joinFormPath(parent, childField?.ignore ? undefined : childName) as string;
+            const childPath = childField?.ignore === true ? path : joinFormPath(path, childName) as string;
             deepHandle(childField, childPath);
           }
         }
@@ -386,7 +385,7 @@ export const setExpandComponents = (properties?: PropertiesData): { [key: string
 }
 
 // 解析组件声明
-export const parseFromNode = (target: CustomUnionType | undefined, typeMap?: { [key: string]: React.ElementType }) => {
+export const parseComponent = (target: CustomUnionType | undefined, typeMap?: { [key: string]: React.ElementType }) => {
   if (target === undefined) return;
   if (isValidChildren(target)) return null;
   // 是否为类或函数组件声明

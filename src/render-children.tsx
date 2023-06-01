@@ -224,7 +224,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
         const importsKeys = ['form', 'formrender', 'formvalues'].concat(Object.keys(expressionImports))
         const importsValues = Object.values(expressionImports);
         const target = matchStr?.replace(/\{\{|\}\}/g, '');
-        target?.replace('$', 'g'); // 去掉$开头的，兼容前版本
+        // target?.replace('$', 'g'); // 去掉$开头的，兼容前版本
         const actionStr = "return " + target;
         // 函数最后一个参数为函数体，前面均为传入的变量名
         const action = new Function(...importsKeys, actionStr);
