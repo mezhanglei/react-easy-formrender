@@ -487,31 +487,6 @@ const watch = {
 
 ### properties
 The fields in the `properties` property are all constructed as a node in the form object, and the nodes are divided into nested nodes and control nodes.
-```javascript
-// Description of all component in the form
-export interface FormComponent {
-  type?: string;
-  props?: any & { children?: any | Array<FormComponent> };
-  hidden?: string | boolean;
-}
-
-// Component union type
-export type UnionComponent<P> =
-  | React.ComponentType<P>
-  | React.ForwardRefExoticComponent<P>
-  | React.FC<P>
-  | keyof React.ReactHTML;
-export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
-export interface FormNodeProps extends FormItemProps, FormComponent {
-  ignore?: boolean; // Mark the current field as a non-form field
-  inside?: CustomUnionType; // FormNode inner nested components
-  outside?: CustomUnionType; // FormNode outside nested components
-  readOnly?: boolean; // readonly？
-  readOnlyRender?: CustomUnionType | ReactNode; // form field's component render
-  typeRender?: any; // form field's component render
-  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // Nested form components Nested objects when they are objects, or collections of arrays when they are array types
-}
-```
 - Nested nodes
   There is no form field component, and the `type` and `props` fields describe which component the node is.
 - Control nodes
@@ -542,6 +517,32 @@ const [properties, setProperties] = useState({
     }
   },
 })
+```
+- formNode type
+```javascript
+// Description of all component in the form
+export interface FormComponent {
+  type?: string;
+  props?: any & { children?: any | Array<FormComponent> };
+  hidden?: string | boolean;
+}
+
+// Component union type
+export type UnionComponent<P> =
+  | React.ComponentType<P>
+  | React.ForwardRefExoticComponent<P>
+  | React.FC<P>
+  | keyof React.ReactHTML;
+export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
+export interface FormNodeProps extends FormItemProps, FormComponent {
+  ignore?: boolean; // Mark the current field as a non-form field
+  inside?: CustomUnionType; // FormNode inner nested components
+  outside?: CustomUnionType; // FormNode outside nested components
+  readOnly?: boolean; // readonly？
+  readOnlyRender?: CustomUnionType | ReactNode; // form field's component render
+  typeRender?: any; // form field's component render
+  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // Nested form components Nested objects when they are objects, or collections of arrays when they are array types
+}
 ```
 ### rules
 The `rules` rules in the form component are derived from the `rules` property in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)。

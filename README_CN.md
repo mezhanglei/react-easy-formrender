@@ -488,31 +488,6 @@ const watch = {
 
 ### properties结构说明
    `properties`属性中的字段均为构造的表单对象中的一个节点，节点分为嵌套节点和控件节点。
-```javascript
-// 表单中的任意的组件描述
-export interface FormComponent {
-  type?: string;
-  props?: any & { children?: any | Array<FormComponent> };
-  hidden?: string | boolean;
-}
-
-// 表单上的组件联合类型
-export type UnionComponent<P> =
-  | React.ComponentType<P>
-  | React.ForwardRefExoticComponent<P>
-  | React.FC<P>
-  | keyof React.ReactHTML;
-export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
-export interface FormNodeProps extends FormItemProps, FormComponent {
-  ignore?: boolean; // 标记当前节点为非表单节点
-  inside?: CustomUnionType; // 节点内层嵌套组件
-  outside?: CustomUnionType; // 节点外层嵌套组件
-  readOnly?: boolean; // 只读模式
-  readOnlyRender?: CustomUnionType; // 只读模式下的组件
-  typeRender?: CustomUnionType; // 表单控件自定义渲染
-  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
-}
-```
 - 嵌套节点
   没有表单域组件，通过`type`和`props`字段描述该节点为哪个组件。
 - 控件节点
@@ -543,6 +518,32 @@ const [properties, setProperties] = useState({
     }
   },
 })
+```
+- 节点的ts类型
+```javascript
+// 表单中的任意的组件描述
+export interface FormComponent {
+  type?: string;
+  props?: any & { children?: any | Array<FormComponent> };
+  hidden?: string | boolean;
+}
+
+// 表单上的组件联合类型
+export type UnionComponent<P> =
+  | React.ComponentType<P>
+  | React.ForwardRefExoticComponent<P>
+  | React.FC<P>
+  | keyof React.ReactHTML;
+export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
+export interface FormNodeProps extends FormItemProps, FormComponent {
+  ignore?: boolean; // 标记当前节点为非表单节点
+  inside?: CustomUnionType; // 节点内层嵌套组件
+  outside?: CustomUnionType; // 节点外层嵌套组件
+  readOnly?: boolean; // 只读模式
+  readOnlyRender?: CustomUnionType; // 只读模式下的组件
+  typeRender?: CustomUnionType; // 表单控件自定义渲染
+  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
+}
 ```
 ### rules
 表单控件中的`rules`规则来自于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`rules`属性。
