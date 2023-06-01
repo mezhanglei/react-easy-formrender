@@ -32,6 +32,7 @@ export default function Demo(props) {
     name1: {
       label: "readonly",
       readOnly: true,
+      outside: {type: 'col', props: {span: 12}},
       readOnlyRender: "readonly component",
       initialValue: 1111,
       hidden: '{{formvalues.name6 == true}}',
@@ -40,6 +41,7 @@ export default function Demo(props) {
     },
     name2: {
       label: "input",
+      outside: {type: 'col', props: {span: 12}},
       rules: [{ required: true, message: 'input empty' }],
       initialValue: 1,
       hidden: '{{formvalues.name6 == true}}',
@@ -47,10 +49,6 @@ export default function Demo(props) {
       props: {}
     },
     name3: {
-      type: 'Form.Item',
-      props: {
-        label: 'name3'
-      },
       properties: [{
         label: "list[0]",
         tooltip: '111',
@@ -143,8 +141,9 @@ export default function Demo(props) {
     <div>
       <RenderForm
         form={form}
+        inside={{type:'row'}}
         values={{ name2: 22 }}
-        // store={formRenderStore}
+        // formrender={formRenderStore}
         properties={properties}
         components={defaultComponents}
         watch={watch} />

@@ -1,5 +1,5 @@
 import { arrayMove } from "./array";
-import { FieldUnionType, FormComponent, FormFieldProps, PropertiesData } from "../types";
+import { CustomUnionType, FormComponent, FormNodeProps, PropertiesData } from "../types";
 import { pathToArr, deepSet, joinFormPath, deepGet } from "react-easy-formcore";
 import { isEmpty } from "./type";
 import { isReactComponent, isValidChildren } from "./ReactIs";
@@ -314,15 +314,15 @@ export const getInitialValues = (properties?: PropertiesData) => {
   if (typeof properties !== 'object') return
   let initialValues = {};
   // 遍历处理对象树中的非properties字段
-  const deepHandle = (formField: FormFieldProps, path: string) => {
-    for (const propsKey of Object.keys(formField)) {
+  const deepHandle = (formNode: FormNodeProps, path: string) => {
+    for (const propsKey of Object.keys(formNode)) {
       if (propsKey !== 'properties') {
-        const propsValue = formField[propsKey]
+        const propsValue = formNode[propsKey]
         if (propsKey === 'initialValue' && propsValue !== undefined) {
           initialValues = deepSet(initialValues, path, propsValue);
         }
       } else {
-        const childProperties = formField[propsKey]
+        const childProperties = formNode[propsKey]
         if (childProperties) {
           for (const childKey of Object.keys(childProperties)) {
             const childField = childProperties[childKey];
@@ -349,18 +349,18 @@ export const getInitialValues = (properties?: PropertiesData) => {
 }
 
 // 展平properties中的控件，键为表单路径
-export const setExpandComponents = (properties?: PropertiesData): { [key: string]: FormFieldProps } | undefined => {
+export const setExpandComponents = (properties?: PropertiesData): { [key: string]: FormNodeProps } | undefined => {
   if (typeof properties !== 'object') return
   let componentsMap = {};
   // 遍历处理对象树中的非properties字段
-  const deepHandle = (formField: FormFieldProps, path: string) => {
-    if (isEmpty(formField['properties'])) {
+  const deepHandle = (formNode: FormNodeProps, path: string) => {
+    if (isEmpty(formNode['properties'])) {
       if (path) {
-        componentsMap[path] = formField;
+        componentsMap[path] = formNode;
       }
     } else {
       const parent = path;
-      const childProperties = formField['properties'];
+      const childProperties = formNode['properties'];
       if (childProperties) {
         for (const key of Object.keys(childProperties)) {
           const childField = childProperties[key];
@@ -386,7 +386,7 @@ export const setExpandComponents = (properties?: PropertiesData): { [key: string
 }
 
 // 解析组件声明
-export const parseFromField = (target: FieldUnionType | undefined, typeMap?: { [key: string]: React.ElementType }) => {
+export const parseFromNode = (target: CustomUnionType | undefined, typeMap?: { [key: string]: React.ElementType }) => {
   if (target === undefined) return;
   if (isValidChildren(target)) return null;
   // 是否为类或函数组件声明

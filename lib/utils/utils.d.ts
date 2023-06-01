@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { FieldUnionType, FormFieldProps, PropertiesData } from "../types";
+import { CustomUnionType, FormNodeProps, PropertiesData } from "../types";
 export declare const matchExpression: (value?: any) => string | undefined;
 export declare const getPathEnd: (path?: string) => string | undefined;
 export declare const getParent: (path?: string) => string | undefined;
@@ -38,8 +38,8 @@ export declare const moveDiffLevel: (properties: PropertiesData, from: {
 }) => PropertiesData | undefined;
 export declare const getInitialValues: (properties?: PropertiesData) => {} | undefined;
 export declare const setExpandComponents: (properties?: PropertiesData) => {
-    [key: string]: FormFieldProps;
+    [key: string]: FormNodeProps;
 } | undefined;
-export declare const parseFromField: (target: FieldUnionType | undefined, typeMap?: {
+export declare const parseFromNode: (target: CustomUnionType | undefined, typeMap?: {
     [key: string]: import("react").ElementType<any>;
 } | undefined) => any;

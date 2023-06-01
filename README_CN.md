@@ -9,14 +9,15 @@
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成).
 
 - 组件注册: 注册的表单控件需要符合`value`/`onChange`(或其他字段)传参才能正常使用.
-- 组件描述：`properties`支持对象或者数组类型的渲染，支持嵌套。
+- 组件描述：`properties`支持对象或者数组类型的渲染，支持通过`properties`属性添加嵌套对象字段。
 - 组件渲染：`Form`组件处理表单的值, `RenderFormChildren`组件处理表单的渲染, 一个`Form`组件可以支持多个`RenderFormChildren`组件在内部渲染.
 - 组件联动：表单属性均可以支持字符串表达式描述联动条件(`properties`除外).
 
 # version log
 - v8.x
   - 更新底层组件为`react-easy-formcore`至少5.x版本.
-  - 渲染数据源`properties`渲染方式更改，其中的节点只支持通过`type`和`props`字段渲染，不再默认携带表单域, 详细使用请见demo。
+  - 渲染数据源`properties`渲染方式更改，分为嵌套节点和控件节点，其中嵌套节点不再携带表单域组件，只有控件节点才默认携带表单域组件
+  - ~~`store`~~ 属性更改为 `formrender`字段.
 - v7.x
   - 7.0.0 移除 ~~`controls`~~ 属性, 保留`components`属性注册全局所有组件.
 - v6.x
@@ -235,7 +236,7 @@ export default function Demo5(props) {
     <div>
       <RenderForm
         form={form}
-        // store={formRenderStore}
+        // formrender={formRenderStore}
         properties={properties}
         watch={watch} />
       <div style={{ marginLeft: '120px' }}>
@@ -288,18 +289,18 @@ export default function Demo(props) {
 
   return (
     <div style={{ padding: '0 8px' }}>
-      <Form store={form}>
+      <Form form={form}>
         <div>
           <p>part1</p>
           <RenderFormChildren
-            // store={formRenderStore1}
+            // formrender={formRenderStore1}
             properties={properties1}
           />
         </div>
         <div>
           <p>part2</p>
           <RenderFormChildren
-            // store={formRenderStore2}
+            // formrender={formRenderStore2}
             properties={properties2}
           />
         </div>
@@ -364,7 +365,7 @@ export default function Demo(props) {
     <div style={{ padding: '0 8px' }}>
       <RenderForm
         form={form}
-        // store={formRenderStore}
+        // formrender={formRenderStore}
         properties={properties}
         watch={watch}
       />
@@ -432,7 +433,7 @@ export default function Demo(props) {
 ```
  2. 字符串表达式的使用规则
   - 一个字符串有且只能有一对`{{`和`}}`.
-  - 除了内置的三个变量(`form`: `useFormStore()`实例, `store`: `useFormRenderStore()`实例, `formvalues`: 表单值对象)以外, 还可以通过`expressionImports`引入外部变量, 然后在字符串表达式内直接引用该变量名.
+  - 除了内置的三个变量(`form`(即`useFormStore()`), `formrender`(即`useFormRenderStore()`), `formvalues`(表单值)对象)以外, 还可以通过`expressionImports`引入外部变量, 然后在字符串表达式内直接引用该变量名.
   - 6.2.5 版本开始, 推荐不写`$`符号. 7.x版本已移除该符号.
 ```javascript
  import moment from 'moment'
@@ -456,7 +457,7 @@ export default function Demo(props) {
 
 ### RenderFormChildren's props
 表单渲染组件的属性:
-- `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` 渲染表单的DSL形式的json数据
+- `properties`: `{ [name: string]: FormNodeProps } | FormNodeProps[]` 渲染表单的DSL形式的json数据
 - `watch`属性：可以监听任意字段的值的变化，例如：
 ```javascript
 
@@ -481,46 +482,68 @@ const watch = {
 - `renderList`：提供自定义渲染列表的函数.
 - `renderItem`：提供自定义渲染表单项的函数.
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
-- `store`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
+- `formrender`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
 - `uneval`: 不执行表单中的字符串表达式.
 - `expressionImports`: 在字符串表达式中引入的外部的变量.
 
-### 表单域属性(FormFieldProps)
-- 表单中的组件采用统一的结构描述: 
+### properties结构说明
+   `properties`属性中的字段均为构造的表单对象中的一个节点，节点分为嵌套节点和控件节点。
 ```javascript
 // 表单中的任意的组件描述
 export interface FormComponent {
-  type?: string; // 注册组件的字符串代号
-  props?: { // 传递给组件的props
-    [key: string]: any;
-    children?: any | Array<FormComponent> // 部分字段允许继续嵌套
-  };
-  hidden?: string | boolean; // 支持字符串表达式或者布尔值
+  type?: string;
+  props?: any & { children?: any | Array<FormComponent> };
+  hidden?: string | boolean;
 }
-```
-- 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`或`Form.List`组件的`props`。
-```javascript
+
 // 表单上的组件联合类型
 export type UnionComponent<P> =
   | React.ComponentType<P>
   | React.ForwardRefExoticComponent<P>
   | React.FC<P>
   | keyof React.ReactHTML;
-export type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function
-
-export interface FormFieldProps extends FormItemProps, FormComponent {
+export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
+export interface FormNodeProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 标记当前节点为非表单节点
-  inside?: FieldUnionType; // 表单域组件内层嵌套组件
-  outside?: FieldUnionType; // 表单域组件外层嵌套组件
+  inside?: CustomUnionType; // 节点内层嵌套组件
+  outside?: CustomUnionType; // 节点外层嵌套组件
   readOnly?: boolean; // 只读模式
-  readOnlyRender?: FieldUnionType | ReactNode; // 只读模式下的组件
-  typeRender?: any; // 表单控件自定义渲染
-  valueGetter?: string | ((...args: any[]) => any); // 拦截输出项
-  valueSetter?: string | ((value: any) => any); // 拦截输入项
-  properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
+  readOnlyRender?: CustomUnionType; // 只读模式下的组件
+  typeRender?: CustomUnionType; // 表单控件自定义渲染
+  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
 }
 ```
-
+- 嵌套节点
+  没有表单域组件，通过`type`和`props`字段描述该节点为哪个组件。
+- 控件节点
+  默认由表单域组件嵌套，提供表单域的一些功能，只有嵌套最底层的节点才为控件节点,默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
+```javascript
+// name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。
+const [properties, setProperties] = useState({
+  name3: {
+    properties: {
+      first: {
+        label: 'first',
+        rules: [{ required: true, message: 'first empty' }],
+        type: 'Select',
+        props: {
+          style: { width: '100%' },
+          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
+        }
+      },
+      second: {
+        label: 'second',
+        rules: [{ required: true, message: 'second empty' }],
+        type: 'Select',
+        props: {
+          style: { width: '100%' },
+          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
+        }
+      }
+    }
+  },
+})
+```
 ### rules
 表单控件中的`rules`规则来自于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`rules`属性。
 
@@ -533,7 +556,7 @@ export interface FormFieldProps extends FormItemProps, FormComponent {
  - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` 根据序号和父节点路径添加选项
  - `getItemByPath`: `(path?: string, attributeName?: string) => void` 获取路径`path`对应的节点，如果是节点中的具体属性则需要`attributeName`参数
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
- - `setProperties`: `(data?: Partial<FormFieldProps>) => void` 设置`properties`;
+ - `setProperties`: `(data?: Partial<FormNodeProps>) => void` 设置`properties`;
 
 ### Hooks
 

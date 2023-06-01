@@ -9,14 +9,15 @@ English | [中文说明](./README_CN.md)
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).
 
 - Component Registration: Registered form components need to match the `value`/`onChange` (or other field) pass-through in order to work properly.
-- Component description: `properties` supports object or array type rendering, nesting is supported.
+- Component description: `properties` supports object or array type rendering, Supports adding nested object fields via the `properties` property.
 - Component rendering: `Form` component handles form values, `RenderFormChildren` component handles form rendering, one `Form` component can support multiple `RenderFormChildren` components rendering internally.
 - Component linkage: All form properties can support string expressions to describe linkage conditions (except `properties`).
 
 # version log
 - v8.x
   - Update the underlying components to `react-easy-formcore` at least version 5.x.
-  - Rendered the datasource `properties` in a different way, the nodes in it only support rendering by `type` and `props` fields and no longer carry form fields by default, see the demo for details.
+  - Rendering data source `properties` rendering method changed, divided into nested nodes and control nodes, where nested nodes no longer carry form field components, only control nodes carry form field components by default
+  - ~~`store`~~ changed to `formrender`,
 - v7.x
   - 7.0.0 Remove ~~`controls`~~ property, keep `components` property to register all global components.
 - v6.x
@@ -235,7 +236,7 @@ export default function Demo5(props) {
     <div>
       <RenderForm
         form={form}
-        // store={formRenderStore}
+        // formrender={formRenderStore}
         properties={properties}
         watch={watch} />
       <div style={{ marginLeft: '120px' }}>
@@ -288,18 +289,18 @@ export default function Demo(props) {
 
   return (
     <div style={{ padding: '0 8px' }}>
-      <Form store={form}>
+      <Form form={form}>
         <div>
           <p>part1</p>
           <RenderFormChildren
-            // store={formRenderStore1}
+            // formrender={formRenderStore1}
             properties={properties1}
           />
         </div>
         <div>
           <p>part2</p>
           <RenderFormChildren
-            // store={formRenderStore2}
+            // formrender={formRenderStore2}
             properties={properties2}
           />
         </div>
@@ -364,7 +365,7 @@ export default function Demo(props) {
     <div style={{ padding: '0 8px' }}>
       <RenderForm
         form={form}
-        // store={formRenderStore}
+        // formrender={formRenderStore}
         properties={properties}
         watch={watch} />
       <div style={{ marginLeft: '120px' }}>
@@ -431,7 +432,7 @@ As we all know, if we use `JSON` during the transfer, the form will lose some in
 ```
  2. Rules for using string expressions
   - A string has and can have only one pair of `{{` and `}}`.
-  - In addition to the three built-in variables (`form`: `useFormStore()` instance, `store`: `useFormRenderStore()` instance, `formvalues`: form value object), external variables can be introduced via `expressionImports`, and then referenced directly within the string expression and then refer to the variable name directly within the string expression.
+  - In addition to the three built-in variables (`form`(equal `useFormStore()`), `formrender`(equal `useFormRenderStore()`), `formvalues`(form value object)), external variables can be introduced via `expressionImports`, and then referenced directly within the string expression and then refer to the variable name directly within the string expression.
   - Starting from 6.2.5, it is recommended to leave out the `$` symbol. It removed in 7.x versions.
 ```javascript
  import moment from 'moment'
@@ -455,7 +456,7 @@ from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 
 ### RenderFormChildren's props
 Properties of the form rendering component:
-- `properties`: `{ [name: string]: FormFieldProps } | FormFieldProps[]` Rendering json data in the form of a DSL for a form.
+- `properties`: `{ [name: string]: FormNodeProps } | FormNodeProps[]` Rendering json data in the form of a DSL for a form.
 - `watch`：can listen to changes in the value of any field, for example:
 ```javascript
 
@@ -480,46 +481,68 @@ const watch = {
 - `renderList`: function that provides custom rendering List.
 - `renderItem`: function that provides custom render field item.
 - `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
-- `store`: The form class responsible for rendering. Created with `useFormRenderStore()`.
+- `formrender`: The form class responsible for rendering. Created with `useFormRenderStore()`.
 - `uneval`: Do not execute string expressions in the form.
 - `expressionImports`: External variables to be introduced in the string expression.
 
-### FormFieldProps
-- the components of the form are described in a uniform structure: 
+### properties
+The fields in the `properties` property are all constructed as a node in the form object, and the nodes are divided into nested nodes and control nodes.
 ```javascript
 // Description of all component in the form
 export interface FormComponent {
-  type?: string; // String designator for the registered component
-  props?: { // The props passed to the component
-    [key: string]: any;
-    children?: any | Array<FormComponent> // Some fields are allowed to continue nesting
-  };
-  hidden?: string | boolean; // Support string expressions or boolean values
+  type?: string;
+  props?: any & { children?: any | Array<FormComponent> };
+  hidden?: string | boolean;
 }
-```
-- The default form field properties are inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
-```javascript
+
 // Component union type
 export type UnionComponent<P> =
   | React.ComponentType<P>
   | React.ForwardRefExoticComponent<P>
   | React.FC<P>
   | keyof React.ReactHTML;
-export type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function
-
-export interface FormFieldProps extends FormItemProps, FormComponent {
+export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
+export interface FormNodeProps extends FormItemProps, FormComponent {
   ignore?: boolean; // Mark the current field as a non-form field
-  inside?: FieldUnionType; // Form field component inner nested components
-  outside?: FieldUnionType; // Form field component outside nested components
+  inside?: CustomUnionType; // FormNode inner nested components
+  outside?: CustomUnionType; // FormNode outside nested components
   readOnly?: boolean; // readonly？
-  readOnlyRender?: FieldUnionType | ReactNode; // readonly display component
+  readOnlyRender?: CustomUnionType | ReactNode; // form field's component render
   typeRender?: any; // form field's component render
-  valueGetter?: string | ((...args: any[]) => any); // output getter
-  valueSetter?: string | ((value: any) => any); // input setter
-  properties?: { [name: string]: FormFieldProps } | FormFieldProps[]; // Nested form components Nested objects when they are objects, or collections of arrays when they are array types
+  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // Nested form components Nested objects when they are objects, or collections of arrays when they are array types
 }
 ```
-
+- Nested nodes
+  There is no form field component, and the `type` and `props` fields describe which component the node is.
+- Control nodes
+  Nested by default by the form field component, providing some functionality of the form field, only the node at the bottom of the nest is a control node and inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
+```javascript
+// `name3` is Nested nodes，but not set component，`first` and `second` is Control nodes with form fields component。
+const [properties, setProperties] = useState({
+  name3: {
+    properties: {
+      first: {
+        label: 'first',
+        rules: [{ required: true, message: 'first empty' }],
+        type: 'Select',
+        props: {
+          style: { width: '100%' },
+          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
+        }
+      },
+      second: {
+        label: 'second',
+        rules: [{ required: true, message: 'second empty' }],
+        type: 'Select',
+        props: {
+          style: { width: '100%' },
+          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
+        }
+      }
+    }
+  },
+})
+```
 ### rules
 The `rules` rules in the form component are derived from the `rules` property in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)。
 
@@ -532,7 +555,7 @@ The `rules` rules in the form component are derived from the `rules` property in
  - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` Add options based on the serial number and parent node path
  - `getItemByPath`: `(path?: string, attributeName?: string) => void` Get the node corresponding to path `path`, or `attributeName` if it is a specific attribute in the node
  - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` Swap options in the tree from one location to another
- - `setProperties`: `(data?: Partial<FormFieldProps>) => void` Set `properties`.
+ - `setProperties`: `(data?: Partial<FormNodeProps>) => void` Set `properties`.
 
 ### Hooks
 

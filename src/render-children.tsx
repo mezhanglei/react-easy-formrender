@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { FormFieldProps, RenderFormChildrenProps, GeneratePrams, FieldUnionType, PropertiesData, GenerateFieldProps } from './types';
+import { FormNodeProps, RenderFormChildrenProps, GeneratePrams, CustomUnionType, PropertiesData, GenerateFormNodeProps } from './types';
 import { defaultComponents } from './components';
 import { Form, FormOptionsContext, FormStore, FormStoreContext, ItemCoreProps, FormRule, joinFormPath } from 'react-easy-formcore';
 import { isEqual } from './utils/object';
@@ -13,7 +13,7 @@ import { isEmpty } from './utils/type';
 export default function RenderFormChildren(props: RenderFormChildrenProps) {
 
   const options = useContext(FormOptionsContext);
-  const [fieldPropsMap, setFieldPropsMap] = useState<Partial<FormFieldProps>>({});
+  const [fieldPropsMap, setFieldPropsMap] = useState<Partial<FormNodeProps>>({});
   const [properties, setProperties] = useState<PropertiesData>({});
 
   const {
@@ -25,12 +25,12 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     renderList,
     inside,
     properties: propsProperties,
-    store,
+    formrender,
     expressionImports = {}
   } = props;
 
   const form = useContext<FormStore>(FormStoreContext);
-  const formRenderStore = store || useFormRenderStore();
+  const formRenderStore = formrender || useFormRenderStore();
   formRenderStore.registry('components', { ...defaultComponents, ...components });
 
   const {
@@ -124,11 +124,11 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     if (typeof properties !== 'object') return;
     const fieldPropsMap = {};
     // 遍历处理对象树中的非properties字段
-    const deepHandle = (formField: FormFieldProps, path: string) => {
-      for (const propsKey of Object.keys(formField || {})) {
+    const deepHandle = (formNode: FormNodeProps, path: string) => {
+      for (const propsKey of Object.keys(formNode || {})) {
         if (typeof propsKey === 'string') {
           if (propsKey !== 'properties') {
-            const propsValue = formField[propsKey];
+            const propsValue = formNode[propsKey];
             let result = propsValue;
             const matchStr = matchExpression(propsValue);
             if (matchStr) {
@@ -141,7 +141,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
             const propsPath = joinFormPath(path, propsKey);
             fieldPropsMap[propsPath] = result;
           } else {
-            const childProperties = formField[propsKey];
+            const childProperties = formNode[propsKey];
             if (childProperties) {
               for (const childKey of Object.keys(childProperties)) {
                 const childField = childProperties[childKey];
@@ -168,7 +168,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   // 遍历对象获取
-  const getValueFromObject = (val?: Partial<FormFieldProps>, generateVal?: Partial<GenerateFieldProps>) => {
+  const getValueFromObject = (val?: Partial<FormNodeProps>, generateVal?: Partial<GenerateFormNodeProps>) => {
     return Object.fromEntries(
       Object.entries(val || {})?.map(
         ([propsKey]) => {
@@ -188,7 +188,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   // 获取计算表达式之后的结果
-  const getEvalFieldProps = (field: FormFieldProps, path?: string) => {
+  const getEvalFieldProps = (field: FormNodeProps, path?: string) => {
     if (!path || isEmpty(field)) return;
     return Object.fromEntries(
       Object.entries(field || {})?.map(
@@ -221,7 +221,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     if (typeof value === 'string') {
       const matchStr = matchExpression(value)
       if (matchStr) {
-        const importsKeys = ['form', 'store', 'formvalues'].concat(Object.keys(expressionImports))
+        const importsKeys = ['form', 'formrender', 'formvalues'].concat(Object.keys(expressionImports))
         const importsValues = Object.values(expressionImports);
         const target = matchStr?.replace(/\{\{|\}\}/g, '');
         target?.replace('$', 'g'); // 去掉$开头的，兼容前版本
@@ -240,15 +240,16 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
 
   const ignoreTag = { "data-type": "ignore" }
   // 目标套上其他组件
-  const withSide = (children: any, side?: FieldUnionType, render?: (params: GeneratePrams<any> & { key?: string }) => any, commonProps?: GeneratePrams) => {
-    const childs = typeof render === 'function' ? render?.({ ...commonProps, key: commonProps?.path, children }) : children;
+  const withSide = (children: any, side?: CustomUnionType, render?: (params: GeneratePrams<any> & { key?: string }) => any, commonProps?: GeneratePrams) => {
+    const keyProps = { key: commonProps?.path, };
+    const childs = typeof render === 'function' ? render?.({ ...commonProps, ...keyProps, children }) : (React.isValidElement(children) ? React.cloneElement(children, keyProps) : children);
     const sideInstance = side && formRenderStore.componentInstance(side, { ...commonProps, ...ignoreTag });
-    const childsWithSide = React.isValidElement(sideInstance) ? React.cloneElement(sideInstance, { children: childs, key: commonProps?.path } as any) : childs;
+    const childsWithSide = React.isValidElement(sideInstance) ? React.cloneElement(sideInstance, { children: childs, ...keyProps } as any) : childs;
     return childsWithSide;
   }
 
   // 生成子元素
-  const generateChild = (name: string, path: string, field: GenerateFieldProps, parent?: { name?: string, path?: string, field?: GenerateFieldProps, }) => {
+  const generateChild = (name: string, path: string, field: GenerateFormNodeProps, parent?: { name?: string, path?: string, field?: GenerateFormNodeProps, }) => {
     if (field?.hidden === true || !field) return;
     const commonParams = {
       name,
@@ -256,7 +257,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       field: { ...options, ...field },
       parent,
       form: form,
-      store: formRenderStore
+      formrender: formRenderStore
     }; // 公共参数
     const {
       readOnly,
@@ -286,6 +287,10 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     // 节点的子组件
     const nestChildren = renderChildren(properties, inside, commonParams)
     const parseComponent = component !== undefined ? formRenderStore.componentParse(component) : undefined;
+    const childs = haveProperties ?
+      (React.isValidElement(fieldWidget) ? React.cloneElement(fieldWidget, { children: nestChildren } as any) : nestChildren)
+      : fieldWidget;
+    const childsWithReadOnly = isReadOnly ? readOnlyWidget : childs;
     const fieldProps = {
       key: path,
       name: name,
@@ -296,10 +301,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       component: parseComponent,
       ...restField
     }
-    const childs = haveProperties ?
-      (React.isValidElement(fieldWidget) ? React.cloneElement(fieldWidget, { children: nestChildren } as any) : nestChildren)
-      : fieldWidget;
-    const childsWithReadOnly = isReadOnly ? readOnlyWidget : childs;
     // 没有子属性则节点为表单控件, 增加Form.Item表单域收集表单值
     const result = haveProperties ? childsWithReadOnly : (
       <Form.Item {...fieldProps}>
@@ -310,7 +311,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   // 渲染children
-  const renderChildren = (properties: FormFieldProps['properties'], inside: FieldUnionType | undefined, current: GeneratePrams): any => {
+  const renderChildren = (properties: FormNodeProps['properties'], inside: CustomUnionType | undefined, current: GeneratePrams): any => {
     const { name, path, field } = current || {};
     const childs = Object.entries(properties || {})?.map(([key, childField], index: number) => {
       if (typeof key === 'string' || typeof key === 'number') {
@@ -326,7 +327,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     return withSide(childs, inside, renderList, current)
   }
 
-  return renderChildren(properties, inside, { store: formRenderStore, form: form });
+  return renderChildren(properties, inside, { formrender: formRenderStore, form: form });
 }
 
 RenderFormChildren.displayName = 'Form.Children';

@@ -8,23 +8,23 @@ export interface FormComponent {
     hidden?: string | boolean;
 }
 export declare type UnionComponent<P> = React.ComponentType<P> | React.ForwardRefExoticComponent<P> | React.FC<P> | keyof React.ReactHTML;
-export declare type FieldUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode;
-export interface GenerateFieldProps extends FormComponent, FormItemProps {
+export declare type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode;
+export interface GenerateFormNodeProps extends FormComponent, FormItemProps {
     ignore?: boolean;
-    inside?: FieldUnionType;
-    outside?: FieldUnionType;
+    inside?: CustomUnionType;
+    outside?: CustomUnionType;
     readOnly?: boolean;
-    readOnlyRender?: FieldUnionType;
-    typeRender?: FieldUnionType;
+    readOnlyRender?: CustomUnionType;
+    typeRender?: CustomUnionType;
     properties?: PropertiesData;
 }
 export declare type PropertiesData = {
-    [name: string]: FormFieldProps;
-} | FormFieldProps[];
-export declare type FormFieldProps = {
-    [key in keyof GenerateFieldProps]: key extends 'rules' ? (string | Array<{
+    [name: string]: FormNodeProps;
+} | FormNodeProps[];
+export declare type FormNodeProps = {
+    [key in keyof GenerateFormNodeProps]: key extends 'rules' ? (string | Array<{
         [key in keyof FormRule]: FormRule[key] | string;
-    }> | GenerateFieldProps[key]) : (key extends 'properties' ? GenerateFieldProps[key] : (string | GenerateFieldProps[key]));
+    }> | GenerateFormNodeProps[key]) : (key extends 'properties' ? GenerateFormNodeProps[key] : (string | GenerateFormNodeProps[key]));
 };
 export declare type WatchHandler = (newValue: any, oldValue: any) => void;
 export interface RenderFormChildrenProps {
@@ -37,26 +37,26 @@ export interface RenderFormChildrenProps {
         } | WatchHandler;
     };
     components?: any;
-    inside?: FieldUnionType;
+    inside?: CustomUnionType;
     properties?: PropertiesData;
     renderList?: (params: GeneratePrams<any>) => any;
     renderItem?: (params: GeneratePrams<any>) => any;
     onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
-    store?: FormRenderStore;
+    formrender?: FormRenderStore;
 }
-export interface RenderFormProps extends Omit<FormProps, 'store'>, RenderFormChildrenProps {
+export interface RenderFormProps extends Omit<FormProps, 'form'>, RenderFormChildrenProps {
     form?: FormStore;
 }
 export interface GeneratePrams<T = {}> {
     name?: string;
     path?: string;
-    field?: T & GenerateFieldProps;
+    field?: T & GenerateFormNodeProps;
     parent?: {
         name?: string;
         path?: string;
-        field?: T & GenerateFieldProps;
+        field?: T & GenerateFormNodeProps;
     };
-    store?: FormRenderStore;
+    formrender?: FormRenderStore;
     form?: FormStore;
     children?: any;
 }
