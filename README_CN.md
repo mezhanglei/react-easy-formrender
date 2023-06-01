@@ -480,7 +480,7 @@ const watch = {
 ```
 - `components`：注册表单中的所有组件;
 - `renderList`：提供自定义渲染列表的函数.
-- `renderItem`：提供自定义渲染表单项的函数.
+- `renderItem`：提供自定义渲染节点的函数.
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
 - `formrender`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
 - `uneval`: 不执行表单中的字符串表达式.

@@ -479,7 +479,7 @@ const watch = {
 ```
 - `components`：register other component for form to use.
 - `renderList`: function that provides custom rendering List.
-- `renderItem`: function that provides custom render field item.
+- `renderItem`: function that provides custom render item.
 - `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
 - `formrender`: The form class responsible for rendering. Created with `useFormRenderStore()`.
 - `uneval`: Do not execute string expressions in the form.
