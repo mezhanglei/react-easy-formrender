@@ -1,8 +1,8 @@
 import { arrayMove } from "./array";
-import { CustomUnionType, FormComponent, FormNodeProps, PropertiesData } from "../types";
+import { FormNodeProps, PropertiesData } from "../types";
 import { pathToArr, deepSet, joinFormPath, deepGet } from "react-easy-formcore";
 import { isEmpty } from "./type";
-import { isReactComponent, isValidChildren } from "./ReactIs";
+
 
 // 匹配字符串表达式
 export const matchExpression = (value?: any) => {
@@ -382,23 +382,4 @@ export const setExpandComponents = (properties?: PropertiesData): { [key: string
     }
   }
   return componentsMap;
-}
-
-// 解析组件声明
-export const parseComponent = (target: CustomUnionType | undefined, typeMap?: { [key: string]: React.ElementType }) => {
-  if (target === undefined) return;
-  if (isValidChildren(target)) return null;
-  // 是否为类或函数组件声明
-  if (isReactComponent(target)) {
-    return target as any
-  }
-  // 是否为已注册的组件声明
-  if (typeof target === 'object' && target) {
-    const targetInfo = target as FormComponent;
-    const register = typeMap && targetInfo?.type && typeMap[targetInfo?.type];
-    if (register) {
-      return register
-    }
-  }
-  return null;
 }
