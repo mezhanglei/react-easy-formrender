@@ -146,6 +146,8 @@ export default function Demo5(props) {
         props: {}
       },
       name3: {
+        // type: '',
+        // props: {},
         properties: [{
           label: "list[0]",
           rules: [{ required: true, message: 'list[0] empty' }],
@@ -174,6 +176,8 @@ export default function Demo5(props) {
         }]
       },
       name4: {
+        // type: '',
+        // props: {},
         properties: {
           first: {
             label: "first",
@@ -387,7 +391,7 @@ for Example:
 - `a[0].b` means the `b` attribute of the first option under the array `a`
 
 ### Expression Usage
-As we all know, if we use `JSON` during the transfer, the form will lose some information that cannot be converted. So we use a string expression to describe the form property linkage, and `eval` is executed to get the result of the linkage.
+As we all know, if we use `JSON` during the transfer, the form will lose some information that cannot be converted. So we use a string expression to describe the form property linkage, and `eval` is executed to get the result.
  1. Quick use: Computational expressions wrapping target property values with `{{` and `}}`
 ```javascript
   const [properties, setProperties] = useState({
@@ -490,11 +494,13 @@ The fields in the `properties` property are all constructed as a node in the for
 - Nested nodes:
   There is no form field component, and the `type` and `props` fields describe which component the node is.
 - Control nodes:
-  Nested by default by the form field component, providing some functionality of the form field, only the node at the bottom of the nest is a control node and inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
+  Carries form field components by default, providing some functionality of the form field, only the node at the bottom of the nest is a control node and inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 ```javascript
 // `name3` is Nested nodes，but not set component，`first` and `second` is Control nodes with form fields component。
 const [properties, setProperties] = useState({
   name3: {
+    // type: '',
+    // props: {},
     properties: {
       first: {
         label: 'first',
@@ -520,20 +526,19 @@ const [properties, setProperties] = useState({
 ```
 - formNode type
 ```javascript
-// Description of all component in the form
+// form component
 export interface FormComponent {
   type?: string;
   props?: any & { children?: any | Array<FormComponent> };
   hidden?: string | boolean;
 }
-
-// Component union type
 export type UnionComponent<P> =
   | React.ComponentType<P>
   | React.ForwardRefExoticComponent<P>
   | React.FC<P>
   | keyof React.ReactHTML;
 export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
+// The type of nodes in the form tree
 export interface FormNodeProps extends FormItemProps, FormComponent {
   ignore?: boolean; // Mark the current field as a non-form field
   inside?: CustomUnionType; // FormNode inner nested components
@@ -544,8 +549,6 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
   properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // Nested form components Nested objects when they are objects, or collections of arrays when they are array types
 }
 ```
-### rules
-The `rules` rules in the form component are derived from the `rules` property in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)。
 
 ### FormRenderStore Methods
   Only responsible for the rendering of the form
@@ -560,5 +563,5 @@ The `rules` rules in the form component are derived from the `rules` property in
 
 ### Hooks
 
-- `useFormRenderStore()` create FormRenderStore by hook.
-- `useFormStore(defaultValues)` create FormStore by hook.
+- `useFormRenderStore()`: create `new FormRenderStore()` by hook.
+- `useFormStore(defaultValues)`: create `new FormStore()` by hook.

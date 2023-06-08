@@ -146,6 +146,8 @@ export default function Demo5(props) {
         props: {}
       },
       name3: {
+        // type: '',
+        // props: {},
         properties: [{
           label: 'list[0]',
           rules: [{ required: true, message: 'list[0] empty' }],
@@ -174,6 +176,8 @@ export default function Demo5(props) {
         }]
       },
       name4: {
+        // type: '',
+        // props: {},
         properties: {
           first: {
             label: 'first',
@@ -388,7 +392,7 @@ export default function Demo(props) {
 - `a[0].b`表示数组a下面的第一个选项的b属性
 
 ### 字符串表达式用法
- 我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。所以我们采用字符串表达式用作描述表单属性联动，`eval`执行得到联动的结果.
+ 我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。所以我们采用字符串表达式用作描述表单属性联动，`eval`执行得到结果.
  1. 快速使用：用`{{`和`}}`包裹目标属性值的计算表达式
 ```javascript
   const [properties, setProperties] = useState({
@@ -433,7 +437,7 @@ export default function Demo(props) {
 ```
  2. 字符串表达式的使用规则
   - 一个字符串有且只能有一对`{{`和`}}`.
-  - 除了内置的三个变量(`form`(即`useFormStore()`), `formrender`(即`useFormRenderStore()`), `formvalues`(表单值)对象)以外, 还可以通过`expressionImports`引入外部变量, 然后在字符串表达式内直接引用该变量名.
+  - 除了内置的三个变量(`form`(即`useFormStore()`), `formrender`(即`useFormRenderStore()`), `formvalues`(表单值对象))以外, 还可以通过`expressionImports`引入外部变量, 然后在字符串表达式内直接引用该变量名.
   - 6.2.5 版本开始, 推荐不写`$`符号. 7.x版本已移除该符号.
 ```javascript
  import moment from 'moment'
@@ -491,11 +495,13 @@ const watch = {
 - 嵌套节点:
   没有表单域组件，通过`type`和`props`字段描述该节点为哪个组件。
 - 控件节点:
-  默认由表单域组件嵌套，提供表单域的一些功能，只有嵌套最底层的节点才为控件节点,默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
+  默认携带表单域组件，提供表单域的一些功能，只有嵌套最底层的节点才为控件节点,默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
 ```javascript
 // name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。
 const [properties, setProperties] = useState({
   name3: {
+    // type: '',
+    // props: {},
     properties: {
       first: {
         label: 'first',
@@ -521,20 +527,19 @@ const [properties, setProperties] = useState({
 ```
 - 节点的ts类型
 ```javascript
-// 表单中的任意的组件描述
+// 表单内的的组件类型
 export interface FormComponent {
   type?: string;
   props?: any & { children?: any | Array<FormComponent> };
   hidden?: string | boolean;
 }
-
-// 表单上的组件联合类型
 export type UnionComponent<P> =
   | React.ComponentType<P>
   | React.ForwardRefExoticComponent<P>
   | React.FC<P>
   | keyof React.ReactHTML;
 export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
+// 表单树中节点的类型
 export interface FormNodeProps extends FormItemProps, FormComponent {
   ignore?: boolean; // 标记当前节点为非表单节点
   inside?: CustomUnionType; // 节点内层嵌套组件
@@ -545,8 +550,6 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
   properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
 }
 ```
-### rules
-表单控件中的`rules`规则来自于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`rules`属性。
 
 ### FormRenderStore Methods
   仅仅负责表单的渲染
@@ -561,5 +564,5 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
 
 ### Hooks
 
-- `useFormRenderStore()` 使用 hooks 创建 FormRenderStore.
-- `useFormStore(defaultValues)` 使用 hooks 创建 FormStore.
+- `useFormRenderStore()`: 创建 `new FormRenderStore()`.
+- `useFormStore(defaultValues)`: 创建 `new FormStore()`
