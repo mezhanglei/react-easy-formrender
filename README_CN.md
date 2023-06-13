@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-8.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -383,6 +383,166 @@ export default function Demo(props) {
 
 ## API
 
+### RenderFormChildren's props
+表单渲染组件的属性:
+- `properties`: `{ [name: string]: FormNodeProps } | FormNodeProps[]` 渲染表单的DSL形式的json数据
+- `watch`属性：可以监听任意字段的值的变化，例如：
+```javascript
+
+const watch = {
+  'name1': (newValue, oldValue) => {
+    // console.log(newValue, oldValue)
+  },
+  'name2[0]': (newValue, oldValue) => {
+    // console.log(newValue, oldValue)
+  },
+  'name3': {
+      handler: (newValue, oldValue) => {
+        // console.log(newValue, oldValue)
+      }
+      immediate: true // 立即监听
+  }
+  ...
+  <RenderForm watch={watch} />
+}
+```
+- `components`：注册表单中的所有组件;
+- `options`： `GenerateFormNodeProps | ((params: GenerateFormNodeProps) => any)` 默认的表单节点的公共参数，会被表单节点自身的参数覆盖同名属性.
+- `renderList`：提供自定义渲染列表的函数.
+- `renderItem`：提供自定义渲染节点的函数.
+- `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
+- `formrender`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
+- `uneval`: 不执行表单中的字符串表达式.
+- `expressionImports`: 在字符串表达式中引入的外部的变量.
+
+### Form`s props
+来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+- 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签报错时, 可以设置`tagName`更换成其他标签.
+
+### FormRenderStore Methods
+  仅仅负责表单的渲染
+ - `updateItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 更新路径`path`对应的节点，如果更新节点中的具体属性则需要`attributeName`参数
+ - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 设置路径`path`对应的节点，如果设置节点中的具体属性则需要`attributeName`参数
+ - `updateNameByPath`: `(newName?: string, path: string) => void` 更新指定路径的name键
+ - `delItemByPath`: `(path?: string, attributeName?: string) => void` 删除路径`path`对应的节点，如果删除节点中的具体属性则需要`attributeName`参数
+ - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` 根据序号和父节点路径添加选项
+ - `getItemByPath`: `(path?: string, attributeName?: string) => void` 获取路径`path`对应的节点，如果是节点中的具体属性则需要`attributeName`参数
+ - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
+ - `setProperties`: `(data?: Partial<FormNodeProps>) => void` 设置`properties`;
+
+### Hooks
+
+- `useFormRenderStore()`: 创建 `new FormRenderStore()`.
+- `useFormStore(defaultValues)`: 创建 `new FormStore()`
+
+## 其他
+
+### properties结构说明
+   `properties`属性中的字段均为构造的表单对象中的一个节点，节点分为嵌套节点和控件节点。
+- 嵌套节点:
+  没有表单域组件，通过`type`和`props`字段描述该节点为哪个组件。
+- 节点:
+  默认携带表单域组件，提供表单域的一些功能，只有嵌套最底层的节点才为控件节点,默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
+```javascript
+// name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。
+const [properties, setProperties] = useState({
+  name3: {
+    // type: '',
+    // props: {},
+    properties: {
+      first: {
+        label: 'first',
+        rules: [{ required: true, message: 'first empty' }],
+        type: 'Select',
+        props: {
+          style: { width: '100%' },
+          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
+        }
+      },
+      second: {
+        label: 'second',
+        rules: [{ required: true, message: 'second empty' }],
+        type: 'Select',
+        props: {
+          style: { width: '100%' },
+          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
+        }
+      }
+    }
+  },
+})
+```
+- 节点的typescript类型
+```javascript
+// 表单内的的组件类型
+export interface FormComponent {
+  type?: string;
+  props?: any & { children?: any | Array<FormComponent> };
+}
+export type UnionComponent<P> =
+  | React.ComponentType<P>
+  | React.ForwardRefExoticComponent<P>
+  | React.FC<P>
+  | keyof React.ReactHTML;
+export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
+// 表单树中节点的类型
+export interface FormNodeProps extends FormItemProps, FormComponent {
+  hidden?: string | boolean;
+  ignore?: boolean; // 标记当前节点为非表单节点
+  inside?: CustomUnionType; // 节点内层嵌套组件
+  outside?: CustomUnionType; // 节点外层嵌套组件
+  readOnly?: boolean; // 只读模式
+  readOnlyRender?: CustomUnionType; // 只读模式下的组件
+  typeRender?: CustomUnionType; // 表单控件自定义渲染
+  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
+}
+```
+
+### 参数传递
+ - 表单节点公共参数：
+ ```javascript
+// 1. 默认表单节点可以接收到节点信息参数，如下
+export interface GeneratePrams<T = {}> {
+  name?: string; // 当前节点的表单字段
+  path?: string; // 当前节点的渲染路径
+  field?: T & GenerateFormNodeProps; // 当前节点的信息
+  parent?: { name?: string; path?: string, field?: T & GenerateFormNodeProps; }; // 父节点的信息
+  formrender?: FormRenderStore;
+  form?: FormStore;
+};
+// 2. 在组件外面传递参数，从GeneratePrams['field']中接收参数
+  
+  <RenderForm
+    options={
+      (current) => ({
+        ...current,
+        props: {...current.props, disabled: true }
+      })
+    } // props属性注入公共参数disabled
+  />
+```
+ - 表单域组件属性传递：
+ 表单域组件属于特殊组件，只有控件所在节点才默认携带表单域组件，可以在`Form`组件上设置所有表单域属性.
+ ```javascript
+ import { RenderFormChildren, useFormStore, Form } from "./form-render"
+
+ const [properties, setProperties] = useState({
+    name3: {
+      label: "name3",
+      type: 'Input',
+      props: {}
+    },
+  })
+  
+  const form = useFormStore();
+
+  <Form form={form} layout="vertical">
+    <RenderFormChildren
+      properties={properties1}
+    />
+  <Form>
+```
+
 ### 表单的中涉及的path路径规则
 表单允许嵌套，所以表单中会涉及寻找某个属性。其路径遵循一定的规则
 
@@ -392,7 +552,7 @@ export default function Demo(props) {
 - `a[0].b`表示数组a下面的第一个选项的b属性
 
 ### 字符串表达式用法
- 我们都知道，传输过程中如果使用`JSON`, 那么表单将会丢失部分不能转换的信息。所以我们采用字符串表达式用作描述表单属性联动，`eval`执行得到结果.
+ 表单节点中属性字段除`properties`外均可以支持字符串表达式来进行联动
  1. 快速使用：用`{{`和`}}`包裹目标属性值的计算表达式
 ```javascript
   const [properties, setProperties] = useState({
@@ -454,115 +614,3 @@ export default function Demo(props) {
   
   <RenderForm properties={properties} expressionImports={{ moment }} />
 ```
-
-### Form组件
-来源于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- 6.2.7 当默认组件`RenderForm`在嵌套情况下`form`标签报错时, 可以设置`tagName`更换成其他标签.
-
-### RenderFormChildren's props
-表单渲染组件的属性:
-- `properties`: `{ [name: string]: FormNodeProps } | FormNodeProps[]` 渲染表单的DSL形式的json数据
-- `watch`属性：可以监听任意字段的值的变化，例如：
-```javascript
-
-const watch = {
-  'name1': (newValue, oldValue) => {
-    // console.log(newValue, oldValue)
-  },
-  'name2[0]': (newValue, oldValue) => {
-    // console.log(newValue, oldValue)
-  },
-  'name3': {
-      handler: (newValue, oldValue) => {
-        // console.log(newValue, oldValue)
-      }
-      immediate: true // 立即监听
-  }
-  ...
-  <RenderForm watch={watch} />
-}
-```
-- `components`：注册表单中的所有组件;
-- `renderList`：提供自定义渲染列表的函数.
-- `renderItem`：提供自定义渲染节点的函数.
-- `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
-- `formrender`: 负责渲染的表单类。通过`useFormRenderStore()`创建，选填.
-- `uneval`: 不执行表单中的字符串表达式.
-- `expressionImports`: 在字符串表达式中引入的外部的变量.
-
-### properties结构说明
-   `properties`属性中的字段均为构造的表单对象中的一个节点，节点分为嵌套节点和控件节点。
-- 嵌套节点:
-  没有表单域组件，通过`type`和`props`字段描述该节点为哪个组件。
-- 控件节点:
-  默认携带表单域组件，提供表单域的一些功能，只有嵌套最底层的节点才为控件节点,默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
-```javascript
-// name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。
-const [properties, setProperties] = useState({
-  name3: {
-    // type: '',
-    // props: {},
-    properties: {
-      first: {
-        label: 'first',
-        rules: [{ required: true, message: 'first empty' }],
-        type: 'Select',
-        props: {
-          style: { width: '100%' },
-          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
-        }
-      },
-      second: {
-        label: 'second',
-        rules: [{ required: true, message: 'second empty' }],
-        type: 'Select',
-        props: {
-          style: { width: '100%' },
-          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
-        }
-      }
-    }
-  },
-})
-```
-- 节点的ts类型
-```javascript
-// 表单内的的组件类型
-export interface FormComponent {
-  type?: string;
-  props?: any & { children?: any | Array<FormComponent> };
-  hidden?: string | boolean;
-}
-export type UnionComponent<P> =
-  | React.ComponentType<P>
-  | React.ForwardRefExoticComponent<P>
-  | React.FC<P>
-  | keyof React.ReactHTML;
-export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
-// 表单树中节点的类型
-export interface FormNodeProps extends FormItemProps, FormComponent {
-  ignore?: boolean; // 标记当前节点为非表单节点
-  inside?: CustomUnionType; // 节点内层嵌套组件
-  outside?: CustomUnionType; // 节点外层嵌套组件
-  readOnly?: boolean; // 只读模式
-  readOnlyRender?: CustomUnionType; // 只读模式下的组件
-  typeRender?: CustomUnionType; // 表单控件自定义渲染
-  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // 嵌套的表单控件 为对象时表示对象嵌套，为数组类型时表示数组集合
-}
-```
-
-### FormRenderStore Methods
-  仅仅负责表单的渲染
- - `updateItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 更新路径`path`对应的节点，如果更新节点中的具体属性则需要`attributeName`参数
- - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` 设置路径`path`对应的节点，如果设置节点中的具体属性则需要`attributeName`参数
- - `updateNameByPath`: `(newName?: string, path: string) => void` 更新指定路径的name键
- - `delItemByPath`: `(path?: string, attributeName?: string) => void` 删除路径`path`对应的节点，如果删除节点中的具体属性则需要`attributeName`参数
- - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` 根据序号和父节点路径添加选项
- - `getItemByPath`: `(path?: string, attributeName?: string) => void` 获取路径`path`对应的节点，如果是节点中的具体属性则需要`attributeName`参数
- - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` 把树中的选项从一个位置调换到另外一个位置
- - `setProperties`: `(data?: Partial<FormNodeProps>) => void` 设置`properties`;
-
-### Hooks
-
-- `useFormRenderStore()`: 创建 `new FormRenderStore()`.
-- `useFormStore(defaultValues)`: 创建 `new FormStore()`

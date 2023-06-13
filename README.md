@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-8.0.0-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.1-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -382,6 +382,165 @@ export default function Demo(props) {
 
 ## API
 
+### RenderFormChildren's props
+Properties of the form rendering component:
+- `properties`: `{ [name: string]: FormNodeProps } | FormNodeProps[]` Rendering json data in the form of a DSL for a form.
+- `watch`：can listen to changes in the value of any field, for example:
+```javascript
+
+const watch = {
+  'name1': (newValue, oldValue) => {
+    // console.log(newValue, oldValue)
+  },
+  'name2[0]': (newValue, oldValue) => {
+    // console.log(newValue, oldValue)
+  },
+  'name3': {
+      handler: (newValue, oldValue) => {
+        // console.log(newValue, oldValue)
+      }
+      immediate: true
+  }
+  ...
+  <RenderForm watch={watch} />
+}
+```
+- `components`：register other component for form to use.
+- `options`： `GenerateFormNodeProps | ((params: GenerateFormNodeProps) => any)` By default, the public parameters of a form node are overridden by the form node's own parameters with the same name.
+- `renderList`: function that provides custom rendering List.
+- `renderItem`: function that provides custom render item.
+- `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
+- `formrender`: The form class responsible for rendering. Created with `useFormRenderStore()`.
+- `uneval`: Do not execute string expressions in the form.
+- `expressionImports`: External variables to be introduced in the string expression.
+
+### Form's Props
+from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
+- 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
+
+### FormRenderStore Methods
+  Only responsible for the rendering of the form
+ - `updateItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Update the node corresponding to path `path`, if updating specific attributes in the node then `attributeName` parameter is required
+ - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Set the node corresponding to path `path`, or `attributeName` if setting specific attributes in the node
+ - `updateNameByPath`: `(newName?: string, path: string) => void` Update the name key of the specified path
+ - `delItemByPath`: `(path?: string, attributeName?: string) => void` Deletes the node corresponding to path `path`, or the `attributeName` parameter if the specific attribute in the node is deleted
+ - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` Add options based on the serial number and parent node path
+ - `getItemByPath`: `(path?: string, attributeName?: string) => void` Get the node corresponding to path `path`, or `attributeName` if it is a specific attribute in the node
+ - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` Swap options in the tree from one location to another
+ - `setProperties`: `(data?: Partial<FormNodeProps>) => void` Set `properties`.
+
+### Hooks
+
+- `useFormRenderStore()`: create `new FormRenderStore()` by hook.
+- `useFormStore(defaultValues)`: create `new FormStore()` by hook.
+
+## Other
+
+### properties
+The fields in the `properties` property are all constructed as a node in the form object, and the nodes are divided into nested nodes and control nodes.
+- Nested nodes:
+  There is no form field component, and the `type` and `props` fields describe which component the node is.
+- Control nodes:
+  Carries form field components by default, providing some functionality of the form field, only the node at the bottom of the nest is a control node and inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
+```javascript
+// `name3` is Nested nodes，but not set component，`first` and `second` is Control nodes with form fields component。
+const [properties, setProperties] = useState({
+  name3: {
+    // type: '',
+    // props: {},
+    properties: {
+      first: {
+        label: 'first',
+        rules: [{ required: true, message: 'first empty' }],
+        type: 'Select',
+        props: {
+          style: { width: '100%' },
+          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
+        }
+      },
+      second: {
+        label: 'second',
+        rules: [{ required: true, message: 'second empty' }],
+        type: 'Select',
+        props: {
+          style: { width: '100%' },
+          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
+        }
+      }
+    }
+  },
+})
+```
+- formNode type
+```javascript
+// form component
+export interface FormComponent {
+  type?: string;
+  props?: any & { children?: any | Array<FormComponent> };
+  hidden?: string | boolean;
+}
+export type UnionComponent<P> =
+  | React.ComponentType<P>
+  | React.ForwardRefExoticComponent<P>
+  | React.FC<P>
+  | keyof React.ReactHTML;
+export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
+// The type of nodes in the form tree
+export interface FormNodeProps extends FormItemProps, FormComponent {
+  hidden?: string | boolean;
+  ignore?: boolean; // Mark the current field as a non-form field
+  inside?: CustomUnionType; // FormNode inner nested components
+  outside?: CustomUnionType; // FormNode outside nested components
+  readOnly?: boolean; // readonly？
+  readOnlyRender?: CustomUnionType | ReactNode; // form field's component render
+  typeRender?: any; // form field's component render
+  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // Nested form components Nested objects when they are objects, or collections of arrays when they are array types
+}
+```
+
+### Property Passing
+ - Form node public parameters:
+ ```javascript
+// 1. Form nodes can receive public node information parameters, as follows
+export interface GeneratePrams<T = {}> {
+  name?: string; // Form fields for the current node
+  path?: string; // Rendering path of the current node
+  field?: T & GenerateFormNodeProps; // Information about the current node
+  parent?: { name?: string; path?: string, field?: T & GenerateFormNodeProps; }; // Information about the parent node
+  formrender?: FormRenderStore;
+  form?: FormStore;
+};
+// 2. Passing parameters outside the component, receiving them from GeneratePrams['field']
+
+  <RenderForm
+    options={
+      (current) => ({
+        ...current,
+        props: { ...current.props, disabled: true }
+      })
+    } // The props property injects the public parameter disabled
+  />
+```
+ - Form field component property passing:
+The form field component is a special component, only the node where the control is located carries the form field component by default, you can set all the form field properties on the `Form` component.
+ ```javascript
+ import RenderForm from "./form-render"
+
+ const [properties, setProperties] = useState({
+    name3: {
+      label: "name3",
+      type: 'Input',
+      props: {}
+    },
+  })
+  
+  <Form form={form} layout="vertical">
+    <RenderFormChildren
+      properties={properties1}
+    />
+  <Form>
+```
+
 ### Path rules involved in the form
 Forms are allowed to be nested, so they will involve finding a certain property. The paths follow certain rules
 
@@ -391,7 +550,7 @@ for Example:
 - `a[0].b` means the `b` attribute of the first option under the array `a`
 
 ### Expression Usage
-As we all know, if we use `JSON` during the transfer, the form will lose some information that cannot be converted. So we use a string expression to describe the form property linkage, and `eval` is executed to get the result.
+ All property fields in form nodes except `properties` can support string expressions for linkage
  1. Quick use: Computational expressions wrapping target property values with `{{` and `}}`
 ```javascript
   const [properties, setProperties] = useState({
@@ -453,115 +612,3 @@ As we all know, if we use `JSON` during the transfer, the form will lose some in
   
   <RenderForm properties={properties} expressionImports={{ moment }} />
 ```
-
-### Form Component
-from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
-- 6.2.7 When the default component `RenderForm` reports an error in the `form` tag in the nested case, you can set `tagName` to be replaced by another tag.
-
-### RenderFormChildren's props
-Properties of the form rendering component:
-- `properties`: `{ [name: string]: FormNodeProps } | FormNodeProps[]` Rendering json data in the form of a DSL for a form.
-- `watch`：can listen to changes in the value of any field, for example:
-```javascript
-
-const watch = {
-  'name1': (newValue, oldValue) => {
-    // console.log(newValue, oldValue)
-  },
-  'name2[0]': (newValue, oldValue) => {
-    // console.log(newValue, oldValue)
-  },
-  'name3': {
-      handler: (newValue, oldValue) => {
-        // console.log(newValue, oldValue)
-      }
-      immediate: true
-  }
-  ...
-  <RenderForm watch={watch} />
-}
-```
-- `components`：register other component for form to use.
-- `renderList`: function that provides custom rendering List.
-- `renderItem`: function that provides custom render item.
-- `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
-- `formrender`: The form class responsible for rendering. Created with `useFormRenderStore()`.
-- `uneval`: Do not execute string expressions in the form.
-- `expressionImports`: External variables to be introduced in the string expression.
-
-### properties
-The fields in the `properties` property are all constructed as a node in the form object, and the nodes are divided into nested nodes and control nodes.
-- Nested nodes:
-  There is no form field component, and the `type` and `props` fields describe which component the node is.
-- Control nodes:
-  Carries form field components by default, providing some functionality of the form field, only the node at the bottom of the nest is a control node and inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
-```javascript
-// `name3` is Nested nodes，but not set component，`first` and `second` is Control nodes with form fields component。
-const [properties, setProperties] = useState({
-  name3: {
-    // type: '',
-    // props: {},
-    properties: {
-      first: {
-        label: 'first',
-        rules: [{ required: true, message: 'first empty' }],
-        type: 'Select',
-        props: {
-          style: { width: '100%' },
-          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
-        }
-      },
-      second: {
-        label: 'second',
-        rules: [{ required: true, message: 'second empty' }],
-        type: 'Select',
-        props: {
-          style: { width: '100%' },
-          children: [{ type: 'Select.Option', props: { key: 1, value: '1', children: 'option1' } }]
-        }
-      }
-    }
-  },
-})
-```
-- formNode type
-```javascript
-// form component
-export interface FormComponent {
-  type?: string;
-  props?: any & { children?: any | Array<FormComponent> };
-  hidden?: string | boolean;
-}
-export type UnionComponent<P> =
-  | React.ComponentType<P>
-  | React.ForwardRefExoticComponent<P>
-  | React.FC<P>
-  | keyof React.ReactHTML;
-export type CustomUnionType = FormComponent | Array<FormComponent> | UnionComponent<any> | Function | ReactNode
-// The type of nodes in the form tree
-export interface FormNodeProps extends FormItemProps, FormComponent {
-  ignore?: boolean; // Mark the current field as a non-form field
-  inside?: CustomUnionType; // FormNode inner nested components
-  outside?: CustomUnionType; // FormNode outside nested components
-  readOnly?: boolean; // readonly？
-  readOnlyRender?: CustomUnionType | ReactNode; // form field's component render
-  typeRender?: any; // form field's component render
-  properties?: { [name: string]: FormNodeProps } | FormNodeProps[]; // Nested form components Nested objects when they are objects, or collections of arrays when they are array types
-}
-```
-
-### FormRenderStore Methods
-  Only responsible for the rendering of the form
- - `updateItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Update the node corresponding to path `path`, if updating specific attributes in the node then `attributeName` parameter is required
- - `setItemByPath`: `(data?: any, path?: string, attributeName?: string) => void` Set the node corresponding to path `path`, or `attributeName` if setting specific attributes in the node
- - `updateNameByPath`: `(newName?: string, path: string) => void` Update the name key of the specified path
- - `delItemByPath`: `(path?: string, attributeName?: string) => void` Deletes the node corresponding to path `path`, or the `attributeName` parameter if the specific attribute in the node is deleted
- - `insertItemByIndex`: `(data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => void` Add options based on the serial number and parent node path
- - `getItemByPath`: `(path?: string, attributeName?: string) => void` Get the node corresponding to path `path`, or `attributeName` if it is a specific attribute in the node
- - `moveItemByPath`: `(from: { parent?: string, index: number }, to: { parent?: string, index?: number })` Swap options in the tree from one location to another
- - `setProperties`: `(data?: Partial<FormNodeProps>) => void` Set `properties`.
-
-### Hooks
-
-- `useFormRenderStore()`: create `new FormRenderStore()` by hook.
-- `useFormStore(defaultValues)`: create `new FormStore()` by hook.
