@@ -407,7 +407,7 @@ const watch = {
 }
 ```
 - `components`：注册表单中的所有组件;
-- `options`： `GenerateFormNodeProps | ((params: GenerateFormNodeProps) => any)` 默认的表单节点的公共参数，会被表单节点自身的参数覆盖同名属性.
+- `options`： `GenerateFormNodeProps | ((params: GenerateFormNodeProps) => any)` 传递给表单节点组件的参数信息. 优先级比表单节点自身的参数要低
 - `renderList`：提供自定义渲染列表的函数.
 - `renderItem`：提供自定义渲染节点的函数.
 - `onPropertiesChange`: `(newValue: PropertiesData) => void;` `properties`更改时回调函数
@@ -442,7 +442,7 @@ const watch = {
 - 嵌套节点:
   没有表单域组件，通过`type`和`props`字段描述该节点为哪个组件。
 - 节点:
-  默认携带表单域组件，提供表单域的一些功能，只有嵌套最底层的节点才为控件节点,默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
+  默认携带表单域组件，提供表单域的一些功能，没有`properties`属性的节点才为控件节点, 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
 ```javascript
 // name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。
 const [properties, setProperties] = useState({
@@ -510,7 +510,7 @@ export interface GeneratePrams<T = {}> {
   formrender?: FormRenderStore;
   form?: FormStore;
 };
-// 2. 在组件外面传递参数，从GeneratePrams['field']中接收参数
+// 2. 在组件外面传递参数，从组件的参数GeneratePrams['field']中接收改变后的值，如下面更改props属性
   
   <RenderForm
     options={
@@ -518,7 +518,7 @@ export interface GeneratePrams<T = {}> {
         ...current,
         props: {...current.props, disabled: true }
       })
-    } // props属性注入公共参数disabled
+    }
   />
 ```
  - 表单域组件属性传递：

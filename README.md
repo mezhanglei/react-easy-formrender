@@ -406,7 +406,7 @@ const watch = {
 }
 ```
 - `components`：register other component for form to use.
-- `options`： `GenerateFormNodeProps | ((params: GenerateFormNodeProps) => any)` By default, the public parameters of a form node are overridden by the form node's own parameters with the same name.
+- `options`： `GenerateFormNodeProps | ((params: GenerateFormNodeProps) => any)` Information about the parameters passed to the form node component. Lower priority than the form node's own parameters
 - `renderList`: function that provides custom rendering List.
 - `renderItem`: function that provides custom render item.
 - `onPropertiesChange`: `(newValue: ProertiesData) => void;` Callback function when `properties` is changed
@@ -441,7 +441,7 @@ The fields in the `properties` property are all constructed as a node in the for
 - Nested nodes:
   There is no form field component, and the `type` and `props` fields describe which component the node is.
 - Control nodes:
-  Carries form field components by default, providing some functionality of the form field, only the node at the bottom of the nest is a control node and inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
+  The default carry form field component provides some functions of form field, nodes without `properties` property are control nodes, the default form field properties are inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 ```javascript
 // `name3` is Nested nodes，but not set component，`first` and `second` is Control nodes with form fields component。
 const [properties, setProperties] = useState({
@@ -510,7 +510,7 @@ export interface GeneratePrams<T = {}> {
   formrender?: FormRenderStore;
   form?: FormStore;
 };
-// 2. Passing parameters outside the component, receiving them from GeneratePrams['field']
+// 2. passing parameters outside the component to receive the changed value from the component's parameter GeneratePrams['field']. Change the props property as follows
 
   <RenderForm
     options={
@@ -518,7 +518,7 @@ export interface GeneratePrams<T = {}> {
         ...current,
         props: { ...current.props, disabled: true }
       })
-    } // The props property injects the public parameter disabled
+    }
   />
 ```
  - Form field component property passing:
