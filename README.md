@@ -519,6 +519,9 @@ export interface GeneratePrams<T = {}> {
         props: { ...current.props, disabled: true }
       })
     }
+    // options={{
+    //   layout: 'vertical'
+    // }}
   />
 ```
  - Form field component property passing:
