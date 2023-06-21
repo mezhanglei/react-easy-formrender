@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-8.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.4-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -68,7 +68,7 @@ yarn add react-easy-formrender
 // register
 import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
-import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
+import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, TreeSelect, Slider, Switch, TimePicker } from 'antd';
 import 'react-easy-formrender/lib/css/main.css'
 export * from 'react-easy-formrender';
 
@@ -90,6 +90,7 @@ export const AntdBaseComponents = {
   "Rate": Rate,
   "Select": Select,
   "Select.Option": Select.Option,
+  "TreeSelect": TreeSelect,
   "Slider": Slider,
   "Switch": Switch,
   "TimePicker": TimePicker,
@@ -513,19 +514,14 @@ export interface GeneratePrams<T = {}> {
 // 2. 在组件外面传递参数，从组件的参数GeneratePrams['field']中接收改变后的值，如下面更改props属性
   
   <RenderForm
-    options={
-      (current) => ({
-        ...current,
-        props: {...current.props, disabled: true }
-      })
-    }
-    // options={{
-    //   layout: 'vertical'
-    // }}
+    options={{
+      layout: 'vertical',
+      props: { disabled: true }
+    }}
   />
 ```
  - 表单域组件属性传递：
- 表单域组件属于特殊组件，只有控件所在节点才默认携带表单域组件，可以在`Form`组件上设置所有表单域属性.
+ 表单域组件属于特殊组件，只有控件所在节点才默认携带表单域组件，可以在`Form`组件上设置任意表单域属性.
  ```javascript
  import { RenderFormChildren, useFormStore, Form } from "./form-render"
 
@@ -539,6 +535,7 @@ export interface GeneratePrams<T = {}> {
   
   const form = useFormStore();
 
+ // set layout
   <Form form={form} layout="vertical">
     <RenderFormChildren
       properties={properties1}

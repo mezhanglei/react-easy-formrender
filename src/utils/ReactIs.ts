@@ -1,18 +1,17 @@
 import React from "react";
 
-// 是否为函数类组件声明
+// 是否为类组件声明
 export function isClassComponent(component: any) {
   return (
     typeof component === 'function' &&
-    !!component.prototype.isReactComponent
+    (component.prototype && component.prototype.isReactComponent)
   )
 }
 
-// 是否为函数组件(函数都可以渲染为组件)
+// 是否为函数组件
 export function isFunctionComponent(component: any) {
   return (
     typeof component === 'function'
-    // String(component).includes('return React.createElement')
   )
 }
 
@@ -33,10 +32,10 @@ export function isValidChildren(element: any) {
 
 // 是否为dom元素渲染结果
 export function isDOMTypeElement(element: any) {
-  return isValidChildren(element) && typeof element.type === 'string';
+  return isValidChildren(element) && typeof element?.type === 'string';
 }
 
 // 是否为函数或类的渲染结果
 export function isCompositeTypeElement(element: any) {
-  return isValidChildren(element) && typeof element.type === 'function';
+  return isValidChildren(element) && typeof element?.type === 'function';
 }

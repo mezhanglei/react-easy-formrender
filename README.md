@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-8.0.3-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.4-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -68,7 +68,7 @@ yarn add react-easy-formrender
 // register
 import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
-import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, Slider, Switch, TimePicker } from 'antd';
+import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, TreeSelect, Slider, Switch, TimePicker } from 'antd';
 import 'react-easy-formrender/lib/css/main.css'
 export * from 'react-easy-formrender';
 
@@ -513,15 +513,10 @@ export interface GeneratePrams<T = {}> {
 // 2. passing parameters outside the component to receive the changed value from the component's parameter GeneratePrams['field']. Change the props property as follows
 
   <RenderForm
-    options={
-      (current) => ({
-        ...current,
-        props: { ...current.props, disabled: true }
-      })
-    }
-    // options={{
-    //   layout: 'vertical'
-    // }}
+    options={{
+      layout: 'vertical',
+      props: { disabled: true }
+    }}
   />
 ```
  - Form field component property passing:
@@ -536,7 +531,7 @@ The form field component is a special component, only the node where the control
       props: {}
     },
   })
-  
+  // set layout
   <Form form={form} layout="vertical">
     <RenderFormChildren
       properties={properties1}

@@ -199,7 +199,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
             return [propsKey, generateValue]
           }
           if (matchStr) {
-            if (propsKey === 'valueSetter') {
+            if (propsKey === 'valueSetter' || propsKey === 'valueGetter') {
               return [propsKey, () => undefined]
             }
             return [propsKey]
@@ -249,7 +249,8 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   // 生成子元素
   const generateChild = (name: string, path: string, field: GenerateFormNodeProps, parent?: GeneratePrams['parent']) => {
     if (field?.hidden === true || !field) return;
-    const mergeField = typeof options === 'function' ? options(field) : Object.assign({}, options, field);
+    const mergeOptions = Object.assign({}, typeof options === 'function' ? options(field) : options, formOptions);
+    const mergeField = Object.assign({}, mergeOptions, field, { props: Object.assign({}, mergeOptions?.props, field?.props) })
     const commonParams = {
       name,
       path,
@@ -259,7 +260,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       formrender: formRenderStore
     }; // 公共参数
     const {
-      readOnly,
       readOnlyRender,
       hidden,
       props,
@@ -276,7 +276,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     // 是否有子节点
     const haveProperties = typeof properties === 'object';
     // 当前节点是否为只读
-    const isReadOnly = readOnly === true;
+    const isReadOnly = restField?.readOnly === true;
     const footerInstance = formRenderStore.componentInstance(footer, commonParams);
     const suffixInstance = formRenderStore.componentInstance(suffix, commonParams);
     // 只读显示组件
@@ -295,9 +295,8 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       onValuesChange: valuesCallback,
       footer: footerInstance,
       suffix: suffixInstance,
-      ignore: readOnly,
       component: component !== undefined ? formRenderStore.componentParse(component) : undefined,
-    }, formOptions, restField);
+    }, restField);
     // 没有子属性则节点为表单控件, 增加Form.Item表单域收集表单值
     const result = haveProperties ? childsWithReadOnly : (
       <Form.Item {...fieldProps}>

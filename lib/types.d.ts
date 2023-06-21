@@ -17,7 +17,7 @@ export declare type GenerateFormNodeProps<T = {}> = FormComponent & FormItemProp
     readOnlyRender?: CustomUnionType;
     typeRender?: CustomUnionType;
     properties?: PropertiesData;
-    hidden?: string | boolean;
+    hidden?: boolean;
 };
 export declare type PropertiesData = {
     [name: string]: FormNodeProps;
