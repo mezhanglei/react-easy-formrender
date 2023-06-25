@@ -48,6 +48,7 @@ export interface RenderFormChildrenProps<T = {}> {
     onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
     formrender?: FormRenderStore;
     options?: GenerateFormNodeProps<T> | ((params: GenerateFormNodeProps<T>) => GenerateFormNodeProps<T>);
+    evalPropNames?: Array<string>;
 }
 export interface RenderFormProps<T = {}> extends Omit<FormProps, 'form'>, RenderFormChildrenProps<T> {
     form?: FormStore;
