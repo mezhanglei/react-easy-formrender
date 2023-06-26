@@ -37,5 +37,6 @@ export declare class FormRenderStore {
         index?: number;
     }) => void;
     subscribeProperties(listener: FormRenderListener): () => void;
+    unsubscribeProperties(): void;
     private notifyProperties;
 }
