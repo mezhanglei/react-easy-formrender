@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-8.0.7-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.8-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -439,9 +439,9 @@ from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 ### properties
 The fields in the `properties` property are all constructed as a node in the form object, and the nodes are divided into nested nodes and control nodes.
 - Nested nodes:
-  There is no form field component, and the `type` and `props` fields describe which component the node is.
+  Nodes with `properties` property describe which component the node is by the `type` and `props` fields, and do not carry form field components.
 - Control nodes:
-  The default carry form field component provides some functions of form field, nodes without `properties` property are control nodes, the default form field properties are inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
+  Nodes without the `properties` property carry a form field component by default, providing some of the functionality of a form field. the default form field properties are inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 ```javascript
 // `name3` is Nested nodes，but not set component，`first` and `second` is Control nodes with form fields component。
 const [properties, setProperties] = useState({

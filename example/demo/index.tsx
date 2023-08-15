@@ -142,7 +142,6 @@ export default function Demo(props) {
       <RenderForm
         form={form}
         inside={{type:'row'}}
-        values={{ name2: 22 }}
         // formrender={formRenderStore}
         properties={properties}
         components={defaultComponents}

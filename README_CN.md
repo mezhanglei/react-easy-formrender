@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-8.0.7-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.8-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -441,9 +441,9 @@ const watch = {
 ### properties结构说明
    `properties`属性中的字段均为构造的表单对象中的一个节点，节点分为嵌套节点和控件节点。
 - 嵌套节点:
-  没有表单域组件，通过`type`和`props`字段描述该节点为哪个组件。
+  有`properties`属性的节点，通过`type`和`props`字段描述该节点为哪个组件，不携带表单域组件。
 - 节点:
-  默认携带表单域组件，提供表单域的一些功能，没有`properties`属性的节点才为控件节点, 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
+  无`properties`属性的节点，默认携带表单域组件，提供表单域的一些功能, 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
 ```javascript
 // name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。
 const [properties, setProperties] = useState({
