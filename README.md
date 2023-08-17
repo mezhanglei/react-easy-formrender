@@ -2,7 +2,7 @@
 
 English | [中文说明](./README_CN.md)
 
-[![Version](https://img.shields.io/badge/version-8.0.8-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.9-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # Introduction?
 
@@ -72,7 +72,7 @@ import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select
 import 'react-easy-formrender/lib/css/main.css'
 export * from 'react-easy-formrender';
 
-export const AntdBaseControls = {
+export const BaseComponents = {
   "Input": Input,
   "Input.TextArea": Input.TextArea,
   "Input.Password": Input.Password,
@@ -90,21 +90,38 @@ export const AntdBaseControls = {
   "Rate": Rate,
   "Select": Select,
   "Select.Option": Select.Option,
+  "TreeSelect": TreeSelect,
   "Slider": Slider,
   "Switch": Switch,
   "TimePicker": TimePicker,
   "TimePicker.RangePicker": TimePicker.RangePicker
 }
 
-export function RenderFormChildren(props: RenderFormChildrenProps) {
+// RenderFormChildren
+export type CustomRenderFormChildrenProps = RenderFormChildrenProps<any>;
+export function RenderFormChildren(props: CustomRenderFormChildrenProps) {
+  const { components, expressionImports, ...rest } = props;
   return (
-    <RenderFormChilds {...props} components={{ ...AntdBaseComponents, ...props?.components }} />
+    <RenderFormChilds
+      options={{ props: { autoComplete: 'off' } }}
+      components={{ ...BaseComponents, ...components }}
+      // expressionImports={{ ...expressionImports, moment }}
+      {...rest}
+    />
   );
 }
 
-export default function FormRender(props: RenderFormProps) {
+// RenderForm
+export type CustomRenderFormProps = RenderFormProps<any>
+export default function FormRender(props: CustomRenderFormProps) {
+  const { components, expressionImports, ...rest } = props;
   return (
-    <RenderFormDefault {...props} components={{ ...AntdBaseComponents, ...props?.components }} />
+    <RenderFormDefault
+      options={{ props: { autoComplete: 'off' } }}
+      components={{ ...BaseComponents, ...components }}
+      // expressionImports={{ ...expressionImports, moment }}
+      {...rest}
+    />
   );
 }
 ```
@@ -437,7 +454,7 @@ from [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)
 ## Other
 
 ### properties
-The fields in the `properties` property are all constructed as a node in the form object, and the nodes are divided into nested nodes and control nodes.
+Each item in the `properties` property is a form node, and the nodes are divided into nested nodes and control nodes.
 - Nested nodes:
   Nodes with `properties` property describe which component the node is by the `type` and `props` fields, and do not carry form field components.
 - Control nodes:
@@ -499,30 +516,9 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
 ```
 
 ### Property Passing
- - Form node public parameters:
+ - Parameter settings for the form node:
  ```javascript
-// 1. Form nodes can receive public node information parameters, as follows
-export interface GeneratePrams<T = {}> {
-  name?: string; // Form fields for the current node
-  path?: string; // Rendering path of the current node
-  field?: T & GenerateFormNodeProps; // Information about the current node
-  parent?: { name?: string; path?: string, field?: T & GenerateFormNodeProps; }; // Information about the parent node
-  formrender?: FormRenderStore;
-  form?: FormStore;
-};
-// 2. passing parameters outside the component to receive the changed value from the component's parameter GeneratePrams['field']. Change the props property as follows
-
-  <RenderForm
-    options={{
-      layout: 'vertical',
-      props: { disabled: true }
-    }}
-  />
-```
- - Form field component property passing:
-The form field component is a special component, only the node where the control is located carries the form field component by default, you can set all the form field properties on the `Form` component.
- ```javascript
- import RenderForm from "./form-render"
+ import RenderForm, { RenderFormChildren, useFormStore, Form } from "./form-render"
 
  const [properties, setProperties] = useState({
     name3: {
@@ -531,12 +527,33 @@ The form field component is a special component, only the node where the control
       props: {}
     },
   })
-  // set layout
-  <Form form={form} layout="vertical">
-    <RenderFormChildren
-      properties={properties1}
-    />
-  <Form>
+  
+  const form = useFormStore();
+
+  // first way
+  <RenderForm
+    options={{
+      layout: 'vertical', // Attributes of a node
+      props: { disabled: true } // Properties of the component rendered by the 'type' field in the node
+    }}
+  />
+  // second way was only sets the properties of the form field component (Form.Item).
+  // <Form form={form} layout="vertical">
+  //   <RenderFormChildren
+  //     properties={properties1}
+  //   />
+  // </Form>
+```
+ - Contextual information received by any component registered in the form:
+ ```javascript
+export interface GeneratePrams<T = {}> {
+  name?: string; // Form fields of the node where the component is located
+  path?: string; // The rendering path of the node where the component is located
+  parent?: { name?: string; path?: string, field?: T & GenerateFormNodeProps; }; // Information about the parent node of the component
+  field?: T & GenerateFormNodeProps; // Information about the node where the component is located
+  formrender?: FormRenderStore;
+  form?: FormStore;
+};
 ```
 
 ### Path rules involved in the form

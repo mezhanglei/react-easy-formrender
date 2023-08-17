@@ -2,7 +2,7 @@
 
 [English](./README.md) | 中文说明
 
-[![Version](https://img.shields.io/badge/version-8.0.8-green)](https://www.npmjs.com/package/react-easy-formrender)
+[![Version](https://img.shields.io/badge/version-8.0.9-green)](https://www.npmjs.com/package/react-easy-formrender)
 
 # 介绍
 
@@ -72,7 +72,7 @@ import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select
 import 'react-easy-formrender/lib/css/main.css'
 export * from 'react-easy-formrender';
 
-export const AntdBaseComponents = {
+export const BaseComponents = {
   "Input": Input,
   "Input.TextArea": Input.TextArea,
   "Input.Password": Input.Password,
@@ -97,15 +97,31 @@ export const AntdBaseComponents = {
   "TimePicker.RangePicker": TimePicker.RangePicker
 }
 
-export function RenderFormChildren(props: RenderFormChildrenProps) {
+// RenderFormChildren
+export type CustomRenderFormChildrenProps = RenderFormChildrenProps<any>;
+export function RenderFormChildren(props: CustomRenderFormChildrenProps) {
+  const { components, expressionImports, ...rest } = props;
   return (
-    <RenderFormChilds {...props} components={{ ...AntdBaseComponents, ...props?.components }} />
+    <RenderFormChilds
+      options={{ props: { autoComplete: 'off' } }}
+      components={{ ...BaseComponents, ...components }}
+      // expressionImports={{ ...expressionImports, moment }}
+      {...rest}
+    />
   );
 }
 
-export default function FormRender(props: RenderFormProps) {
+// RenderForm
+export type CustomRenderFormProps = RenderFormProps<any>
+export default function FormRender(props: CustomRenderFormProps) {
+  const { components, expressionImports, ...rest } = props;
   return (
-    <RenderFormDefault {...props} components={{ ...AntdBaseComponents, ...props?.components }} />
+    <RenderFormDefault
+      options={{ props: { autoComplete: 'off' } }}
+      components={{ ...BaseComponents, ...components }}
+      // expressionImports={{ ...expressionImports, moment }}
+      {...rest}
+    />
   );
 }
 ```
@@ -439,11 +455,11 @@ const watch = {
 ## 其他
 
 ### properties结构说明
-   `properties`属性中的字段均为构造的表单对象中的一个节点，节点分为嵌套节点和控件节点。
+   `properties`属性中每一项均为一个表单节点，节点分为嵌套节点和控件节点。
 - 嵌套节点:
   有`properties`属性的节点，通过`type`和`props`字段描述该节点为哪个组件，不携带表单域组件。
 - 节点:
-  无`properties`属性的节点，默认携带表单域组件，提供表单域的一些功能, 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
+  无`properties`属性的节点，默认携带表单域组件(`Form.Item`), 提供表单域的一些功能, 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
 ```javascript
 // name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。
 const [properties, setProperties] = useState({
@@ -499,31 +515,10 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
 }
 ```
 
-### 参数传递
- - 表单节点公共参数：
+### 参数注入
+ - 表单节点的参数设置：
  ```javascript
-// 1. 默认表单节点可以接收到节点信息参数，如下
-export interface GeneratePrams<T = {}> {
-  name?: string; // 当前节点的表单字段
-  path?: string; // 当前节点的渲染路径
-  field?: T & GenerateFormNodeProps; // 当前节点的信息
-  parent?: { name?: string; path?: string, field?: T & GenerateFormNodeProps; }; // 父节点的信息
-  formrender?: FormRenderStore;
-  form?: FormStore;
-};
-// 2. 在组件外面传递参数，从组件的参数GeneratePrams['field']中接收改变后的值，如下面更改props属性
-  
-  <RenderForm
-    options={{
-      layout: 'vertical',
-      props: { disabled: true }
-    }}
-  />
-```
- - 表单域组件属性传递：
- 表单域组件属于特殊组件，只有控件所在节点才默认携带表单域组件，可以在`Form`组件上设置任意表单域属性.
- ```javascript
- import { RenderFormChildren, useFormStore, Form } from "./form-render"
+ import RenderForm, { RenderFormChildren, useFormStore, Form } from "./form-render"
 
  const [properties, setProperties] = useState({
     name3: {
@@ -535,14 +530,32 @@ export interface GeneratePrams<T = {}> {
   
   const form = useFormStore();
 
- // set layout
-  <Form form={form} layout="vertical">
-    <RenderFormChildren
-      properties={properties1}
-    />
-  <Form>
+  // 第一种方式
+  <RenderForm
+    options={{
+      layout: 'vertical', // 节点的属性
+      props: { disabled: true } // 节点中type字段渲染的组件的属性
+    }}
+  />
+  // 第二种方式 仅仅可以设置表单域组件(Form.Item)的属性
+  // <Form form={form} layout="vertical">
+  //   <RenderFormChildren
+  //     properties={properties1}
+  //   />
+  // </Form>
 ```
 
+ - 表单中组件注入的参数:
+ ```javascript
+export interface GeneratePrams<T = {}> {
+  name?: string; // 组件所在节点的表单字段
+  path?: string; // 组件所在节点的渲染路径
+  parent?: { name?: string; path?: string, field?: T & GenerateFormNodeProps; }; // 组件所在父节点的信息
+  field?: T & GenerateFormNodeProps; // 组件所在节点的信息
+  formrender?: FormRenderStore;
+  form?: FormStore;
+};
+```
 ### 表单的中涉及的path路径规则
 表单允许嵌套，所以表单中会涉及寻找某个属性。其路径遵循一定的规则
 
