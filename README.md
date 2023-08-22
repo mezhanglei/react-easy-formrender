@@ -516,7 +516,7 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
 ```
 
 ### Property Passing
- - Parameter settings for the form node:
+ - The properties of the form node are set globally:
  ```javascript
  import RenderForm, { RenderFormChildren, useFormStore, Form } from "./form-render"
 

@@ -461,7 +461,7 @@ const watch = {
 - 节点:
   无`properties`属性的节点，默认携带表单域组件(`Form.Item`), 提供表单域的一些功能, 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
 ```javascript
-// name3 为嵌套节点，但是没有设置节点组件，first和second为控件节点，有表单域属性。
+// name3 为嵌套节点，first和second为控件节点，有表单域属性。
 const [properties, setProperties] = useState({
   name3: {
     // type: '',
@@ -516,7 +516,7 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
 ```
 
 ### 参数注入
- - 表单节点的参数设置：
+ - 表单节点的属性全局设置：
  ```javascript
  import RenderForm, { RenderFormChildren, useFormStore, Form } from "./form-render"
 
@@ -545,7 +545,7 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
   // </Form>
 ```
 
- - 表单中组件注入的参数:
+ - 表单中的组件注入的参数:
  ```javascript
 export interface GeneratePrams<T = {}> {
   name?: string; // 组件所在节点的表单字段
