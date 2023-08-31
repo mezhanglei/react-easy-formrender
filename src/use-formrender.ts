@@ -7,7 +7,7 @@ export function useFormRenderStore() {
 }
 
 // 获取properties的state数据
-export function useProperties(formrender: FormRenderStore, immediate = true) {
+export function useProperties(formrender: FormRenderStore) {
   const [properties, setProperties] = useState<PropertiesData>();
 
   const subscribeData = () => {
@@ -18,7 +18,6 @@ export function useProperties(formrender: FormRenderStore, immediate = true) {
   }
 
   useMemo(() => {
-    if (!immediate) return
     subscribeData();
   }, []);
 
