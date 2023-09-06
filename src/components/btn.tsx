@@ -58,7 +58,7 @@ export const AddBtn: React.FC<AddBtnProps> = (props) => {
 
   const addNewItem = () => {
     const properties = field?.properties;
-    const nextIndex = typeof properties === 'object' && Object?.keys(properties)?.length || 0;
+    const nextIndex = Object?.keys(properties || {})?.length || 0;
     if (item && currentPath) {
       formrender?.insertItemByIndex(item, nextIndex, { path: currentPath });
     }

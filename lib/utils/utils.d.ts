@@ -15,12 +15,12 @@ export declare const toEntries: (data: any) => {
     isList: boolean;
     entries: [string, any][];
 };
-export declare const updateName: (properties: PropertiesData, newName?: string, pathStr?: string) => PropertiesData | undefined;
+export declare const updateName: (properties: PropertiesData, newName?: string, pathStr?: string) => PropertiesData;
 export declare type InsertItemType = Array<any> | Object | any;
 export declare const insertItemByIndex: (properties: PropertiesData, data: InsertItemType, index?: number, parent?: {
     path?: string;
     attributeName?: string;
-}) => PropertiesData | undefined;
+}) => PropertiesData;
 export declare const moveSameLevel: (properties: PropertiesData, from: {
     parent?: string;
     index: number;
@@ -34,7 +34,7 @@ export declare const moveDiffLevel: (properties: PropertiesData, from: {
 }, to: {
     parent?: string;
     index?: number;
-}) => PropertiesData | undefined;
+}) => PropertiesData;
 export declare const getInitialValues: (properties?: PropertiesData) => {} | undefined;
 export declare const setExpandComponents: (properties?: PropertiesData) => {
     [key: string]: FormNodeProps;

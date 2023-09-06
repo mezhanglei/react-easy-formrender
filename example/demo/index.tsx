@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "./index.less";
-import RenderForm, { useFormStore } from '../../lib/index';
+import RenderForm, { useFormStore } from '../../src/index';
 import '../../lib/css/main.css';
 import { Button, Checkbox, Input, Radio, Select } from 'antd';
 
