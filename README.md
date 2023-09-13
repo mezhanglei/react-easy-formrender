@@ -144,7 +144,7 @@ export default function Demo5(props) {
     }
   }
 
-  const [properties, setProperties] = useState({
+  const properties = {
       name1: {
         label: "readonly",
         readOnly: true,
@@ -242,7 +242,7 @@ export default function Demo5(props) {
           children: 'option'
         }
       },
-    })
+    }
 
   const form = useFormStore();
   // const formRenderStore = useFormRenderStore()
@@ -278,7 +278,7 @@ import RenderForm, { RenderFormChildren, Form, useFormStore, useFormRenderStore 
 import { Button } from 'antd';
 export default function Demo(props) {
   
-  const [properties1, setProperties1] = useState({
+  const properties1 = {
     part1: {
       label: "part1input",
       rules: [{ required: true, message: 'empty' }],
@@ -286,9 +286,9 @@ export default function Demo(props) {
       type: 'Input',
       props: {}
     },
-  })
+  }
 
-  const [properties2, setProperties2] = useState({
+  const properties2 = {
     part2: {
       label: "part2input",
       rules: [{ required: true, message: 'empty' }],
@@ -296,7 +296,7 @@ export default function Demo(props) {
       type: 'Input',
       props: {}
     },
-  })
+  }
 
   const form = useFormStore();
   // const formRenderStore1 = useFormRenderStore()
@@ -341,7 +341,7 @@ import RenderForm, { useFormStore } from './form-render';
 import { Button } from 'antd';
 export default function Demo(props) {
   
-  const [properties, setProperties1] = useState(
+  const properties =
     [
       {
         label: "list-0",
@@ -372,7 +372,6 @@ export default function Demo(props) {
         props: {}
       },
     ]
-  );
 
   const form = useFormStore();
 
@@ -461,7 +460,7 @@ Each item in the `properties` property is a form node, and the nodes are divided
   Nodes without the `properties` property carry a form field component by default, providing some of the functionality of a form field. the default form field properties are inherited from the `Form.Item` or the `Form.List` component in [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore).
 ```javascript
 // `name3` is Nested nodes，but not set component，`first` and `second` is Control nodes with form fields component。
-const [properties, setProperties] = useState({
+const properties = {
   name3: {
     // type: '',
     // props: {},
@@ -486,7 +485,7 @@ const [properties, setProperties] = useState({
       }
     }
   },
-})
+}
 ```
 - formNode type
 ```javascript
@@ -520,13 +519,13 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
  ```javascript
  import RenderForm, { RenderFormChildren, useFormStore, Form } from "./form-render"
 
- const [properties, setProperties] = useState({
+ const properties = {
     name3: {
       label: "name3",
       type: 'Input',
       props: {}
     },
-  })
+  }
   
   const form = useFormStore();
 
@@ -568,7 +567,7 @@ for Example:
  All property fields in form nodes except `properties` can support string expressions for linkage
  1. Quick use: Computational expressions wrapping target property values with `{{` and `}}`
 ```javascript
-  const [properties, setProperties] = useState({
+  const properties = {
     name1: {
       label: 'name1',
       valueProp: 'checked',
@@ -585,11 +584,11 @@ for Example:
       type: 'Input',
       props: {}
     },
-  })
+  }
 
   // OR
 
-  const [properties, setProperties] = useState({
+  const properties = {
     name1: {
       label: 'name1',
       valueProp: 'checked',
@@ -606,7 +605,7 @@ for Example:
       type: 'Input',
       props: {}
     },
-  })
+  }
 ```
  2. Rules for using string expressions
   - A string has and can have only one pair of `{{` and `}}`.
@@ -616,14 +615,14 @@ for Example:
  import moment from 'moment'
  import RenderForm from "./form-render"
 
- const [properties, setProperties] = useState({
+ const properties = {
     name3: {
       label: "name3",
       initialValue: "{{moment().format('YYYY-MM-DD')}}",
       type: 'Input',
       props: {}
     },
-  })
+  }
   
   <RenderForm properties={properties} expressionImports={{ moment }} />
 ```

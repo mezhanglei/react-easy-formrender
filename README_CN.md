@@ -144,7 +144,7 @@ export default function Demo5(props) {
     }
   }
 
-  const [properties, setProperties] = useState({
+  const properties = {
       name1: {
         label: "readonly",
         readOnly: true,
@@ -242,7 +242,7 @@ export default function Demo5(props) {
           children: 'option'
         }
       },
-    })
+    }
 
   const form = useFormStore();
   // const formRenderStore = useFormRenderStore()
@@ -278,7 +278,7 @@ import RenderForm, { RenderFormChildren, Form, useFormStore } from './form-rende
 import { Button } from 'antd';
 export default function Demo(props) {
   
-  const [properties1, setProperties1] = useState({
+  const properties1 = {
     part1: {
       label: "part1input",
       rules: [{ required: true, message: 'name1 empty' }],
@@ -286,9 +286,9 @@ export default function Demo(props) {
       type: 'Input',
       props: {}
     },
-  })
+  }
 
-  const [properties2, setProperties2] = useState({
+  const properties2 = {
     part2: {
       label: "part2input",
       rules: [{ required: true, message: 'name1 empty' }],
@@ -296,7 +296,7 @@ export default function Demo(props) {
       type: 'Input',
       props: {}
     },
-  })
+  }
 
   const form = useFormStore();
   // const formRenderStore1 = useFormRenderStore()
@@ -341,7 +341,7 @@ import RenderForm, { useFormStore } from './form-render';
 import { Button } from 'antd';
 export default function Demo(props) {
   
-  const [properties, setProperties1] = useState(
+  const properties =
     [
       {
         label: "list-0",
@@ -371,8 +371,7 @@ export default function Demo(props) {
         type: 'Input',
         props: {}
       },
-    ]
-  );
+    ];
 
   const form = useFormStore();
 
@@ -462,7 +461,7 @@ const watch = {
   无`properties`属性的节点，默认携带表单域组件(`Form.Item`), 提供表单域的一些功能, 默认的表单域属性继承自[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)中的`Form.Item`的`props`.
 ```javascript
 // name3 为嵌套节点，first和second为控件节点，有表单域属性。
-const [properties, setProperties] = useState({
+const properties = {
   name3: {
     // type: '',
     // props: {},
@@ -487,7 +486,7 @@ const [properties, setProperties] = useState({
       }
     }
   },
-})
+}
 ```
 - 节点的typescript类型
 ```javascript
@@ -520,13 +519,13 @@ export interface FormNodeProps extends FormItemProps, FormComponent {
  ```javascript
  import RenderForm, { RenderFormChildren, useFormStore, Form } from "./form-render"
 
- const [properties, setProperties] = useState({
+ const properties = {
     name3: {
       label: "name3",
       type: 'Input',
       props: {}
     },
-  })
+  }
   
   const form = useFormStore();
 
@@ -568,7 +567,7 @@ export interface GeneratePrams<T = {}> {
  表单节点中属性字段除`properties`外均可以支持字符串表达式来进行联动
  1. 快速使用：用`{{`和`}}`包裹目标属性值的计算表达式
 ```javascript
-  const [properties, setProperties] = useState({
+  const properties = {
     name1: {
       label: 'name1',
       valueProp: 'checked',
@@ -585,11 +584,11 @@ export interface GeneratePrams<T = {}> {
       type: 'Input',
       props: {}
     },
-  })
+  }
 
   // OR
 
-  const [properties, setProperties] = useState({
+  const properties = {
     name1: {
       label: 'name1',
       valueProp: 'checked',
@@ -606,7 +605,7 @@ export interface GeneratePrams<T = {}> {
       type: 'Input',
       props: {}
     },
-  })
+  }
 ```
  2. 字符串表达式的使用规则
   - 一个字符串有且只能有一对`{{`和`}}`.
@@ -616,14 +615,14 @@ export interface GeneratePrams<T = {}> {
  import moment from 'moment'
  import RenderForm from "./form-render"
 
- const [properties, setProperties] = useState({
+ const properties = {
     name3: {
       label: "name3",
       initialValue: "{{moment().format('YYYY-MM-DD')}}",
       type: 'Input',
       props: {}
     },
-  })
+  }
   
   <RenderForm properties={properties} expressionImports={{ moment }} />
 ```
