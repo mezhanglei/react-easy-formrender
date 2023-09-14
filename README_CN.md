@@ -66,7 +66,7 @@ yarn add react-easy-formrender
 ### 1.首先注册基本组件(以antd@4.20.2组件库为例)
 ```javascript
 // register
-import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
+import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, TreeSelect, Slider, Switch, TimePicker } from 'antd';
 import 'react-easy-formrender/lib/css/main.css'
@@ -97,9 +97,10 @@ export const BaseComponents = {
   "TimePicker.RangePicker": TimePicker.RangePicker
 }
 
+export type CustomRenderFormProps = RenderFormProps<any>;
+
 // RenderFormChildren
-export type CustomRenderFormChildrenProps = RenderFormChildrenProps<any>;
-export function RenderFormChildren(props: CustomRenderFormChildrenProps) {
+export function RenderFormChildren(props: CustomRenderFormProps) {
   const { components, expressionImports, ...rest } = props;
   return (
     <RenderFormChilds
@@ -111,8 +112,6 @@ export function RenderFormChildren(props: CustomRenderFormChildrenProps) {
   );
 }
 
-// RenderForm
-export type CustomRenderFormProps = RenderFormProps<any>
 export default function FormRender(props: CustomRenderFormProps) {
   const { components, expressionImports, ...rest } = props;
   return (

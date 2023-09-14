@@ -66,7 +66,7 @@ yarn add react-easy-formrender
 ### 1.First register the basic components(Take the `antd@4.20.2` UI library as an example)
 ```javascript
 // register
-import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormChildrenProps, RenderFormProps } from 'react-easy-formrender';
+import RenderFormDefault, { RenderFormChildren as RenderFormChilds, RenderFormProps } from 'react-easy-formrender';
 import React from 'react';
 import { Input, InputNumber, Checkbox, DatePicker, Mentions, Radio, Rate, Select, TreeSelect, Slider, Switch, TimePicker } from 'antd';
 import 'react-easy-formrender/lib/css/main.css'
@@ -97,9 +97,10 @@ export const BaseComponents = {
   "TimePicker.RangePicker": TimePicker.RangePicker
 }
 
+export type CustomRenderFormProps = RenderFormProps<any>;
+
 // RenderFormChildren
-export type CustomRenderFormChildrenProps = RenderFormChildrenProps<any>;
-export function RenderFormChildren(props: CustomRenderFormChildrenProps) {
+export function RenderFormChildren(props: CustomRenderFormProps) {
   const { components, expressionImports, ...rest } = props;
   return (
     <RenderFormChilds

@@ -10,7 +10,7 @@ import { useFormRenderStore } from './use-formrender';
 import { isEmpty, isObject } from './utils/type';
 
 // 表单元素渲染
-export default function RenderFormChildren(props: RenderFormChildrenProps) {
+export default function RenderFormChildren(props: RenderFormProps) {
 
   const [fieldPropsMap, setFieldPropsMap] = useState<Partial<FormNodeProps>>({});
   const [properties, setProperties] = useState<PropertiesData>({});
@@ -24,6 +24,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     renderList,
     inside,
     properties: propsProperties,
+    form,
     formrender,
     expressionImports = {},
     options,
@@ -31,9 +32,9 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   } = props;
 
   const formOptions = useContext(FormOptionsContext);
-  const form = useContext<FormStore>(FormStoreContext);
-  const { onValuesChange } = formOptions;
+  const formStore = form || useContext<FormStore>(FormStoreContext);
   const formRenderStore = formrender || useFormRenderStore();
+  const { onValuesChange } = formOptions;
   formRenderStore.registry('components', Object.assign({}, defaultComponents, components));
 
   const valuesCallback: ItemCoreProps['onValuesChange'] = (...args) => {
@@ -42,27 +43,27 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
   }
 
   useEffect(() => {
-    if (!form || !watch) return;
+    if (!formStore || !watch) return;
     Object.entries(watch)?.map(([key, watcher]) => {
       // 函数形式
       if (typeof watcher === 'function') {
-        form?.subscribeFormValue(key, watcher)
+        formStore?.subscribeFormValue(key, watcher)
         // 对象形式
       } else if (isObject(watcher)) {
         if (typeof watcher.handler === 'function') {
-          form?.subscribeFormValue(key, watcher.handler);
+          formStore?.subscribeFormValue(key, watcher.handler);
         }
         if (watcher.immediate) {
-          watcher.handler(form?.getFieldValue(key), form?.getLastValue(key));
+          watcher.handler(formStore?.getFieldValue(key), formStore?.getLastValue(key));
         }
       }
     });
     return () => {
       Object.entries(watch || {})?.forEach(([key]) => {
-        form?.unsubscribeFormValue(key);
+        formStore?.unsubscribeFormValue(key);
       });
     }
-  }, [form, watch]);
+  }, [formStore, watch]);
 
   // 从formRenderStore中订阅更新properties
   useEffect(() => {
@@ -190,7 +191,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
         const actionStr = "return " + target;
         // 函数最后一个参数为函数体，前面均为传入的变量名
         const action = new Function(...importsKeys, actionStr);
-        const result = action(form, formRenderStore, form && form.getFieldValue() || {}, ...importsValues);
+        const result = action(formStore, formRenderStore, formStore && formStore.getFieldValue() || {}, ...importsValues);
         return evalExpression(result, uneval);
       } else {
         return value;
@@ -220,7 +221,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
       path,
       field: mergeField,
       parent,
-      form: form,
+      form: formStore,
       formrender: formRenderStore
     }; // 公共参数
     const {
@@ -245,7 +246,6 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     const suffixInstance = formRenderStore.componentInstance(suffix, commonParams);
     const fieldProps = Object.assign({
       name: name,
-      onValuesChange: valuesCallback,
       footer: footerInstance,
       suffix: suffixInstance,
       component: component !== undefined ? formRenderStore.componentParse(component) : undefined,
@@ -264,7 +264,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     } else {
       // 携带表单域的节点
       result = (
-        <Form.Item {...fieldProps}>
+        <Form.Item {...fieldProps} onValuesChange={valuesCallback}>
           {FormNodeWidget}
         </Form.Item>
       );
@@ -289,7 +289,7 @@ export default function RenderFormChildren(props: RenderFormChildrenProps) {
     return withSide(childs, inside, renderList, current)
   }
 
-  return renderChildren(properties, inside, { formrender: formRenderStore, form: form });
+  return renderChildren(properties, inside, { formrender: formRenderStore, form: formStore });
 }
 
 RenderFormChildren.displayName = 'Form.Children';
