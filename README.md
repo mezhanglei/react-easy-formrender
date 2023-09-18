@@ -113,7 +113,6 @@ export function RenderFormChildren(props: CustomRenderFormProps) {
 }
 
 // RenderForm
-export type CustomRenderFormProps = RenderFormProps<any>
 export default function FormRender(props: CustomRenderFormProps) {
   const { components, expressionImports, ...rest } = props;
   return (
