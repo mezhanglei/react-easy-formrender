@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FormNodeProps, RenderFormChildrenProps, GeneratePrams, CustomUnionType, PropertiesData, GenerateFormNodeProps, CustomRenderType } from './types';
+import { FormNodeProps, GeneratePrams, CustomUnionType, PropertiesData, GenerateFormNodeProps, CustomRenderType, RenderFormProps } from './types';
 import { defaultComponents } from './components';
 import { Form, FormOptionsContext, FormStore, FormStoreContext, ItemCoreProps, joinFormPath } from 'react-easy-formcore';
 import { isEqual } from './utils/object';
@@ -252,7 +252,14 @@ export default function RenderFormChildren(props: RenderFormProps) {
     }, restField);
     // 只读显示组件
     const readOnlyWidget = formRenderStore.componentInstance(readOnlyRender, commonParams);
-    if (isReadOnly) return readOnlyWidget;
+    if (isReadOnly) {
+      return haveProperties ?
+        readOnlyWidget
+        :
+        <Form.Item {...fieldProps}>
+          {readOnlyWidget}
+        </Form.Item>
+    };
     // 当前节点组件
     const FormNodeWidget = formRenderStore.componentInstance(typeRender || { type, props }, commonParams);
     // 节点的子组件

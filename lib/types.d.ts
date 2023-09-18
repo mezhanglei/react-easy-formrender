@@ -31,7 +31,11 @@ export declare type FormNodeProps = {
     }> | GenerateFormNodeProps[key]) : (key extends 'properties' ? GenerateFormNodeProps[key] : (string | GenerateFormNodeProps[key]));
 };
 export declare type WatchHandler = (newValue: any, oldValue: any) => void;
-export interface RenderFormChildrenProps<T = {}> {
+export interface RenderFormProps<T = {}> extends Omit<FormProps, 'form'> {
+    form?: FormStore;
+    formrender?: FormRenderStore;
+    options?: GenerateFormNodeProps<T> | ((params: GenerateFormNodeProps<T>) => GenerateFormNodeProps<T>);
+    evalPropNames?: Array<string>;
     expressionImports?: object;
     uneval?: boolean;
     watch?: {
@@ -46,12 +50,6 @@ export interface RenderFormChildrenProps<T = {}> {
     renderList?: CustomRenderType;
     renderItem?: CustomRenderType;
     onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
-    formrender?: FormRenderStore;
-    options?: GenerateFormNodeProps<T> | ((params: GenerateFormNodeProps<T>) => GenerateFormNodeProps<T>);
-    evalPropNames?: Array<string>;
-}
-export interface RenderFormProps<T = {}> extends Omit<FormProps, 'form'>, RenderFormChildrenProps<T> {
-    form?: FormStore;
 }
 export interface GeneratePrams<T = {}> {
     name?: string;
