@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FormNodeProps, GeneratePrams, CustomUnionType, PropertiesData, GenerateFormNodeProps, CustomRenderType, RenderFormProps } from './types';
+import { FormNodeProps, GenerateParams, CustomUnionType, PropertiesData, GenerateFormNodeProps, CustomRenderType, RenderFormProps } from './types';
 import { defaultComponents } from './components';
 import { Form, FormOptionsContext, FormStore, FormStoreContext, ItemCoreProps, joinFormPath } from 'react-easy-formcore';
 import { isEqual } from './utils/object';
@@ -203,7 +203,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
 
   const ignoreTag = { "data-type": "ignore" }
   // 目标套上其他组件
-  const withSide = (children: any, side?: CustomUnionType, render?: CustomRenderType, commonProps?: GeneratePrams) => {
+  const withSide = (children: any, side?: CustomUnionType, render?: CustomRenderType, commonProps?: GenerateParams) => {
     const childs = typeof render === 'function' ? render?.(Object.assign({ children }, commonProps)) : children;
     const sideInstance = side && formRenderStore.componentInstance(side, Object.assign({}, commonProps, ignoreTag));
     const childsWithSide = React.isValidElement(sideInstance) ? React.cloneElement(sideInstance, { children: childs } as Partial<unknown>) : childs;
@@ -212,7 +212,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
   }
 
   // 生成子元素
-  const generateChild = (name: string, path: string, field: GenerateFormNodeProps, parent?: GeneratePrams['parent']) => {
+  const generateChild = (name: string, path: string, field: GenerateFormNodeProps, parent?: GenerateParams['parent']) => {
     if (field?.hidden === true || !field) return;
     const mergeOptions = Object.assign({}, typeof options === 'function' ? options(field) : options, formOptions);
     const mergeField = Object.assign({}, mergeOptions, field, { props: Object.assign({}, mergeOptions?.props, field?.props) })
@@ -280,7 +280,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
   }
 
   // 渲染children
-  const renderChildren = (properties: FormNodeProps['properties'], inside: CustomUnionType | undefined, current: GeneratePrams): any => {
+  const renderChildren = (properties: FormNodeProps['properties'], inside: CustomUnionType | undefined, current: GenerateParams): any => {
     const { name, path, field } = current || {};
     const childs = Object.entries(properties || {})?.map(([key, childField], index: number) => {
       if (typeof key === 'string' || typeof key === 'number') {

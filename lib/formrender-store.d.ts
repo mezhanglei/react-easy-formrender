@@ -1,4 +1,4 @@
-import { CustomUnionType, GeneratePrams, PropertiesData } from "./types";
+import { CustomUnionType, GenerateParams, PropertiesData } from "./types";
 import { InsertItemType } from "./utils/utils";
 export declare type FormRenderListener = (newValue?: any, oldValue?: any) => void;
 export declare class FormRenderStore {
@@ -9,7 +9,7 @@ export declare class FormRenderStore {
     constructor();
     registry(key: 'components', data: any): void;
     componentParse(target?: CustomUnionType): any;
-    componentInstance(target?: CustomUnionType, commonProps?: GeneratePrams): any;
+    componentInstance(target?: CustomUnionType, commonProps?: GenerateParams): any;
     getProperties(): PropertiesData;
     setProperties(data?: PropertiesData): void;
     updateItemByPath: (data?: any, path?: string, attributeName?: string) => void;

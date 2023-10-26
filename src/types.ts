@@ -32,7 +32,7 @@ export type GenerateFormNodeProps<T = {}> = FormComponent & FormItemProps & T & 
 // 表单属性对象
 export type PropertiesData = { [name: string]: FormNodeProps } | FormNodeProps[]
 // render函数
-export type CustomRenderType = (params: GeneratePrams<any> & { children?: any }) => any;
+export type CustomRenderType = (params: GenerateParams<any> & { children?: any }) => any;
 
 // 表单域(支持字符串表达式的表单域)
 export type FormNodeProps = {
@@ -64,7 +64,7 @@ export interface RenderFormProps<T = {}> extends Omit<FormProps, 'form'> {
 };
 
 // 组件公共的参数
-export interface GeneratePrams<T = {}> {
+export interface GenerateParams<T = {}> {
   name?: string;
   path?: string;
   field?: GenerateFormNodeProps<T>;

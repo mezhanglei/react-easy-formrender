@@ -1,6 +1,6 @@
 import React from 'react';
 import { ColProps, RowProps } from "antd";
-import { GeneratePrams } from '../types';
+import { GenerateParams } from '../types';
 import './grid.less';
 export declare const getColProps: (props: ColProps, inline?: boolean) => {
     flex?: (string | number) | undefined;
@@ -273,11 +273,11 @@ export declare const getColProps: (props: ColProps, inline?: boolean) => {
     md: any;
     lg: any;
 };
-export interface GridRowProps extends RowProps, GeneratePrams {
+export interface GridRowProps extends RowProps, GenerateParams {
     children: any;
 }
 export declare const GridRow: React.ForwardRefExoticComponent<GridRowProps & React.RefAttributes<any>>;
-export interface GridColProps extends ColProps, GeneratePrams {
+export interface GridColProps extends ColProps, GenerateParams {
     children: any;
 }
 export declare const GridCol: React.ForwardRefExoticComponent<GridColProps & React.RefAttributes<any>>;

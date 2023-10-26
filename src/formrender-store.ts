@@ -1,5 +1,5 @@
 import { deepClone } from "./utils/object";
-import { CustomUnionType, GeneratePrams, PropertiesData } from "./types";
+import { CustomUnionType, GenerateParams, PropertiesData } from "./types";
 import { getItemByPath, setItemByPath, updateItemByPath, moveSameLevel, moveDiffLevel, updateName, getKeyValueByIndex, InsertItemType, insertItemByIndex } from "./utils/utils";
 import { createInstance, parseComponent } from "./utils/handle";
 import { joinFormPath } from "react-easy-formcore";
@@ -35,7 +35,7 @@ export class FormRenderStore {
   }
 
   // 创建components的实例
-  public componentInstance(target?: CustomUnionType, commonProps?: GeneratePrams) {
+  public componentInstance(target?: CustomUnionType, commonProps?: GenerateParams) {
     const typeMap = this.components;
     return createInstance(target, typeMap, commonProps);
   }

@@ -22,7 +22,7 @@ export declare type GenerateFormNodeProps<T = {}> = FormComponent & FormItemProp
 export declare type PropertiesData = {
     [name: string]: FormNodeProps;
 } | FormNodeProps[];
-export declare type CustomRenderType = (params: GeneratePrams<any> & {
+export declare type CustomRenderType = (params: GenerateParams<any> & {
     children?: any;
 }) => any;
 export declare type FormNodeProps = {
@@ -51,7 +51,7 @@ export interface RenderFormProps<T = {}> extends Omit<FormProps, 'form'> {
     renderItem?: CustomRenderType;
     onPropertiesChange?: (newValue: PropertiesData, oldValue?: PropertiesData) => void;
 }
-export interface GeneratePrams<T = {}> {
+export interface GenerateParams<T = {}> {
     name?: string;
     path?: string;
     field?: GenerateFormNodeProps<T>;
