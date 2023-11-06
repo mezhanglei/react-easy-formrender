@@ -1,5 +1,5 @@
 import React from 'react';
-import './icon.less';
+import './index.less';
 interface SvgIconProps extends React.HtmlHTMLAttributes<SVGSVGElement> {
     name: string;
     className?: string;

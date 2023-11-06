@@ -7,7 +7,7 @@ export declare class FormRenderStore {
     private lastProperties;
     private propertiesListeners;
     constructor();
-    registry(key: 'components', data: any): void;
+    registry(data: any): void;
     componentParse(target?: CustomUnionType): any;
     componentInstance(target?: CustomUnionType, commonProps?: GenerateParams): any;
     getProperties(): PropertiesData;

@@ -18,14 +18,11 @@ const nodeModulesPath = resolveApp('node_modules');
 const appHtml = path.join(appRoot, 'public/index.html');
 // 引入配置
 const configs = require('./configs.js');
-// 图标路径
-const iconsPath = path.resolve(srcPath, './icons');
 const isDev = configs.isDev;
 // 合并为一个对象输出
 module.exports = {
   appRoot,
   srcPath,
-  iconsPath,
   examplePath,
   outputPath,
   devOutputPath,

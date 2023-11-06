@@ -4,7 +4,6 @@ import { defaultComponents } from './components';
 import { Form, FormOptionsContext, FormStore, FormStoreContext, ItemCoreProps, joinFormPath } from 'react-easy-formcore';
 import { isEqual } from './utils/object';
 import 'react-easy-formcore/lib/css/main.css';
-import "./icons/index.js";
 import { matchExpression } from './utils/utils';
 import { useFormRenderStore } from './use-formrender';
 import { isEmpty, isObject } from './utils/type';
@@ -35,7 +34,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
   const formStore = form || useContext<FormStore>(FormStoreContext);
   const formRenderStore = formrender || useFormRenderStore();
   const { onValuesChange } = formOptions;
-  formRenderStore.registry('components', Object.assign({}, defaultComponents, components));
+  formRenderStore.registry(Object.assign({}, defaultComponents, components));
 
   const valuesCallback: ItemCoreProps['onValuesChange'] = (...args) => {
     onValuesChange && onValuesChange(...args)
