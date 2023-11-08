@@ -1,12 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FormNodeProps, GenerateParams, CustomUnionType, PropertiesData, GenerateFormNodeProps, CustomRenderType, RenderFormProps } from './types';
-import { defaultComponents } from './components';
 import { Form, FormOptionsContext, FormStore, FormStoreContext, ItemCoreProps, joinFormPath } from 'react-easy-formcore';
 import { isEqual } from './utils/object';
 import 'react-easy-formcore/lib/css/main.css';
 import { matchExpression } from './utils/utils';
 import { useFormRenderStore } from './use-formrender';
 import { isEmpty, isObject } from './utils/type';
+import { CustomCol, CustomRow } from './components';
+
+const defaultComponents = {
+  'row': CustomRow,
+  'col': CustomCol,
+  'Form.Item': Form.Item,
+  'Form.List': Form.List,
+}
 
 // 表单元素渲染
 export default function RenderFormChildren(props: RenderFormProps) {

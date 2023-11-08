@@ -273,11 +273,11 @@ export declare const getColProps: (props: ColProps, inline?: boolean) => {
     md: any;
     lg: any;
 };
-export interface GridRowProps extends RowProps, GenerateParams {
+export interface CustomRowProps extends RowProps, GenerateParams {
     children: any;
 }
-export declare const GridRow: React.ForwardRefExoticComponent<GridRowProps & React.RefAttributes<any>>;
-export interface GridColProps extends ColProps, GenerateParams {
+export declare const CustomRow: React.ForwardRefExoticComponent<CustomRowProps & React.RefAttributes<any>>;
+export interface CustomColProps extends ColProps, GenerateParams {
     children: any;
 }
-export declare const GridCol: React.ForwardRefExoticComponent<GridColProps & React.RefAttributes<any>>;
+export declare const CustomCol: React.ForwardRefExoticComponent<CustomColProps & React.RefAttributes<any>>;
