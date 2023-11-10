@@ -211,7 +211,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
   // 目标套上其他组件
   const withSide = (children: any, side?: CustomUnionType, render?: CustomRenderType, commonProps?: GenerateParams) => {
     const childs = typeof render === 'function' ? render?.(Object.assign({ children }, commonProps)) : children;
-    const sideInstance = side && formRenderStore.componentInstance(side, Object.assign({}, commonProps, ignoreTag));
+    const sideInstance = side && formRenderStore.renderComponent(side, Object.assign({}, commonProps, ignoreTag));
     const childsWithSide = React.isValidElement(sideInstance) ? React.cloneElement(sideInstance, { children: childs } as Partial<unknown>) : childs;
     const cloneChilds = React.isValidElement(childsWithSide) ? React.cloneElement(childsWithSide, { key: commonProps?.path }) : childsWithSide;
     return cloneChilds;
@@ -248,16 +248,16 @@ export default function RenderFormChildren(props: RenderFormProps) {
     const haveProperties = isObject(properties) || properties instanceof Array;
     // 当前节点是否为只读
     const isReadOnly = restField?.readOnly === true;
-    const footerInstance = formRenderStore.componentInstance(footer, commonParams);
-    const suffixInstance = formRenderStore.componentInstance(suffix, commonParams);
+    const footerInstance = formRenderStore.renderComponent(footer, commonParams);
+    const suffixInstance = formRenderStore.renderComponent(suffix, commonParams);
     const fieldProps = Object.assign({
       name: name,
       footer: footerInstance,
       suffix: suffixInstance,
-      component: component !== undefined ? formRenderStore.componentParse(component) : undefined,
+      component: component !== undefined ? formRenderStore.parseComponent(component) : undefined,
     }, restField);
     // 只读显示组件
-    const readOnlyWidget = formRenderStore.componentInstance(readOnlyRender, commonParams);
+    const readOnlyWidget = formRenderStore.renderComponent(readOnlyRender, commonParams);
     if (isReadOnly) {
       return haveProperties ?
         readOnlyWidget
@@ -267,7 +267,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
         </Form.Item>
     };
     // 当前节点组件
-    const FormNodeWidget = formRenderStore.componentInstance(typeRender || { type, props }, commonParams);
+    const FormNodeWidget = formRenderStore.renderComponent(typeRender || { type, props }, commonParams);
     // 节点的子组件
     const FormNodeChildren = renderChildren(properties, inside, commonParams)
     let result;

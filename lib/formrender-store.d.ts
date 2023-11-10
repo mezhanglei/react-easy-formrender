@@ -9,7 +9,7 @@ export declare class FormRenderStore {
     constructor();
     registry(data: any): void;
     componentParse(target?: CustomUnionType): any;
-    componentInstance(target?: CustomUnionType, commonProps?: GenerateParams): any;
+    renderComponent(target?: CustomUnionType, commonProps?: GenerateParams): any;
     getProperties(): PropertiesData;
     setProperties(data?: PropertiesData): void;
     updateItemByPath: (data?: any, path?: string, attributeName?: string) => void;
