@@ -7,7 +7,7 @@ import { isEmpty, isObject } from './type';
 const isFormRegistered = (target?: any, typeMap?: { [key: string]: React.ElementType }) => {
   const Com = isObject(target) && typeMap && typeMap[(target as FormComponent).type || ''];
   return Com;
-}
+};
 
 // 解析组件声明
 export const parseComponent = (target: CustomUnionType | undefined, typeMap?: { [key: string]: React.ElementType }) => {
@@ -22,7 +22,7 @@ export const parseComponent = (target: CustomUnionType | undefined, typeMap?: { 
   }
   if (isReactComponent(target)) return target;
   return null;
-}
+};
 
 // 渲染组件
 export const renderComponent = (target?: any, typeMap?: { [key: string]: React.ElementType }, commonProps?: GenerateParams): any => {
@@ -42,4 +42,4 @@ export const renderComponent = (target?: any, typeMap?: { [key: string]: React.E
   // 是否为React元素
   if (React.isValidElement(target) || typeof target === 'string' || typeof target === 'number') return target;
   return null;
-}
+};

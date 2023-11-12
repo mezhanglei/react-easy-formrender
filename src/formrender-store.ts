@@ -15,11 +15,11 @@ export class FormRenderStore {
   constructor() {
     this.properties = {};
     this.lastProperties = undefined;
-    this.getProperties = this.getProperties.bind(this)
-    this.setProperties = this.setProperties.bind(this)
-    this.registry = this.registry.bind(this)
-    this.parseComponent = this.parseComponent.bind(this)
-    this.renderComponent = this.renderComponent.bind(this)
+    this.getProperties = this.getProperties.bind(this);
+    this.setProperties = this.setProperties.bind(this);
+    this.registry = this.registry.bind(this);
+    this.parseComponent = this.parseComponent.bind(this);
+    this.renderComponent = this.renderComponent.bind(this);
     this.components = {};
   }
 
@@ -59,7 +59,7 @@ export class FormRenderStore {
       let newProperties = updateItemByPath(cloneProperties, data, path, attributeName);
       this.setProperties(newProperties);
     }
-  }
+  };
 
   // 设置指定路径的值
   setItemByPath = (data?: any, path?: string, attributeName?: string) => {
@@ -68,7 +68,7 @@ export class FormRenderStore {
       let newProperties = setItemByPath(cloneProperties, data, path, attributeName);
       this.setProperties(newProperties);
     }
-  }
+  };
 
   // 设置指定路径的值
   setItemByIndex = (data?: any, index?: number, parent?: { path?: string, attributeName?: string }) => {
@@ -80,7 +80,7 @@ export class FormRenderStore {
       let newProperties = setItemByPath(cloneProperties, data, formPath, attributeName);
       this.setProperties(newProperties);
     }
-  }
+  };
 
   // 更新节点的键
   updateNameByPath = (endName?: string, path?: string) => {
@@ -89,7 +89,7 @@ export class FormRenderStore {
       let newProperties = updateName(cloneProperties, endName, path);
       this.setProperties(newProperties);
     }
-  }
+  };
 
   // 插入值，默认末尾
   insertItemByIndex = (data: InsertItemType, index?: number, parent?: { path?: string, attributeName?: string }) => {
@@ -98,7 +98,7 @@ export class FormRenderStore {
       let newProperties = insertItemByIndex(cloneProperties, data, index, parent);
       this.setProperties(newProperties);
     }
-  }
+  };
 
   // 根据path删除一条
   delItemByPath = (path?: string, attributeName?: string) => {
@@ -107,7 +107,7 @@ export class FormRenderStore {
       let newProperties = setItemByPath(cloneProperties, undefined, path, attributeName);
       this.setProperties(newProperties);
     }
-  }
+  };
 
   // 获取指定路径的项
   getItemByPath = (path?: string, attributeName?: string) => {
@@ -115,7 +115,7 @@ export class FormRenderStore {
     if (cloneProperties) {
       return getItemByPath(cloneProperties, path, attributeName);
     }
-  }
+  };
 
   // 获取指定index的项
   getItemByIndex = (index: number, parent: { path?: string, attributeName?: string }) => {
@@ -124,7 +124,7 @@ export class FormRenderStore {
       const [, value] = getKeyValueByIndex(cloneProperties, index, parent);
       return value;
     }
-  }
+  };
 
   // 从from到to更换位置
   moveItemByPath = (from: { parent?: string, index: number }, to: { parent?: string, index?: number }) => {
@@ -138,14 +138,14 @@ export class FormRenderStore {
       }
       this.setProperties(newProperties);
     }
-  }
+  };
 
   // 订阅表单渲染数据的变动
   public subscribeProperties(listener: FormRenderListener) {
     this.propertiesListeners.push(listener);
     return () => {
       this.propertiesListeners = [];
-    }
+    };
   }
 
   // 卸载
@@ -156,8 +156,8 @@ export class FormRenderStore {
   // 同步表单渲染数据的变化
   private notifyProperties() {
     this.propertiesListeners.forEach((onChange) => {
-      const cloneProperties = this.getProperties()
+      const cloneProperties = this.getProperties();
       onChange && onChange(cloneProperties, this.lastProperties);
-    })
+    });
   }
 }

@@ -13,7 +13,7 @@ const defaultComponents = {
   'col': CustomCol,
   'Form.Item': Form.Item,
   'Form.List': Form.List,
-}
+};
 
 // 表单元素渲染
 export default function RenderFormChildren(props: RenderFormProps) {
@@ -38,22 +38,24 @@ export default function RenderFormChildren(props: RenderFormProps) {
   } = props;
 
   const formOptions = useContext(FormOptionsContext);
-  const formStore = form || useContext<FormStore>(FormStoreContext);
-  const formRenderStore = formrender || useFormRenderStore();
+  const formContext = useContext<FormStore>(FormStoreContext);
+  const formStore = form || formContext;
+  const formrenderContext = useFormRenderStore();
+  const formRenderStore = formrender || formrenderContext;
   const { onValuesChange } = formOptions;
   formRenderStore.registry(Object.assign({}, defaultComponents, components));
 
   const valuesCallback: ItemCoreProps['onValuesChange'] = (...args) => {
-    onValuesChange && onValuesChange(...args)
+    onValuesChange && onValuesChange(...args);
     handleFieldProps();
-  }
+  };
 
   useEffect(() => {
     if (!formStore || !watch) return;
     Object.entries(watch)?.map(([key, watcher]) => {
       // 函数形式
       if (typeof watcher === 'function') {
-        formStore?.subscribeFormValue(key, watcher)
+        formStore?.subscribeFormValue(key, watcher);
         // 对象形式
       } else if (isObject(watcher)) {
         if (typeof watcher.handler === 'function') {
@@ -68,21 +70,21 @@ export default function RenderFormChildren(props: RenderFormProps) {
       Object.entries(watch || {})?.forEach(([key]) => {
         formStore?.unsubscribeFormValue(key);
       });
-    }
+    };
   }, [formStore, watch]);
 
   // 从formRenderStore中订阅更新properties
   useEffect(() => {
-    if (!formRenderStore) return
+    if (!formRenderStore) return;
     formRenderStore.subscribeProperties((newValue, oldValue) => {
       setProperties(newValue);
       if (!isEqual(newValue, oldValue)) {
-        onPropertiesChange && onPropertiesChange(newValue, oldValue)
+        onPropertiesChange && onPropertiesChange(newValue, oldValue);
       }
-    })
+    });
     return () => {
       formRenderStore?.unsubscribeProperties();
-    }
+    };
   }, [formRenderStore, onPropertiesChange]);
 
   // 从props中更新properties
@@ -107,7 +109,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
       return Object.fromEntries(
         Object.entries(val || {})?.map(
           ([propsKey, propsItem]) => {
-            return [propsKey, evalAttr(propsItem)]
+            return [propsKey, evalAttr(propsItem)];
           }
         )
       );
@@ -115,7 +117,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
       const generateItem = evalExpression(val, uneval);
       return generateItem;
     }
-  }
+  };
 
   // 递归遍历处理表单域的字符串表达式并存储解析后的信息
   const handleFieldProps = () => {
@@ -161,7 +163,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
       }
     }
     setFieldPropsMap(fieldPropsMap);
-  }
+  };
 
   // 获取计算表达式之后的结果
   const getEvalFieldProps = (field: FormNodeProps, path?: string) => {
@@ -175,23 +177,23 @@ export default function RenderFormChildren(props: RenderFormProps) {
           // 匹配上表达式或表达式值的映射则返回映射值
           if (matchStr || generateValue !== undefined) {
             if (propsKey === 'valueSetter' || propsKey === 'valueGetter') {
-              return [propsKey, generateValue ? generateValue : () => undefined]
+              return [propsKey, generateValue ? generateValue : () => undefined];
             }
-            return generateValue == undefined ? [propsKey] : [propsKey, generateValue]
+            return generateValue == undefined ? [propsKey] : [propsKey, generateValue];
           }
           return [propsKey, propsValue];
         }
       )
     );
-  }
+  };
 
   // 值兼容字符串表达式
   const evalExpression = (value?: unknown, uneval?: boolean): any => {
     if (uneval) return value;
     if (typeof value === 'string') {
-      const matchStr = matchExpression(value)
+      const matchStr = matchExpression(value);
       if (matchStr) {
-        const importsKeys = ['form', 'formrender', 'formvalues'].concat(Object.keys(expressionImports))
+        const importsKeys = ['form', 'formrender', 'formvalues'].concat(Object.keys(expressionImports));
         const importsValues = Object.values(expressionImports);
         const target = matchStr?.replace(/\{\{|\}\}/g, '');
         const actionStr = "return " + target;
@@ -205,9 +207,9 @@ export default function RenderFormChildren(props: RenderFormProps) {
     } else {
       return value;
     }
-  }
+  };
 
-  const ignoreTag = { "data-type": "ignore" }
+  const ignoreTag = { "data-type": "ignore" };
   // 目标套上其他组件
   const withSide = (children: any, side?: CustomUnionType, render?: CustomRenderType, commonProps?: GenerateParams) => {
     const childs = typeof render === 'function' ? render?.(Object.assign({ children }, commonProps)) : children;
@@ -215,7 +217,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
     const childsWithSide = React.isValidElement(sideInstance) ? React.cloneElement(sideInstance, { children: childs } as Partial<unknown>) : childs;
     const cloneChilds = React.isValidElement(childsWithSide) ? React.cloneElement(childsWithSide, { key: commonProps?.path }) : childsWithSide;
     return cloneChilds;
-  }
+  };
 
   // 生成表单项
   const renderChild = (params: GenerateParams) => {
@@ -265,7 +267,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
         :
         <Form.Item {...fieldProps}>
           {readOnlyWidget}
-        </Form.Item>
+        </Form.Item>;
     }
     // 当前节点组件
     const FormNodeWidget = formRenderStore.renderComponent(typeRender || { type, props }, commonParams);
@@ -297,7 +299,7 @@ export default function RenderFormChildren(props: RenderFormProps) {
       );
     };
     return withSide(result, outside, renderItem, commonParams);
-  }
+  };
 
   const childs = Object.entries(properties || {}).map(([key, field], index: number) => {
     const generateField = getEvalFieldProps(field, key);

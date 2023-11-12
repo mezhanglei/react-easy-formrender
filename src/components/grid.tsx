@@ -13,15 +13,15 @@ export const getColProps = (props: ColProps, inline?: boolean) => {
     if (!inline) {
       return value ?? (span || maxspan);
     }
-  }
+  };
   return {
     xs: getValue(inline, xs),
     sm: getValue(inline, sm),
     md: getValue(inline, md),
     lg: getValue(inline, lg),
     ...restProps
-  }
-}
+  };
+};
 
 export interface CustomRowProps extends RowProps, GenerateParams {
   children: any;

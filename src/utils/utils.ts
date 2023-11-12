@@ -11,31 +11,31 @@ export const matchExpression = (value?: any) => {
     const result = value?.match(reg)?.[0];
     return result;
   }
-}
+};
 
 // 获取路径的末尾节点字符串(不带中括号)
 export const getPathEnd = (path?: string) => {
-  const pathArr = pathToArr(path)
-  const end = pathArr?.pop()
+  const pathArr = pathToArr(path);
+  const end = pathArr?.pop();
   return end;
-}
+};
 
 // 根据路径返回父路径(兼容a[0],a.[0],a.b, a[0].b形式的路径)
 export const getParent = (path?: string) => {
   const end = getPathEnd(path);
   if (typeof end === 'string' && path) {
-    const endReg = new RegExp(`\\[\\d+\\]$|\\.${end}$|${end}$`)
-    return path.replace(endReg, '')
+    const endReg = new RegExp(`\\[\\d+\\]$|\\.${end}$|${end}$`);
+    return path.replace(endReg, '');
   }
-}
+};
 
 // 路径末尾项是否为数组项
 export const endIsListItem = (path?: string) => {
   if (typeof path === 'string') {
     const endReg = new RegExp('\\[\\d+\\]$');
-    return endReg.test(path)
+    return endReg.test(path);
   }
-}
+};
 
 // 更改当前的表单字段
 export const changePathEnd = (oldPath: string, endName: string | number) => {
@@ -44,7 +44,7 @@ export const changePathEnd = (oldPath: string, endName: string | number) => {
     const newPath = joinFormPath(parent, endName);
     return newPath;
   }
-}
+};
 
 // 根据路径更新数据
 export const updateItemByPath = (properties: PropertiesData, data?: any, path?: string, attributeName?: string) => {
@@ -75,7 +75,7 @@ export const updateItemByPath = (properties: PropertiesData, data?: any, path?: 
           delete temp[end];
         }
       } else {
-        temp[end] = deepMergeObject(endData, data)
+        temp[end] = deepMergeObject(endData, data);
       }
     }
   }
@@ -114,7 +114,7 @@ export const setItemByPath = (properties: PropertiesData, data?: any, path?: str
       } else {
         if (temp instanceof Array && temp[end] === undefined) {
           const index = +end;
-          temp.splice(index, 0, data)
+          temp.splice(index, 0, data);
         } else {
           temp[end] = data;
         }
@@ -126,7 +126,7 @@ export const setItemByPath = (properties: PropertiesData, data?: any, path?: str
 
 // 根据path获取指定路径的项
 export const getItemByPath = (properties?: PropertiesData, path?: string, attributeName?: string) => {
-  if (!properties) return
+  if (!properties) return;
   const pathArr = pathToArr(path);
   let temp: any = properties;
   if (pathArr.length === 0) {
@@ -156,7 +156,7 @@ export const getKeyValueByIndex = (properties: PropertiesData, index?: number, p
   const isList = childs instanceof Array;
   const key = isList ? index : childKeys[index];
   return [key, childs[key]];
-}
+};
 
 // 转化为有序列表
 export const toEntries = (data: any) => {
@@ -204,7 +204,7 @@ export const updateName = (properties: PropertiesData, newName?: string, pathStr
       if (item?.[0] === end && end) {
         item[0] = newName;
       }
-    })
+    });
   }
   const result = parseEntries(entriesData);
   if (parentPath) {
@@ -213,7 +213,7 @@ export const updateName = (properties: PropertiesData, newName?: string, pathStr
   } else {
     return result;
   }
-}
+};
 
 // 插入数据
 export type InsertItemType = Array<any> | Object | any;
@@ -306,18 +306,18 @@ export const moveDiffLevel = (properties: PropertiesData, from: { parent?: strin
 
 // 提取properties中的默认值
 export const getInitialValues = (properties?: PropertiesData) => {
-  if (!properties) return
+  if (!properties) return;
   let initialValues = {};
   // 遍历处理对象树中的非properties字段
   const deepHandle = (formNode: FormNodeProps, path: string) => {
     for (const propsKey of Object.keys(formNode)) {
       if (propsKey !== 'properties') {
-        const propsValue = formNode[propsKey]
+        const propsValue = formNode[propsKey];
         if (propsKey === 'initialValue' && propsValue !== undefined) {
           initialValues = deepSet(initialValues, path, propsValue);
         }
       } else {
-        const childProperties = formNode[propsKey]
+        const childProperties = formNode[propsKey];
         if (childProperties) {
           for (const childKey of Object.keys(childProperties)) {
             const childField = childProperties[childKey];
@@ -336,16 +336,16 @@ export const getInitialValues = (properties?: PropertiesData) => {
     const childField = properties[key];
     const childName = key;
     if (typeof childName === 'number' || typeof childName === 'string') {
-      const childPath = joinFormPath(childField?.ignore ? undefined : childName) as string
+      const childPath = joinFormPath(childField?.ignore ? undefined : childName) as string;
       deepHandle(childField, childPath);
     }
   }
   return initialValues;
-}
+};
 
 // 展平properties中的控件，键为表单路径
 export const setExpandComponents = (properties?: PropertiesData): { [key: string]: FormNodeProps } | undefined => {
-  if (!properties) return
+  if (!properties) return;
   let componentsMap = {};
   // 遍历处理对象树中的非properties字段
   const deepHandle = (formNode: FormNodeProps, path: string) => {
@@ -377,4 +377,4 @@ export const setExpandComponents = (properties?: PropertiesData): { [key: string
     }
   }
   return componentsMap;
-}
+};

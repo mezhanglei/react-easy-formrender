@@ -22,7 +22,8 @@ export default function RenderForm(props: RenderFormProps) {
     ...formOptions
   } = props;
 
-  const formStore = form ?? useFormStore();
+  const formContext = useFormStore();
+  const formStore = form ?? formContext;
 
   return (
     <Form form={formStore} {...formOptions}>

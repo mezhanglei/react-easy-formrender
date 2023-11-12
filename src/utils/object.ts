@@ -20,9 +20,9 @@ export const deepMergeObject = function (obj1: any, obj2: any) {
   const cloneObj = deepClone(obj1);
   for (let key in obj2) {
     if (isObject(cloneObj[key])) {
-      cloneObj[key] = deepMergeObject(cloneObj[key], obj2[key])
+      cloneObj[key] = deepMergeObject(cloneObj[key], obj2[key]);
     } else {
-      cloneObj[key] = obj2[key]
+      cloneObj[key] = obj2[key];
     }
   }
   return cloneObj;
