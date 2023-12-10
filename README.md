@@ -4,6 +4,8 @@ English | [中文说明](./README_CN.md)
 
 [![Version](https://img.shields.io/badge/version-8.0.25-green)](https://www.npmjs.com/package/react-easy-formrender)
 
+> The project has been migrated to [@simpleform/render](https://github.com/mezhanglei/simpleform), this repository is deprecated.
+
 # Introduction?
 
 High degree of freedom and Lightweight dynamic form Engine, high-end solutions often require only simple design(which is done based on [react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore) development).

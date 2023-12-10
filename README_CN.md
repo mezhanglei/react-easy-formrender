@@ -4,6 +4,8 @@
 
 [![Version](https://img.shields.io/badge/version-8.0.25-green)](https://www.npmjs.com/package/react-easy-formrender)
 
+> 项目已迁移至[@simpleform/render](https://github.com/mezhanglei/simpleform), 本仓库已废弃.
+
 # 介绍
 
 高自由度、轻量级动态表单引擎，高端的方案往往只需要简单的设计(该方案基于[react-easy-formcore](https://github.com/mezhanglei/react-easy-formcore)开发完成).
